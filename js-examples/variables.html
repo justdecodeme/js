@@ -2,13 +2,27 @@
 <html lang="en">
 <body>
     <script>
-        var a = 5, b = 3;
+        var a = 5;
+        var b = "hi";
+        var c = true;
+        var d = null;
+        var e;
+        var f = ['ajax', 'bootstrap', 'css', 'd3js'];
+        var g = {
+            "name":"rakesh",
+            "dob":"may 13",
+            sayHello: function() {
+                console.log("Hi, Good work, Keep it up!");
+            }
+        };
 
-        console.log(a + " + " + b + " = " + (a+b));
-        console.log(a + " - " + b + " = " + (a-b));
-        console.log(a + " * " + b + " = " + (a*b));
-        console.log(a + " / " + b + " = " + (a/b));
-        console.log(a + " % " + b + " = " + (a%b));
+        console.log("typeof("+a+") = " + typeof(a)); //nubmer
+        console.log("typeof("+b+") = " + typeof(b)); //string
+        console.log("typeof("+c+") = " + typeof(c)); //boolean
+        console.log("typeof("+d+") = " + typeof(d)); //object
+        console.log("typeof("+e+") = " + typeof(e)); //undefined
+        console.log("typeof("+f+") = " + typeof(f)); //object
+        console.log("typeof("+g+") = " + typeof(g)); //object
     </script>
 </body>
 </html>
