@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Local storage testing</h1>
+    <button onclick="setdata()">Set Data</button>
+    <button onclick="getdata()">Get Data</button>
+
+    <script>
+    // // Save data in your Web Storage (3 methods)
+    //     addEventListener('DOMContentLoaded', function() {
+    //             if (sessionStorage) {
+    //                 var storage = sessionStorage;
+    //                 var current = (new Date()).toLocaleString();
+    //                 storage.setItem('updated', current);
+    //                 storage.updated2 = current;
+    //                 storage['updated3'] = current;
+    //                 console.log(storage);
+    //             }
+    //         }
+    //     );
+    //
+    // // Get data from your Web Storage (3 methods)
+    //     addEventListener('DOMContentLoaded', function() {
+    //             if (sessionStorage) {
+    //                 var storage = sessionStorage;
+    //                 window.alert(
+    //                 'getItem: ' + storage.getItem('updated') + '\n' +
+    //                 'Property-like: ' + storage.updated2 + '\n' +
+    //                 'Associative Array: ' + storage['updated3']);
+    //                 alert("hi")
+    //             }
+    //         }
+    //     );
+
+    function setdata() {
+        if (sessionStorage) {
+            sessionStorage.setItem('msg', "Hi, How are you?");
+
+        }
+    }
+    function getdata() {
+        if (sessionStorage) {
+            alert(sessionStorage.getItem('msg'));
+        }
+    }
+    </script>
+</body>
+</html>
