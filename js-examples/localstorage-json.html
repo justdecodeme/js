@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1>Local storage testing</h1>
+    <button onclick="setdata()">Set Data</button>
+    <button onclick="getdata()">Get Data</button>
+
+    <script>
+    // var todos = [{buy: "iphone"}, {gift: "mac"}];
+    var todos = [
+		{
+			description: 'Breakfast',
+			done: true,
+			removed: false
+		},
+		{
+			description: 'Lunch',
+			done: false,
+			removed: false
+		},
+		{
+			description: 'Dinner',
+			done: false,
+			removed: false
+		}
+	]
+
+    // Initialize localStorage
+	if (!localStorage.newtodos) {
+		localStorage.newtodos = JSON.stringify([]);
+	}
+
+    // Save in localStorage
+    function setdata() {
+        localStorage.newtodos = JSON.stringify(todos);
+    }
+
+    // Load from localStorage
+    function getdata() {
+        var newtodos = JSON.parse(localStorage.newtodos);
+        console.log(newtodos[0].description);
+    }
+    </script>
+</body>
+</html>
