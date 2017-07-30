@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+    document.body.addEventListener("myEventName", doSomething, false);
+
+    function doSomething(e) {
+        alert("Event is called: " + e.type);
+        alert("Event detail is: " + e.detail.first);
+    }
+
+    // var myEvent = new CustomEvent("myEventName");
+    var myEvent = new CustomEvent("myEventName",
+    {
+        'detail': {
+            first: "Chalupa",
+            last: "Batman",
+            random: Math.round(Math.random() * 1000)
+        }
+    });
+    document.body.dispatchEvent(myEvent);
+    </script>
+</body>
+</html>
