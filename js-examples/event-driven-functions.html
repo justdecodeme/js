@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event Driven JS</title>
+    <script src="../common/js/jquery.min.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <button id="btn_01">Button 01</button>
+    <button id="callNowBtn">Call Now</button>
+    <script>
+        'use strict'
+
+        /**
+         * A set of video chat related functions
+         * @module videoChat
+         */
+        var videoChat = (function() {
+            var my = {}
+            my.one = function() {
+                console.log('one')
+            }
+            my.two = function() {
+                console.log('two')
+            }
+            return my
+        })()
+
+        /**
+         * A map of each DOM node and its event listeners
+         * @object
+         * @property {object} DOM node - A list of event-driven functions
+         */
+        var functionMap = {
+            "callNowBtn": {
+                "click": [videoChat.one],
+                "mousedown": [videoChat.two, videoChat.one]
+            }
+        }
+
+        /**
+         * A set of general-purpose functions
+         * @module util
+         */
+        var util = (function() {
+            var my = {}
+
+            // General-purpose event listener
+            var listener = function(e) {
+                  console.log(e.type.toUpperCase());
+                if (functionMap[e.target.id]) {
+                    if (functionMap[e.target.id][e.type]) {
+                        if ({}.toString.call(functionMap[e.target.id][e.type]) === '[object Array]') {
+                            e.preventDefault()
+                            for (var i = 0; i < functionMap[e.target.id][e.type].length; i++) {
+                                if ({}.toString.call(functionMap[e.target.id][e.type][i]) === '[object Function]') {
+                                    setTimeout(functionMap[e.target.id][e.type][i])
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // A public method to enable a specific event listening
+            my.listen = function(type) {
+                addEventListener(type, listener, false)
+            }
+            // A public method to disable a specific event listening
+            my.ignore = function(type) {
+                removeEventListener(type, listener, false)
+            }
+
+            return my
+        })()
+
+        /**
+         * Main
+         * @listens DOMContentLoaded
+         */
+        addEventListener('DOMContentLoaded', function() {
+            // Start listening click
+            util.listen('click');
+            util.listen('mousedown');
+        })
+    </script>
+</body>
+
+</html>
