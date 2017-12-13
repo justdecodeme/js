@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        var str = "JS is awesome!";
+
+        console.log(str.toUpperCase());
+        console.log(str.toLowerCase());
+        
+        // substring(start, end)
+        console.log(str.substring(3, 5)); 
+        // In case the end value is smaller than the start, substring is smart enough to swap the values before doing the string extraction
+        console.log(str.substring(5, 3)); 
+
+        // substr(start, length) 
+        console.log(str.substr(3, 5)); 
+        // -ve value is NOT allowed
+        console.log(str.substr(0, -3)); 
+
+        // slice(start, length)
+        console.log(str.slice(3, 5)); 
+        // -ve value is allowed
+        console.log(str.slice(0, -3)); 
+
+        
+        console.log(str.replace("is","is really"));
+        console.log(str.indexOf('e'));
+        console.log(str.lastIndexOf('e'));
+    </script>
+</body>
+</html>

@@ -2,19 +2,30 @@
 <html lang="en">
 <body>
     <script>
+        // number
         var a = 5;
+        // string
         var b = "hi";
+        // boolean
         var c = true;
+        // null
         var d = null;
+        // undefined
         var e;
+        // array
         var f = ['ajax', 'bootstrap', 'css', 'd3js'];
+        // object
         var g = {
             "name":"rakesh",
             "dob":"may 13",
             sayHello: function() {
-                console.log("Hi, Good work, Keep it up!");
+                console.log("Hi from object method!");
             }
         };
+        // function
+        var h = function() {
+            console.log("Hi from function!")
+        }
 
         console.log("typeof("+a+") = " + typeof(a)); //nubmer
         console.log("typeof("+b+") = " + typeof(b)); //string
@@ -23,6 +34,14 @@
         console.log("typeof("+e+") = " + typeof(e)); //undefined
         console.log("typeof("+f+") = " + typeof(f)); //object
         console.log("typeof("+g+") = " + typeof(g)); //object
+        console.log("typeof("+h+") = " + typeof(h)); //function
+
+        console.log('...................................')
+        
+        // The console.log method can accept n arguments, so we can write above lines as given below also.
+        console.log("typeof(", f, ") = ", typeof(f));
+        console.log("typeof(", g, ") = ", typeof(g));
+        console.log("typeof(", h, ") = ", typeof(h));
     </script>
 </body>
 </html>

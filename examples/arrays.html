@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        var array = ['HTML', 'CSS', 'JS'];
+        // var array = new Array('HTML', 'CSS', 'JS');
+        var array2 = ['PHP', 'MYSQL', 'WORDPRESS'];
+
+        // NOTES
+        // slice, concat do not change original array
+
+        console.log('array:                   ' + array);
+        
+        console.log('array.push(arg):         ' + array.push('PHP'));
+        console.log('array:                   ' + array);
+        
+        console.log('array.pop():             ' + array.pop());
+        console.log('array:                   ' + array);
+        
+        console.log('array.unshift(arg):      ' + array.unshift("PHP"));
+        console.log('array:                   ' + array);
+        
+        console.log('array.shift():           ' + array.shift());
+        console.log('array:                   ' + array);
+
+		// show the REMOVED items, accepts n arguments splice(i, n, items) 
+		// i can be -ve (last element is -1, 2nd last is -2..)
+		// If i is NaN, it is treated as if it were 0.
+		// If n is less than 0 or equal to NaN, it is treated as if it were 0.
+		// If i or n is greater than Array’s length, either argument will use the Array’s length
+        console.log('array.splice(args):      ' + array.splice(1, 1, 'SASS'));
+        // console.log('array.splice(args):      ' + array.splice(NaN, 1, 'SASS')); 
+        // console.log('array.splice(args):      ' + array.splice(-2, 1, 'SASS'));
+        // console.log('array.splice(args):      ' + array.splice(1, 1, 'SASS', 'SCSS'));
+        // console.log('array.splice(args):      ' + array.splice(2,1));
+        // console.log('array.splice(args):      ' + array.splice(2));
+        console.log('array:                   ' + array);
+
+        // show the SELECTED items, accepts 2 arguments splice(i, n) 
+        console.log('array.slice(arg):        ' + array.slice(2,3));
+        // console.log('array.slice(arg):        ' + array.slice(2));
+        console.log('array:                   ' + array);
+
+        console.log('array.concat(arr):       ' + array.concat(array2));
+        console.log('array:                   ' + array);
+
+        console.log('array.sort():            ' + array.sort());
+        console.log('array:                   ' + array);
+
+        console.log('array.reverse():         ' + array.reverse()); 
+        console.log('array:                   ' + array);
+
+
+    </script>
+</body>
+</html>

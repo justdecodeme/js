@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        var computer = {
+        	model: '2016',
+        	ram: '8GB',
+        	hdd: '1TB',
+        	pc: '3.2Ghz',
+        	type: 'Laptop',
+        	fullType: function() {
+        		return this.pc + " " + this.type;
+        	}
+        }
+
+        var person = new Object();
+        person.fName = "Rakesh";
+        person.lName = "Kumar";
+        person.weight = "70 KG";
+
+        console.log(computer.fullType());
+        console.log(person.fName);
+    </script>
+</body>
+</html>
