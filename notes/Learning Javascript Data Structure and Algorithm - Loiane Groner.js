@@ -57,4 +57,28 @@
 /***********************/
 /* Chapter 02 - Arrays */
 /***********************/
-// In JavaScript, an array is a mutable object.
+// In JavaScript, an array is a mutable object. Arrays in JavaScript are modified objects.
+
+// The push and pop method allow an array to emulate a basic stack data structure.
+// The unshift and shift method allow an array to emulate a basic queue data structure.
+
+// JavaScripts only support 1D arrays, it does not support matrices. However, we can implement matrices
+// or any multidimensional array using an array of arrays. (as given below)
+//day 1
+averageTemp[0] = [];
+averageTemp[0][0] = 72;
+averageTemp[0][1] = 75;
+averageTemp[0][2] = 79;
+averageTemp[0][3] = 79;
+averageTemp[0][4] = 81;
+averageTemp[0][5] = 81;
+//day 2
+averageTemp[1] = [];
+averageTemp[1][0] = 81;
+averageTemp[1][1] = 79;
+averageTemp[1][2] = 75;
+averageTemp[1][3] = 75;
+averageTemp[1][4] = 73;
+averageTemp[1][5] = 72;
+
+// The 3 methods (map, filter, reduce) are the base of the functional programming of JavaScript
