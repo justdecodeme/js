@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+    	//-------------------
+    	// ES6 classes
+    	//-------------------
+    	class Book {
+    	    constructor (title, pages, isbn) {
+    	        this.title = title;
+    	        this.pages = pages;
+    	        this.isbn = isbn;
+    	    }
+    	    printIsbn(){
+    	        console.log(this.isbn);
+    	    }
+    	}
+    	let book = new Book('JS Mastery', 400, 1234567890);
+    	console.log(book.title); //outputs the book title
+        book.title = 'JS - Beginer to Advance'; //update the value of the book title
+    	console.log(book.title); //outputs the book title
+
+    	//-------------------
+    	// inheritance
+    	//-------------------
+    	class ITBook extends Book {
+    	    constructor (title, pages, isbn, technology) {
+    	    	// refering to the constructor superclass using the keyword super
+    	        super(title, pages, isbn);
+    	        this.technology = technology;
+    	    }
+    	    printTechnology(){
+    	        console.log(this.technology);
+    	    }
+    	}
+    	let jsBook = new ITBook('Learning JS Algorithms', '200', '1234567890', 'JavaScript');
+    	console.log(jsBook.isbn);
+    	console.log(jsBook.printTechnology());
+
+    	//-------------------
+    	// getter and setters
+    	//-------------------
+    	class Person {
+    	    constructor (name) {
+    	        this._name = name;
+    	    }
+    	    get name() {
+    	        return this._name;
+    	    }
+    	    set name(value) {
+    	        this._name = value;
+    	    }
+    	}
+    	let person = new Person('Frodo');
+    	console.log(person.name);
+    	person.name = 'Gandalf';
+    	console.log(person.name);
+    	person._name = 'Sam';
+    	console.log(person.name);
+
+    	//-------------------
+    	//using symbols for private atributes
+    	//-------------------
+    	var _name = Symbol();
+    	class Person2 {
+    	    constructor (name) {
+    	        this[_name] = name;
+    	    }
+    	    get name() {
+    	        return this[_name];
+    	    }
+    	    set name(value) {
+    	        this[_name] = value;
+    	    }
+    	}
+    	let person2 = new Person2('Frodo');
+    	console.log(person2.name);
+    	person2.name = 'Gandalf';
+    	console.log(person2.name);
+
+    	console.log(Object.getOwnPropertySymbols(person2));
+    </script>
+</body>
+</html>
