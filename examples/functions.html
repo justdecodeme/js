@@ -9,6 +9,8 @@
 
         sayHi(); // Hi
 
+        console.log('--------------');
+
         // function without return statement but with parameter
         function output(text) {
             console.log(text);
@@ -21,12 +23,13 @@
 
         output(); // undefined
 
+        console.log('--------------');
+
         // function using the return statement
         function sum(num1, num2) {
             return num1 + num2;
         }
         console.log(sum(1,2)); // 3
-
 
         console.log('--------------');
 
@@ -52,6 +55,27 @@
         // }
         let circleArea2 = (r) => 3.14 * r * r;
         console.log(circleArea2(10));        
+
+        console.log('--------------');
+
+        //******* EcmaScript 6: Default Parameter Values
+
+        function sum(x = 1, y = 2, z = 3) {
+            return x + y + z
+        };
+        console.log(sum(4,2)); //outpus 9
+
+        //function above is the same as
+        function sum(x, y, z) {
+            if (x === undefined)
+                x = 1;
+            if (y === undefined)
+                y = 2;
+            if (z === undefined)
+                z = 3;
+            return x + y + z;
+        };
+        console.log(sum(4,2)); //outpus 9        
     </script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+    	//******* EcmaScript 6: Default Parameter Values
+    	function sum(x = 1, y = 2, z = 3) {
+    	    return x + y + z
+    	};
+
+    	var params = [3, 4, 5];
+    	// TURN ARRAYS INTO PARAMETERS
+    	// ES6: spread operator ('...')
+    	console.log(sum(...params));
+    	// ES5: using the apply() function
+    	console.log(sum.apply(undefined, params));
+
+    	var numbers = [1, 2, ...params]; //pushing values into array
+    	console.log(numbers);
+
+    	console.log('-----------------------');
+
+		// The spread operator (...) can also be used as a rest parameter in functions
+		// to replace arguments
+
+    	// ES6: rest parameter ('...')
+    	function restParamaterFunction(x, y, ...a) {
+    		console.log(a); // (3) ["hello", true, 7]
+    	    return (x + y) * a.length;
+    	}
+    	console.log(restParamaterFunction(1, 2, "hello", true, 7)); // outputs 9;
+
+    	// code above is the same as ES5:
+    	function restParamaterFunction2(x, y) {
+    		console.log(arguments); // Arguments(5) [1, 2, "hello", true, 7, callee: ƒ, Symbol(Symbol.iterator): ƒ]
+    	    var a = Array.prototype.slice.call(arguments, 2);
+    		console.log(a); // (3) ["hello", true, 7]
+    	    return (x + y) * a.length;
+    	};
+    	console.log(restParamaterFunction2(1, 2, "hello", true, 7));
+    </script>
+</body>
+</html>
