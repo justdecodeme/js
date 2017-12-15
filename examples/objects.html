@@ -57,42 +57,46 @@
         // ENHANCED OBJECT PROPERTIES
         // *******************************
 
-        // Destructuring Assignment + Property Shorthand
-        var [x, y] = ['a', 'b'];
-        var obj = { x, y };
+        // ES6: Destructuring Assignment + Property Shorthand
+        var [x, y] = ['a', 'b']; // Destructuring Assignment
+        var obj = { x, y }; // Property Shorthand
         console.log(obj); // { x: "a", y: "b" }
 
-        // 
+        // swaping (Array destructuring can also be performed to swap values at once without the need to create temp varibale)
         [x, y] = [y, x];
-        console.log([x, y], [y, x]);
-        var temp = x;
-        x = y;
-        y = temp;
+        obj = { x, y };
+        console.log(obj); // { x: "b", y: "a" }
 
-        //code above is the same as
+        // ES5: code above is the same as
         var x = 'a';
         var y = 'b';
         var obj2 = { x: x, y: y };
         console.log(obj2); // { x: "a", y: "b" }
 
+        // swaping
+        var temp = x;
+        x = y;
+        y = temp;
+        obj2 = { x: x, y: y };
+        console.log(obj2); // { x: "a", y: "b" }
 
-        // Method Properties
+        // ES6: Method Properties (to declare functions inside objects as if they were properties)
         var hello = {
             name : 'abcdef',
             printHello(){
                 console.log('Hello');
             }
         }
-        console.log(hello.printHello());
+        hello.printHello();
 
-        //code above is the same as:
+        // ES5: code above is the same as:
         var hello2 = {
             name: 'abcdef',
             printHello: function printHello() {
-                console.log('Hello');
+                console.log('Hello2');
             }
         };
-        console.log(hello2.printHello());
+        hello2.printHello();
     </script>
 </body>
 </html>
