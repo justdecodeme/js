@@ -34,11 +34,11 @@
 // ECMAScript 6 functionalities
 // ----------------------------
 // let and const (✓)
-// Template literals (✗)
-// Destructuring (✗)
-// Spread and Rest operator (✗)
-// Arrow functions using => (✗)
+// Template literals (✓)
+// Destructuring Assignment (✗)
+// Spread and Rest operator (✓)
+// Arrow functions using => (✓)
 // Classes (✗)
-// Default parameters (✗)
+// Default parameters (✓)
 
 // let and const has same begavior except variable defined as const has a read-only value, meaning a constant value.
