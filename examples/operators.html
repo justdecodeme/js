@@ -2,13 +2,48 @@
 <html lang="en">
 <body>
     <script>
-        var a = 5, b = 3;
+        var a = 5, b = 3, c = "1";
 
-        console.log(a + " + " + b + " = " + (a+b));
-        console.log(a + " - " + b + " = " + (a-b));
-        console.log(a + " * " + b + " = " + (a*b));
-        console.log(a + " / " + b + " = " + (a/b));
-        console.log(a + " % " + b + " = " + (a%b));
+		console.log("Arithmetic operators");
+        console.log(a + " + " + b + " : " + (a+b));
+        console.log(a + " - " + b + " : " + (a-b));
+        console.log(a + " * " + b + " : " + (a*b));
+        console.log(a + " / " + b + " : " + (a/b));
+        console.log(a + " % " + b + " : " + (a%b));
+        console.log(a + " ** " + b + " : " + (a**b));
+        console.log('--' + a + " : " + (--a));
+        console.log('++' + a + " : " + (++a));
+        console.log( a + '--' + " : " + (a--));
+        console.log( a + '++' + " : " + (a++));
+
+		console.log("Assignment operators");
+		console.log(c + ' == 1 : ' + (c == 1));
+		console.log(c + ' === 1 : ' + (c === 1));
+		console.log(c + ' != 1 : ' + (c != 1));
+		console.log(c + ' > 1 : ' + (c > 1));
+		console.log(c + ' < 1 : ' + (c < 1));
+		console.log(c + ' >= 1 : ' + (c >= 1));
+		console.log(c + ' <= 1 : ' + (c <= 1));
+
+		console.log("Logical operators");
+		console.log('true && false : ' + (true && false)); // And
+		console.log('true || false : ' + (true || false)); // Or
+		console.log('!true : ' + (!true));		           // Not
+
+		console.log("Bitwise operators");
+		console.log('5 & 1:', (5 & 1));   // And, same as 0101 & 0001 (result 0001 / 1)
+		console.log('5 | 1:', (5 | 1));   // Or, same as 0101 | 0001 (result 0101 / 5)
+		console.log('~ 5:', (~5));        // Not, same as ~0101 (result 1010 / 10)
+		console.log('5 ^ 1:', (5 ^ 1));   // Xor, same as 0101 ^ 0001 (result 0100 / 4)
+		console.log('5 << 1:', (5 << 1)); // Left shift, same as 0101 << 1 (result 1010 / 10)
+		console.log('5 >> 1:', (5 >> 1)); // Right shift, same as 0101 >> 1 (result 0010 / 2)		       
+
+		console.log("delete operators");
+		var myObj = {name: 'John', age: 21};
+		delete myObj.age;
+		console.log(myObj); // Object {name: "John"}
+
+		console.log("typeOf operators -> visit data-types.html");
     </script>
 </body>
 </html>
