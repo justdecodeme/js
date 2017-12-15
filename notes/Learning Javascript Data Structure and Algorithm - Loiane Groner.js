@@ -53,3 +53,8 @@
 // let and const has same begavior except variable defined as const has a read-only value, meaning a constant value.
 
 // It is good to remember that JavaScript object-oriented programming is done through prototype
+
+/***********************/
+/* Chapter 02 - Arrays */
+/***********************/
+// In JavaScript, an array is a mutable object.
