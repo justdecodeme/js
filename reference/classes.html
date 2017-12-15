@@ -35,14 +35,15 @@
     	}
     	let jsBook = new ITBook('Learning JS Algorithms', '200', '1234567890', 'JavaScript');
     	console.log(jsBook.isbn);
-    	console.log(jsBook.printTechnology());
+    	jsBook.printTechnology();
 
     	//-------------------
     	// getter and setters
     	//-------------------
     	class Person {
     	    constructor (name) {
-    	        this._name = name;
+    	    	// using underscore to make it seem as though the attribute is private (its not really a private)
+    	        this._name = name; 
     	    }
     	    get name() {
     	        return this._name;
@@ -55,11 +56,9 @@
     	console.log(person.name);
     	person.name = 'Gandalf';
     	console.log(person.name);
-    	person._name = 'Sam';
-    	console.log(person.name);
 
     	//-------------------
-    	//using symbols for private atributes
+    	// using symbols for private atributes
     	//-------------------
     	var _name = Symbol();
     	class Person2 {
