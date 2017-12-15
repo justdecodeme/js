@@ -59,11 +59,40 @@
 
         var numbers = [0,1,2,3,4,5];
 
-        // ADD A NEW ELEMENT TO THE LAST
-
+        console.log('ADDING A NEW ELEMENT TO THE LAST');
         // manually
-        numbers[numbers.length] = 10;
-        console.log(numbers);
+        numbers[numbers.length] = 6;
+        console.log(numbers); // (7) [0, 1, 2, 3, 4, 5, 6]
+
+        // using method push
+        numbers.push(7)
+        console.log(numbers); // (8) [0, 1, 2, 3, 4, 5, 6, 7]
+
+        console.log('ADDING A NEW ELEMENT TO THE FIRST');
+        // manually 
+        for (var i = numbers.length; i >= 0; i--) {
+            numbers[i] = numbers[i-1];
+        }
+        numbers[0] = -1;
+        console.log(numbers); // (9) [-1, 0, 1, 2, 3, 4, 5, 6, 7]
+
+        // using method unshift
+        numbers.unshift(-2)
+        console.log(numbers); // (10) [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+
+        console.log('REMOVING A ELEMENT FROM THE FIRST');
+        // manually
+        for (var i = 0; i < numbers.length; i++) {
+            numbers[i] = numbers[i+1];
+        }
+        console.log(numbers); // (10) [-1, 0, 1, 2, 3, 4, 5, 6, 7, undefined]
+
+        // using method shift
+        numbers.shift()
+        console.log(numbers); // (9) [0, 1, 2, 3, 4, 5, 6, 7, undefined]
+
+
+
     </script>
 </body>
 </html>
