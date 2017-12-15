@@ -58,6 +58,7 @@
 /* Chapter 02 - Arrays */
 /***********************/
 // In JavaScript, an array is a mutable object. Arrays in JavaScript are modified objects.
+// Javascript arrays are not strongly typed as in other languages such as C and Java.
 
 // The push and pop method allow an array to emulate a basic stack data structure.
 // The unshift and shift method allow an array to emulate a basic queue data structure.
@@ -82,3 +83,6 @@ averageTemp[1][4] = 73;
 averageTemp[1][5] = 72;
 
 // The 3 methods (map, filter, reduce) are the base of the functional programming of JavaScript
+
+// Typed arrays are great to work with WebGL APIs, manipulate bits, and manipulate files 
+// images.

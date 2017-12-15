@@ -64,6 +64,13 @@
         }
         console.table(friends.sort(comparePerson));        
 
+        // SORTING STRINGS WITH ACCENTED CHARACTERS
+
+        var names = ['Maève', 'Maeve'];
+        console.log(names.sort(function(a, b){
+            return a.localeCompare(b);
+        }));        
+
     </script>
 </body>
 </html>
