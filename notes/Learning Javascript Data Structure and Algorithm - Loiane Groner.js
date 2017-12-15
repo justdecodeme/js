@@ -22,3 +22,23 @@
 // You may hear that global variables in JS are evil and this is true. Usually, the quality of JS source code
 // is measured by the number of global variables and functions (a large number is bad). So, whenever possible,
 // try avoiding global variables.
+
+// In Object Oriented Programming (OOP), an object is an instance of a class
+
+// ECMAScript is a scripting language specification. JavaScript is an implementation of this specification, 
+// as are Jscript and ActionScript
+
+// ECMAScript 2015 == ES6
+// ECMAScript 2016 == ES7
+
+// ECMAScript 6 functionalities
+// ----------------------------
+// let and const (✓)
+// Template literals (✗)
+// Destructuring (✗)
+// Spread and Rest operator (✗)
+// Arrow functions using => (✗)
+// Classes (✗)
+// Default parameters (✗)
+
+// let and const has same begavior except variable defined as const has a read-only value, meaning a constant value.

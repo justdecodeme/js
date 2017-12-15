@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        // function without return statement
+        function sayHi() {
+            console.log('Hi!');
+        }
+
+        sayHi(); // Hi
+
+        // function without return statement but with parameter
+        function output(text) {
+            console.log(text);
+        }
+
+        output('Hello!'); // Hello!
+
+        // 2nd argument is neglected
+        output('Hello again!', 'Other text'); // Hello again!
+
+        output(); // undefined
+
+        // function using the return statement
+        function sum(num1, num2) {
+            return num1 + num2;
+        }
+        console.log(sum(1,2)); // 3
+    </script>
+</body>
+</html>

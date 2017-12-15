@@ -2,24 +2,51 @@
 <html lang="en">
 <body>
     <script>
-        var computer = {
-        	model: '2016',
-        	ram: '8GB',
-        	hdd: '1TB',
-        	pc: '3.2Ghz',
-        	type: 'Laptop',
-        	fullType: function() {
-        		return this.pc + " " + this.type;
-        	}
-        }
+        /* Object example 1 */
 
         var person = new Object();
-        person.fName = "Rakesh";
-        person.lName = "Kumar";
-        person.weight = "70 KG";
 
-        console.log(computer.fullType());
-        console.log(person.fName);
+        /* Object example 2 */
+
+        var person = {};
+
+        person = {
+            name: {
+                first: 'Gandalf',
+                last: 'the Grey'
+            },
+            address: 'Middle Earth',
+            fullName: function() {
+                return this.name.first + " " + this.name.last;
+            }
+        };
+        console.log(person.fullName()); // Gandalf the Grey
+        console.log(person.address); // Middle Earth
+
+        /* Object example 3 */
+        // this is also, how we declare a class that represents a book
+        function Book(title, pages, isbn){
+            this.title = title;
+            this.pages = pages;
+            this.isbn = isbn;
+            this.printIsbn = function(){
+                console.log(this.isbn);
+            }
+        }
+        Book.prototype.printDetails = function(){
+            console.log(this.title + ' | ' + this.pages + ' | ' + this.isbn);
+        };
+
+        var book1 = new Book('JS Mastery', 400, 1234567890);
+        var book2 = new Book('JavaScript Projects', 999, 4567890);
+
+        console.log(book1.title); //outputs the book title
+        book1.title = 'JS - Beginer to Advance'; //update the value of the book title
+        console.log(book1.title); //outputs the updated value
+        book1.printIsbn();
+
+        book1.printDetails();
+        book2.printDetails();
     </script>
 </body>
 </html>
