@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Fibonacci Series</title>
+</head>
+<body>
+    <script>
+    	//fibonacci numbers
+    	// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ...
+
+    	var fibonacci = [];
+    	fibonacci[0] = 1;
+    	fibonacci[1] = 1;
+    	const total = 5;
+
+    	for(var i = 2; i < total; i++){
+    	    fibonacci[i] = fibonacci[i-1] + fibonacci[i-2];
+    	}
+
+    	for(var i = 0; i<fibonacci.length; i++){
+    	    console.log(fibonacci[i]);          
+    	}
+
+    	console.log(fibonacci);    	
+    </script>
+</body>
+</html>
