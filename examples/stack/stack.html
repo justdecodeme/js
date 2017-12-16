@@ -179,6 +179,8 @@
         // There is one data type we can use to ensure that the property will be private in a class,
         // and it is called WeakMap. A WeakMap can store key/value pair, where the key is an objet and
         // the value can be any data type.
+        // This time items property is truly private in the Stack class, since we have wrapped the 
+        // Stack class with a closure (outer function), so that WeakMap has scope only inside function
         let Stack4 = (function () {
 
             const items = new WeakMap();
@@ -201,7 +203,8 @@
                     return s[s.length-1];
                 }
                 isEmpty(){
-                    return items.get(this).length == 0;
+                    let s = items.get(this);
+                    return s.length == 0;
                 }
                 size(){
                     let s = items.get(this);
