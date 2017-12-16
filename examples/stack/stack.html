@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Stack</title>
+</head>
+<body>
+    <script>
+        // METHOD 01
+        // We created a Stack function that can be used as a sort of class; since JS functions have 
+        // constructors, we can simulate the class behavior. We declare a variable named items that
+        // is private and only accessible to the stack function/class. However, this approach creates
+        // a COPY OF THE VARIABLE ITEMS for each class instance created. Therefore, it does not 
+        // escalte well in case we need to use several instances of the stack class at the same time.
+
+        function Stack() {
+            let items = [];
+            this.push = function(element){
+                items.push(element);
+            };
+            this.pop = function(){
+                return items.pop();
+            };
+            this.peek = function(){
+                return items[items.length-1];
+            };
+            this.isEmpty = function(){
+                return items.length == 0;
+            };
+            this.size = function(){
+                return items.length;
+            };
+            this.clear = function(){
+                items = [];
+            };
+            this.print = function(){
+                console.log(items.toString());
+            };
+            this.toString = function(){
+                return items.toString();
+            };
+        }    
+
+        let stack = new Stack();
+        console.log(stack.isEmpty()); // true
+        stack.push(5);
+        stack.push(8);
+        console.log(stack.peek()); // 8
+        stack.push(11);
+        console.log(stack.size()); // 3
+        console.log(stack.isEmpty()); // false
+        stack.push(15);
+        stack.pop();
+        stack.pop();
+        console.log(stack.size()); // 2
+        stack.print(); // [5, 8]
+
+        console.log('-----------------------------');
+
+        // METHOD 02
+        // We simply transformed the Stack function into a Stack class using the ES6 simplified syntax
+        // Using this syntax we cannot declare variable in the body of the class as other languages
+        // (Java, C++, C#), so we need to declare them inside the class constructor and we can make a 
+        // reference to the variable using this.nameOfVariable in other functions of the class.
+        // Although the code looks cleaner and it is more beautiful, the variable items are public
+        // The ES6 classes are prototype based. Although prototype based class save memory and 
+        // escalates better than function-based classes, this approach does not allow us to declare 
+        // private properties (varialbes) ro methods. And in this case, we want the user of the Stack 
+        // class to have access only to the methods we are exposing in the class.
+
+        class Stack2 {
+            constructor () {
+                this.items = [];
+            }
+            push(element){
+                this.items.push(element);
+            }
+            pop(){
+                return this.items.pop();
+            }
+            peek(){
+                return this.items[this.items.length-1];
+            }
+            isEmpty(){
+                return this.items.length == 0;
+            }
+            size(){
+                return this.items.length;
+            }
+            clear(){
+                this.items = [];
+            }
+            print(){
+                console.log(this.toString());
+            }
+            toString(){
+                return this.items.toString();
+            }
+        }
+
+        let stack2 = new Stack2();
+        console.log(stack2.isEmpty()); // true
+        stack2.push(5);
+        stack2.push(8);
+        console.log(stack2.peek()); // 8
+        stack2.push(11);
+        console.log(stack2.size()); // 3
+        console.log(stack2.isEmpty()); // false
+        stack2.push(15);
+        stack2.pop();
+        stack2.pop();
+        console.log(stack2.size()); // 2
+        stack2.print(); // [5, 8]
+
+        console.log('-----------------------------');
+
+        // METHOD 03
+        // ES6 introduced a new primitive type called Symbol that is immutable, and it can be used as
+        // an object property. Let's see how we can use it to declare the items property i the Stack
+        // class: 
+
+        let _items = Symbol();
+
+        class Stack3 {
+            constructor () {
+                this[_items] = [];
+            }
+            push(element){
+                this[_items].push(element);
+            }
+            pop(){
+                return this[_items].pop();
+            }
+            peek(){
+                return this[_items][this[_items].length-1];
+            }
+            isEmpty(){
+                return this[_items].length == 0;
+            }
+            size(){
+                return this[_items].length;
+            }
+            clear(){
+                this[_items] = [];
+            }
+            print(){
+                console.log(this.toString());
+            }
+            toString(){
+                return this[_items].toString();
+            }
+        }
+
+        let stack3 = new Stack3();
+        console.log(stack3.isEmpty()); // true
+        stack3.push(5);
+        stack3.push(8);
+        console.log(stack3.peek()); // 8
+        stack3.push(11);
+        console.log(stack3.size()); // 3
+        console.log(stack3.isEmpty()); // false
+        stack3.push(15);
+        stack3.pop();
+        stack3.pop();
+        console.log(stack3.size()); // 2
+        stack3.print(); // [5, 8]
+
+        // it is possible to retrieve the _items Symbol by accessing stack3[objectSymbols[0]]
+        let objectSymbols = Object.getOwnPropertySymbols(stack3);
+        console.log(objectSymbols.length); // 1
+        console.log(objectSymbols);        // [Symbol()]
+        console.log(objectSymbols[0]);     // Symbol()
+        stack3[objectSymbols[0]].push(1);
+        stack3.print(); //5, 8, 1
+
+        console.log('-----------------------------');
+
+        // METHOD 04
+        // ES6 classes with WeakMap
+        // There is one data type we can use to ensure that the property will be private in a class,
+        // and it is called WeakMap. A WeakMap can store key/value pair, where the key is an objet and
+        // the value can be any data type.
+        let Stack4 = (function () {
+
+            const items = new WeakMap();
+
+            class Stack4 {
+                constructor () {
+                    items.set(this, []);
+                }
+                push(element){
+                    let s = items.get(this);
+                    s.push(element);
+                }
+                pop(){
+                    let s = items.get(this);
+                    let r = s.pop();
+                    return r;
+                }
+                peek(){
+                    let s = items.get(this);
+                    return s[s.length-1];
+                }
+                isEmpty(){
+                    return items.get(this).length == 0;
+                }
+                size(){
+                    let s = items.get(this);
+                    return s.length;
+                }
+                clear(){
+                    items.set(this, []);
+                }
+                print(){
+                    console.log(this.toString());
+                }
+                toString(){
+                    return items.get(this).toString();
+                }
+            }
+            return Stack3;
+        })();           
+
+        let stack4 = new Stack4();
+        console.log(stack4.isEmpty()); // true
+        stack4.push(5);
+        stack4.push(8);
+        console.log(stack4.peek()); // 8
+        stack4.push(11);
+        console.log(stack4.size()); // 3
+        console.log(stack4.isEmpty()); // false
+        stack4.push(15);
+        stack4.pop();
+        stack4.pop();
+        console.log(stack4.size()); // 2
+        stack4.print(); // [5, 8]        
+    </script>
+</body>
+</html>
