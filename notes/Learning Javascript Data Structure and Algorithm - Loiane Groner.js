@@ -40,7 +40,7 @@
 // Arrow functions using => (✓)
 // Classes (✓)
 // Default parameters (✓)
-// iterators (✗)
+// iterators (✓)
 // typed arrays (✗)
 // Set  (✗)
 // Map (✗)
@@ -92,3 +92,10 @@ averageTemp[1][5] = 72;
 /***********************/
 // A stack is an ordered collection of items that follows the LIFO (Last In First Out)
 
+// Solving problems using Stacks
+// Stacks have a variety of applications in real-world problems, like:
+// 01. backtracking problems to remember tasks or paths visited
+// 02. undo ActionScript
+// 03. decimal to binary (✓)
+// 04. balanced parenthesis problem
+// 05. tower of Hanoi 

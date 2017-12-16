@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Stack</title>
+    <title>Stack</title>
 </head>
 <body>
     <script>
+        console.log('METHOD 01 -----------------------------');
+
         // METHOD 01
         // We created a Stack function that can be used as a sort of class; since JS functions have 
         // constructors, we can simulate the class behavior. We declare a variable named items that
@@ -54,7 +56,7 @@
         console.log(stack.size()); // 2
         stack.print(); // [5, 8]
 
-        console.log('-----------------------------');
+        console.log('METHOD 02 -----------------------------');
 
         // METHOD 02
         // We simply transformed the Stack function into a Stack class using the ES6 simplified syntax
@@ -111,7 +113,7 @@
         console.log(stack2.size()); // 2
         stack2.print(); // [5, 8]
 
-        console.log('-----------------------------');
+        console.log('METHOD 03 -----------------------------');
 
         // METHOD 03
         // ES6 introduced a new primitive type called Symbol that is immutable, and it can be used as
@@ -172,7 +174,7 @@
         stack3[objectSymbols[0]].push(1);
         stack3.print(); //5, 8, 1
 
-        console.log('-----------------------------');
+        console.log('METHOD 04 -----------------------------');
 
         // METHOD 04
         // ES6 classes with WeakMap
@@ -185,7 +187,7 @@
 
             const items = new WeakMap();
 
-            class Stack4 {
+            class Stack5 {
                 constructor () {
                     items.set(this, []);
                 }
@@ -220,7 +222,7 @@
                     return items.get(this).toString();
                 }
             }
-            return Stack4;
+            return Stack5;
         })();           
 
         let stack4 = new Stack4();
