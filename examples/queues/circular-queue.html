@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Circular Queue (Hot Potato)</title>
+</head>
+<body>
+    <script>
+        function Queue() {
+
+            let items = [];
+
+            this.enqueue = function(element){
+                items.push(element);
+            };
+            this.dequeue = function(){
+                return items.shift();
+            };
+            this.front = function(){
+                return items[0];
+            };
+            this.isEmpty = function(){
+                return items.length == 0;
+            };
+            this.clear = function(){
+                items = [];
+            };
+            this.size = function(){
+                return items.length;
+            };
+            this.print = function(){
+                console.log(items.toString());
+            };
+        }   
+
+        function hotPotato (nameList, num){
+
+            let queue = new Queue();
+
+            for (let i=0; i<nameList.length; i++) {
+                queue.enqueue(nameList[i]);
+            }
+            let eliminated = '';
+            while (queue.size() > 1){
+                for (let i=0; i<num; i++) {
+                    queue.enqueue(queue.dequeue());
+                    queue.print();
+                }
+                eliminated = queue.dequeue();
+                console.log('-> ' + eliminated + ' was eliminated from the Hot Potato game.');
+            }
+
+            return queue.dequeue();
+        }
+
+        let names = ['Rakko','Amod','Priya','Ashish','Anita'];
+        let winner = hotPotato(names, 3);
+        console.log('The winner is: ' + winner);
+    </script>
+</body>
+</html>
