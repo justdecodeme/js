@@ -47,15 +47,22 @@
         }
 
         var source = new Stack();
+        var dest = new Stack();
+        var helper = new Stack();
+
         source.push(3);
         source.push(2);
         source.push(1);
 
-        var dest = new Stack();
-        var helper = new Stack();
+        console.log('-> Begining: ');
+        source.print();
+        helper.print();
+        dest.print();
+
 
         towerOfHanoi(source.size(), source, dest, helper);
 
+        console.log('-> Ending: ');
         source.print();
         helper.print();
         dest.print();
