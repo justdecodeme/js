@@ -86,3 +86,9 @@ averageTemp[1][5] = 72;
 
 // Typed arrays are great to work with WebGL APIs, manipulate bits, and manipulate files 
 // images.
+
+/***********************/
+/* Chapter 03 - Stacks */
+/***********************/
+// A stack is an ordered collection of items that follows the LIFO (Last In First Out)
+
