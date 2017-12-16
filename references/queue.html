@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Queue</title>
+</head>
+<body>
+    <script>
+        console.log('METHOD 01 -----------------------------');
+
+        // METHOD 01
+        // We created a Queue function that can be used as a sort of class; since JS functions have 
+        // constructors, we can simulate the class behavior. We declare a variable named items that
+        // is private and only accessible to the queue function/class. However, this approach creates
+        // a COPY OF THE VARIABLE ITEMS for each class instance created. Therefore, it does not 
+        // escalte well in case we need to use several instances of the queue class at the same time.
+
+        function Queue() {
+
+            let items = [];
+
+            this.enqueue = function(element){
+                items.push(element);
+            };
+            this.dequeue = function(){
+                return items.shift();
+            };
+            this.front = function(){
+                return items[0];
+            };
+            this.isEmpty = function(){
+                return items.length == 0;
+            };
+            this.clear = function(){
+                items = [];
+            };
+            this.size = function(){
+                return items.length;
+            };
+            this.print = function(){
+                console.log(items.toString());
+            };
+        }   
+
+        let queue = new Queue();
+        console.log(queue.isEmpty()); //outputs true
+        queue.enqueue("John");
+        queue.enqueue("Jack");
+        queue.print();
+        queue.enqueue("Camila");
+        queue.print();
+        console.log(queue.size()); //outputs 3
+        console.log(queue.isEmpty()); //outputs false
+        queue.dequeue();
+        queue.dequeue();
+        queue.print();
+
+    
+        console.log('METHOD 02 -----------------------------');
+
+        // METHOD 02
+        // ES6 classes with WeakMap
+        // There is one data type we can use to ensure that the property will be private in a class,
+        // and it is called WeakMap. A WeakMap can store key/value pair, where the key is an objet and
+        // the value can be any data type.
+        // This time items property is truly private in the Queue class, since we have wrapped the 
+        // Queue class with a closure (outer function), so that WeakMap has scope only inside function
+
+        let Queue2 = (function () {
+
+            const items = new WeakMap();
+
+            class Queue2 {
+
+                constructor () {
+                    items.set(this, []);
+                }
+                enqueue(element) {
+                    let q = items.get(this);
+                    q.push(element);
+                }
+                dequeue() {
+                    let q = items.get(this);
+                    let r = q.shift();
+                    return r;
+                }
+                front() {
+                    let q = items.get(this);
+                    return q[0];
+                }
+                isEmpty(){
+                    return items.get(this).length == 0;
+                }
+                size(){
+                    let q = items.get(this);
+                    return q.length;
+                }
+                clear(){
+                    items.set(this, []);
+                }
+                print(){
+                    console.log(this.toString());
+                }
+                toString(){
+                    return items.get(this).toString();
+                }
+            }
+            return Queue2;
+        })();
+
+        let queue2 = new Queue2();
+        console.log(queue2.isEmpty()); //outputs true
+        queue2.enqueue("John");
+        queue2.enqueue("Jack");
+        queue2.print();
+        queue2.enqueue("Camila");
+        queue2.print();
+        console.log(queue2.size()); //outputs 3
+        console.log(queue2.isEmpty()); //outputs false
+        queue2.dequeue();
+        queue2.dequeue();
+        queue2.print();
+    </script>
+</body>
+</html>
