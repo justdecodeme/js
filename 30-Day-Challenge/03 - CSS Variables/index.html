@@ -61,16 +61,16 @@
       document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
     }
 
-    // inputs.forEach(input => input.addEventListener('change', handleUpdate));
-    // inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
 
-    // above 2 lines are same as
-    inputs.forEach(function (input) {
-      return input.addEventListener('change', handleUpdate);
-    });
-    inputs.forEach(function (input) {
-      return input.addEventListener('mousemove', handleUpdate);
-    });    
+    // ABOVE 2 LINES ARE SAME AS
+    // inputs.forEach(function (input) {
+    //   return input.addEventListener('change', handleUpdate);
+    // });
+    // inputs.forEach(function (input) {
+    //   return input.addEventListener('mousemove', handleUpdate);
+    // });    
   </script>
 </body>
 </html>
