@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>RegExp</title>
+</head>
+<body>
+  <h1>Heading</h1>
+
+  <script>
+    // A regular expression is an object that describes a pattern of characters.
+    // Regular expressions are used to perform pattern-matching and "search-and-replace" functions on te
+
+    // In JavaScript, regular expressions are often used with the two string methods: search() and replace().
+    // The search() method uses an expression to search for a match, and returns the position of the match.
+    // The replace() method returns a modified string where the pattern is replaced.
+
+    // var patt = new RegExp("regexp", "modifiers") // OR /regexp/modifiers;
+
+    // Regular Expression Modifiers
+    // i = Perform case-insensitive matching
+    // g = Perform a global match (find all matches rather than stopping after the first match)
+    // s = Perform single line matching
+    // m = Perform multiline matching (^ and $ match start and end of line)
+
+    // Regular Expression Patterns
+    // [abc]  [12]  [ab2-.]  // [^abc] (opposite effect)
+    // Find any of the characters between the brackets
+
+    // [a-z]  [A-Z] [0-9] [a-zA-Z0-9]  // [^a-z] (opposite effect)
+    // Find any of the digits between the brackets
+
+    // (x|y)	Find any of the alternatives separated with |
+
+    // Metacharacters are characters with a special meaning:(need to be escaped)
+    // .[{()\^$|?**
+    // \d	Digit (0-9)
+    // \D	Not a Digit (0-9)
+    // \w	Word character (a-z, A-Z, 0-9, _)
+    // \W	Not a Word character (a-z, A-Z, 0-9, _)
+    // \s	Whitespace (space, tab, newline)
+    // \S	Not a Whitespace (space, tab, newline)
+
+    // \b	Word Boundary
+    // \B	Not a Word Boundary
+    // ^ Begining of a string
+    // $ End of a string
+    // \uxxxx	Find the Unicode character specified by the hexadecimal number xxxx
+    // \. Select everything escept new line
+
+    // Quantifiers define quantities:
+    // *  0 or more
+    // +  1 or more
+    // ?  0 or one
+    // {3} Exact Number
+    // {3,4} Range of Numbers (Minimum, Maximum)
+    // n+	Matches any string that contains at least one n
+    // n*	Matches any string that contains zero or more occurrences of n
+    // n?	Matches any string that contains zero or one occurrences of n
+
+    var str = "JavaScript is Awesome!";
+
+    // Using the RegExp Object
+    // In JS, the RegExp object is a regular expression object with predefined properties and methods.
+
+    console.log('_____ search() With a Regular Expression _____');
+    console.log(str.search(/Is/));  // -1 (case sensitive)
+    console.log(str.search(/Is/i)); // 11 (case insensitive)
+
+    console.log('_____ search() With String _____');
+    console.log(str.search("Is")); // -1
+    console.log(str.search("is")); // 11
+
+    console.log('_____ replace() With a Regular Expression _____');
+    console.log(str.replace(/Is/, "is really")); // JavaScript is Awesome!
+    console.log(str.replace(/Is/i, "is really")); // JavaScript is really Awesome!
+
+    console.log('_____ replace() With String _____');
+    console.log(str.replace("Is", "is really")); // JavaScript is Awesome!
+    console.log(str.replace("is", "is really")); // JavaScript is really Awesome!
+
+    console.log('_____ match() With a Regular Expression _____');
+    console.log(str.match(/Is/));  // null (case sensitive)
+    console.log(str.match(/Is/i)); // ["is", index: 11, input: "JavaScript is Awesome!"]
+
+    console.log('_____ test() -> RegExp expression method _____');
+    // It searches a string for a pattern, and returns true or false, depending on the result.
+    var patt = /is/;
+    console.log(patt.test(str)); // true
+    console.log(/Is/.test(str)); // false
+
+    console.log('_____ exec() -> RegExp expression method _____');
+    // It searches a string for a specified pattern, and returns the found text. If no match is found, it returns null.
+    console.log(patt.exec(str)); // ["e", index: 16, input: "JavaScript is Awesome!"]
+    console.log(/Is/.exec(str)); // null
+
+    console.log(str.match(/e/)); // ["e", index: 16, input: "JavaScript is Awesome!"]
+    console.log(str.match(/e/g)); // (2) ["e", "e"]
+    console.log(str.match(/^JavaScript is Awesome!$/g)); //
+
+    /***************
+        Examples
+    ***************/
+
+    // 123-567-8901 {1}
+    // 223.567.8901 {2}
+    // 323*567*8901 {3}
+
+    // \d\d\d.\d\d\d.\d\d\d\d // select all {1}{2}{3}
+    // \d\d\d-\d\d\d-\d\d\d\d // select {1}
+    // \d\d\d[-*]\d\d\d[-*]\d\d\d\d // select {1}{3}
+    // [12]23[-.]\d\d\d[-.]\d\d\d\d // select {1}{2}
+
+    // Mr. Schafer {1}
+    // Mr Smith {2}
+    // Ms Davis {3}
+    // Mrs. Robinson {4}
+    // Mr. T {5}
+
+    // Mr\.?\s[A-Z]\w* // select {1}{2}{5}
+    // M(r|s|rs)\.?\s[A-Z]\w* // select {1}{2}{3}{4}{5}
+
+    // https://www.google.com {1}
+    // http://coreyms.com {2}
+    // https://youtube.com {3}
+    // https://www.nasa.gov {4}
+
+    // https?://(www\.)?(\w+)(\.\w+) // select {1}{2}{3}{4}
+  </script>
+
+</body>
+</html>
