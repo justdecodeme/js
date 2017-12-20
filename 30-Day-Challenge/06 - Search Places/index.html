@@ -35,22 +35,37 @@
   }
   
   function displayMatches() {
-    // stop next lines to excecute when switching windows
-    if(this.value.length ==  0) return false;
+
+    if(this.value.length == 0) {
+      let defaultList = `
+       <li>Filter for a city</li>
+        <li>or a state</li>`;
+      
+      suggestions.innerHTML = defaultList;
+
+      return false;
+    }
 
     const matchArray = findMatches(this.value, cities);
-    const html = matchArray.map(place => {
-      const regex = new RegExp(this.value, 'gi');
-      const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
-      const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
-      return `
-        <li>
-          <span class="name">${cityName}, ${stateName}</span>
-          <span class="population">${numberWithCommas(place.population)}</span>
-        </li>
-      `;
-    }).join('');
-    suggestions.innerHTML = html;
+
+    if(matchArray.length == 0) {
+      let alert = '<li class="alert">No Result Found.</li>'
+      suggestions.innerHTML = alert;
+    } else {
+      let html = matchArray.map(place => {
+        let regex = new RegExp(this.value, 'gi');
+        let cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+        let stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+        return `
+          <li>
+            <span class="name">${cityName}, ${stateName}</span>
+            <span class="population">${numberWithCommas(place.population)}</span>
+          </li>
+        `;
+      }).join('');
+      suggestions.innerHTML = html;
+    }
+
   }
   
   const searchInput = document.querySelector('.search');

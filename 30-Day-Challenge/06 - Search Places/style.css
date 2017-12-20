@@ -80,3 +80,7 @@ span.population {
 .hl {
   background:#ffc600;
 }
+.suggestions li.alert {
+  background: none;
+  background-color: ffffff5c!important ;
+}
