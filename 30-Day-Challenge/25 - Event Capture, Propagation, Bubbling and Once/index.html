@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+  <style>
+    html {
+      box-sizing: border-box;
+    }
+    *, *:before, *:after { box-sizing: inherit; }
+    div {
+      width:100%;
+      padding:50px;
+    }
+    .one {
+      background: thistle;
+    }
+    .two {
+      background:mistyrose;
+    }
+    .three {
+      background:coral;
+    }
+    button {
+      position: fixed;
+      left: 10px;
+      top: 10px;
+    }
+  </style>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<button>Click Me!</button>
+<script>
+  const divs = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e) {
+    console.log(this.classList.value);
+    // e.stopPropagation(); // stop bubbling!
+    // console.log(this);
+  }
+  
+  divs.forEach(div => div.addEventListener('click', logText, {
+    // capture: true, // (false by default - capture: up to down, bubble: down to up)
+    // once: true
+  }));
+  
+  button.addEventListener('click', () => {
+    console.log('Click!!!');
+  }, {
+    once: true
+  });
+</script>
+</body>
+</html>
