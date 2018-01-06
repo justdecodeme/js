@@ -24,9 +24,11 @@ html {
   display: block;
   clear: both;
 }
-
+.photobooth label {
+  font-size: 20px;
+}
 .photo {
-  width:100%;
+  /* width:100%; */
   float:left;
 }
 
@@ -35,6 +37,11 @@ html {
   top:20px;
   right: 20px;
   width:200px;
+}
+
+.rgb span {
+  width: 50px;
+  display: inline-block;
 }
 
 /*

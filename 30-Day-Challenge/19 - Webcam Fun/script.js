@@ -3,6 +3,8 @@ const canvas = document.querySelector('.photo');
 const ctx = canvas.getContext('2d');
 const strip = document.querySelector('.strip');
 const snap = document.querySelector('.snap');
+const inputs = document.querySelectorAll('input');
+let isValueChanging = false;
 
 function getVideo() {
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -24,15 +26,16 @@ function paintToCanvas() {
 
   return setInterval(() => {
     ctx.drawImage(video, 0, 0, width, height);
+
     // take the pixels out
     let pixels = ctx.getImageData(0, 0, width, height);
+
     // mess with them
     // pixels = redEffect(pixels);
-
-    pixels = rgbSplit(pixels);
+    pixels = greenScreen(pixels);
+    // pixels = rgbSplit(pixels);
     // ctx.globalAlpha = 0.8;
 
-    // pixels = greenScreen(pixels);
     // put them back
     ctx.putImageData(pixels, 0, 0);
   }, 16);
@@ -49,7 +52,7 @@ function takePhoto() {
   link.href = data;
   link.setAttribute('download', 'handsome');
   link.innerHTML = `<img src="${data}" alt="Handsome Man" />`;
-  strip.insertBefore(link, strip.firsChild);
+  strip.insertBefore(link, strip.firstChild);
 }
 
 function redEffect(pixels) {
@@ -97,6 +100,23 @@ function greenScreen(pixels) {
   return pixels;
 }
 
-getVideo();
+// getVideo();
 
-video.addEventListener('canplay', paintToCanvas);
+// video.addEventListener('canplay', paintToCanvas);
+
+function mousedown() {
+  isValueChanging = true;
+}
+function mousemove() {
+  if(isValueChanging) {
+    document.querySelector('span[id="'+this.name+'"]').innerHTML = this.value;
+  }
+}
+function mouseup() {
+  isValueChanging = false;
+  document.querySelector('span[id="'+this.name+'"]').innerHTML = this.value;
+}
+
+inputs.forEach(input => input.addEventListener('mousedown', mousedown));
+inputs.forEach(input => input.addEventListener('mousemove', mousemove));
+inputs.forEach(input => input.addEventListener('mouseup', mouseup));
