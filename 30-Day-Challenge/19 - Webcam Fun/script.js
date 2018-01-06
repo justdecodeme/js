@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const strip = document.querySelector('.strip');
 const snap = document.querySelector('.snap');
 const inputs = document.querySelectorAll('input');
+const spans = document.querySelectorAll('span');
 let isValueChanging = false;
 
 function getVideo() {
@@ -109,7 +110,7 @@ function mousedown() {
 }
 function mousemove() {
   if(isValueChanging) {
-    document.querySelector('span[id="'+this.name+'"]').innerHTML = this.value;
+    document.querySelector('span[id="' + this.name + '"]').innerHTML = this.value;
   }
 }
 function mouseup() {
@@ -120,3 +121,7 @@ function mouseup() {
 inputs.forEach(input => input.addEventListener('mousedown', mousedown));
 inputs.forEach(input => input.addEventListener('mousemove', mousemove));
 inputs.forEach(input => input.addEventListener('mouseup', mouseup));
+
+for(var i = 0; i < spans.length; i++) {
+  spans[i].innerHTML = inputs[i].value;
+}

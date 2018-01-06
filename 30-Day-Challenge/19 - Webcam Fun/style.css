@@ -42,6 +42,7 @@ html {
 .rgb span {
   width: 50px;
   display: inline-block;
+  font-size: 18px;
 }
 
 /*
