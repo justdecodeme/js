@@ -101,9 +101,9 @@ function greenScreen(pixels) {
   return pixels;
 }
 
-// getVideo();
+getVideo();
 
-// video.addEventListener('canplay', paintToCanvas);
+video.addEventListener('canplay', paintToCanvas);
 
 function mousedown() {
   isValueChanging = true;
