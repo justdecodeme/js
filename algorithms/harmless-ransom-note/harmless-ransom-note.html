@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Harmless Ransom Note</title>
+</head>
+<body>
+	<p>
+		Given an arbitrary ransom note string and another string containing letters from all the magazines, write a function that will return true if the ransom note can be constructed from the magazines ; otherwise, it will return false. 
+		<br>
+ 		Each letter in the magazine string can only be used once in your ransom note.
+	</p>
+<script>
+function harmlessRansomNote (noteText, magazineText) {
+	// split both string parameters into arrays
+	var noteArr = noteText.split(' ');
+	var magazineArr = magazineText.split(' ');
+
+	// create an object to use as a hash table it also avoids exponential time complexity of nested loops
+	var magazineObj = {};
+
+	// forEach to check if word is an word is an object on our property
+	// magazineArr.forEach(function(word) {}); // same as below
+	magazineArr.forEach(word => {
+	    // if not we add it to our object 
+	      // increment the value		
+		if(!magazineObj[word]) {
+			magazineObj[word] = 0;
+		}
+	    // otherwise, if it is there
+	      // we just increment the value
+		magazineObj[word]++;
+	});
+
+	// Boolean variable to be return from function
+	var noteIsPossible = true;
+
+	// use forEach to iterate through each word
+	noteArr.forEach(word => {
+		// if word is found on the object decrement it
+		if(magazineObj[word]) {
+			magazineObj[word]--;
+			// if word value < 0 we can't make our word so note is NOT possible.
+			if(magazineObj[word] < 0) {
+				noteIsPossible = false;
+			}
+			// if word is not found then the note is NOT possible.
+		} else {
+			noteIsPossible = false;
+		}
+	})
+	console.log(noteIsPossible);
+	return noteIsPossible;
+}
+
+harmlessRansomNote('js js js', 'js easy js');
+
+// Time Complexity:  Since these loops are NOT nested we have a linear time complexity of 
+// O(n) or O(n) + O(m) or O(n + m)
+</script>
+</body>
+</html>
