@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Typing App</title>
+    <style media="screen">
+      .active { background: lightblue; }
+      .success { color: #d5d5d5; }
+      .error { background: orange; }
+    </style>
+  </head>
+  <body>
+    <div id="typingArea"></div>
+
+    <script type="text/javascript">
+      let str = 'js is Awesome!';
+      let strArr = str.split('');
+      let strHTML = '';
+      let count = 0;
+
+      strArr.forEach(letter => {
+        strHTML += `<span class="letter">${letter}</span>`
+      })
+
+      document.querySelector('#typingArea').innerHTML = strHTML;
+      document.querySelectorAll('#typingArea span')[0].classList.add('active');
+
+      let last = document.querySelectorAll('#typingArea span')[str.length-1];
+
+      var checkTyping = function(e) {
+        let active = document.querySelector('#typingArea span.active');
+
+        if(active != last) {
+          console.log(e.key)
+          if(active.innerHTML == e.key && e.key != Shift) {
+              active.classList.add('success');
+              active.nextSibling.classList.add('active');
+              active.classList.remove('active');
+          } else if(active.innerHTML != e.key && e.key != Shift) {
+              active.classList.add('error');
+              active.nextSibling.classList.add('active');
+              active.classList.remove('active');
+          }
+        } else if(active == last) {
+          console.error("DONE!");
+        }
+      }
+
+      document.addEventListener('keyup', checkTyping, false);
+    </script>
+  </body>
+</html>
