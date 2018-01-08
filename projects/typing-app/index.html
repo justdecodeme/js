@@ -13,7 +13,7 @@
     <div id="typingArea"></div>
 
     <script type="text/javascript">
-      let str = 'js is Awesome!';
+      let str = 'js is.';
       let strArr = str.split('');
       let strHTML = '';
       let count = 0;
@@ -30,19 +30,26 @@
       var checkTyping = function(e) {
         let active = document.querySelector('#typingArea span.active');
 
-        if(active != last) {
-          console.log(e.key)
-          if(active.innerHTML == e.key && e.key != Shift) {
+        if(count < str.length-3) {
+          count++;
+          active.nextSibling.classList.add('active');
+          if(active.innerHTML == e.key) {
               active.classList.add('success');
               active.nextSibling.classList.add('active');
               active.classList.remove('active');
-          } else if(active.innerHTML != e.key && e.key != Shift) {
+          } else if(active.innerHTML != e.key) {
               active.classList.add('error');
-              active.nextSibling.classList.add('active');
               active.classList.remove('active');
           }
-        } else if(active == last) {
-          console.error("DONE!");
+        } else {
+          active.classList.remove('active');
+          if(active.innerHTML == e.key) {
+              active.classList.add('success');
+          } else if(active.innerHTML != e.key) {
+              active.classList.add('error');
+          }
+          setTimeout(function(){ alert("DONE!"); })
+          document.removeEventListener('keyup', checkTyping, false);
         }
       }
 
