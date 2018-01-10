@@ -4,43 +4,65 @@
     <meta charset="utf-8">
     <title>Typing App</title>
     <style media="screen">
+      #typingArea {
+        font-size: 70px;
+      }
       .active { background: lightblue; }
       .success { color: #d5d5d5; }
       .error { background: orange; }
     </style>
   </head>
   <body>
-    <div id="typingArea"></div>
+    <button id="toggleTyping">Start Typing</button>
+    <!-- container for letters -->
+    <div id="typingArea"></div> <!-- {1} -->
 
     <script type="text/javascript">
+      // string to be typed
       let str = 'js is.';
+      // convert string to array
       let strArr = str.split('');
       let strHTML = '';
       let count = 0;
+      let enableTyping = false;
+      let typingArea = document.querySelector('#typingArea');
+      let toggleTyping = document.querySelector('#toggleTyping');
 
+      // convert string array to html
       strArr.forEach(letter => {
         strHTML += `<span class="letter">${letter}</span>`
       })
+      // put generated html into its container {1}
+      typingArea.innerHTML = strHTML;
 
-      document.querySelector('#typingArea').innerHTML = strHTML;
-      document.querySelectorAll('#typingArea span')[0].classList.add('active');
-
+      // select all letters
+      let letters = document.querySelectorAll('#typingArea span');
+      // select last letter
       let last = document.querySelectorAll('#typingArea span')[str.length-1];
+      // add active class to firt letter
+      letters[0].classList.add('active');
+
 
       var checkTyping = function(e) {
+        console.log(toggleTyping);
+        // select active letter
         let active = document.querySelector('#typingArea span.active');
 
-        if(count < str.length-3) {
+        // check if we reached last letter or not
+        if(count < str.length-1) {
           count++;
+          // add active class to next element
           active.nextSibling.classList.add('active');
+          // if active letter is equal to typed letter
           if(active.innerHTML == e.key) {
               active.classList.add('success');
-              active.nextSibling.classList.add('active');
               active.classList.remove('active');
+              // if active letter is not equal to typed letter
           } else if(active.innerHTML != e.key) {
               active.classList.add('error');
               active.classList.remove('active');
           }
+          // if we reached last letter
         } else {
           active.classList.remove('active');
           if(active.innerHTML == e.key) {
@@ -52,8 +74,17 @@
           document.removeEventListener('keyup', checkTyping, false);
         }
       }
-
+      var toggleTyping = function() {
+        if(!toggleTyping) {
+          toggleTyping = !toggleTyping;
+          toggleTyping.innerHTML = 'stop';
+        } else {
+          toggleTyping = !toggleTyping;
+          toggleTyping.innerHTML = 'start';
+        }
+      }
       document.addEventListener('keyup', checkTyping, false);
+      toggleTyping.addEventListener('click', () => { enableTyping = true }, false);
     </script>
   </body>
 </html>
