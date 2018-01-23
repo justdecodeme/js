@@ -44,7 +44,7 @@
 
 
       var checkTyping = function(e) {
-        console.log(isTypingEnabled);
+        console.log('typing');
         // select active letter
         let active = document.querySelector('#typingArea span.active');
         // run only if typing is enabled
@@ -76,17 +76,17 @@
           }
         }
       }
-      var toggleTyping = function() {
+      var toggleTyping = function(e) {
         // if typing is not enabled
-        if(!isTypingEnabled) {
+        if(!isTypingEnabled && e.detail == 1) { // e.detail == 1 (don't run on spacebar click)
           isTypingEnabled = !isTypingEnabled;
           toggleTypingBtn.innerHTML = 'Stop Typing';
           document.addEventListener('keyup', checkTyping, false);
-        } else {
+        } else if(e.detail == 1) {
           isTypingEnabled = !isTypingEnabled;
           toggleTypingBtn.innerHTML = 'Start Typing';
+          document.removeEventListener('keyup', checkTyping, false);
         }
-        console.warn(isTypingEnabled);
       }
 
       toggleTypingBtn.addEventListener('click', toggleTyping, false);
