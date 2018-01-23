@@ -4,16 +4,26 @@
     <meta charset="utf-8">
     <title>Typing App</title>
     <style media="screen">
+      #toggleTypingBtn {
+          background: lightgreen;
+          padding: 10px;
+          cursor: pointer;
+          user-select: none;
+          display: inline-block;
+      }
+      #toggleTypingBtn.active {
+        background: orange;
+      }
       #typingArea {
         font-size: 70px;
       }
       .active { background: lightblue; }
       .success { color: #d5d5d5; }
-      .error { background: orange; }
+      .error { background: yellow; }
     </style>
   </head>
   <body>
-    <button id="toggleTypingBtn">Start Typing</button>
+    <a id="toggleTypingBtn">Start Typing</a>
     <!-- container for letters -->
     <div id="typingArea"></div> <!-- {1} -->
 
@@ -79,10 +89,12 @@
         // if typing is not enabled
         if(!isTypingEnabled && e.detail == 1) { // e.detail == 1 (don't run on spacebar click)
           isTypingEnabled = !isTypingEnabled;
+          toggleTypingBtn.classList.add('active');
           toggleTypingBtn.innerHTML = 'Stop Typing';
           document.addEventListener('keyup', checkTyping, false);
         } else if(e.detail == 1) {
           isTypingEnabled = !isTypingEnabled;
+          toggleTypingBtn.classList.remove('active');
           toggleTypingBtn.innerHTML = 'Start Typing';
           document.removeEventListener('keyup', checkTyping, false);
         }
