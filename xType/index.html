@@ -52,7 +52,7 @@
       // add active class to firt letter
       letters[0].classList.add('active');
 
-
+      // FUNCTIONS
       var checkTyping = function(e) {
         // select active letter
         let active = document.querySelector('#typingArea span.active');
@@ -80,7 +80,9 @@
             } else if(active.innerHTML != e.key) {
                 active.classList.add('error');
             }
-            setTimeout(function(){ alert("DONE!"); })
+            setTimeout(function(){ alert("DONE!"); });
+            toggleTypingBtn.classList.remove('active');
+            toggleTypingBtn.innerHTML = 'Start Typing';
             document.removeEventListener('keyup', checkTyping, false);
           }
         }
@@ -100,6 +102,7 @@
         }
       }
 
+      // EVENT LISTENERS
       toggleTypingBtn.addEventListener('click', toggleTyping, false);
     </script>
   </body>
