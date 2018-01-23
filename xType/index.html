@@ -13,7 +13,7 @@
     </style>
   </head>
   <body>
-    <button id="toggleTyping">Start Typing</button>
+    <button id="toggleTypingBtn">Start Typing</button>
     <!-- container for letters -->
     <div id="typingArea"></div> <!-- {1} -->
 
@@ -26,7 +26,7 @@
       let count = 0;
       let isTypingEnabled = false;
       let typingArea = document.querySelector('#typingArea');
-      let toggleTypingBtn = document.querySelector('#toggleTyping');
+      let toggleTypingBtn = document.querySelector('#toggleTypingBtn');
 
       // convert string array to html
       strArr.forEach(letter => {
@@ -44,7 +44,6 @@
 
 
       var checkTyping = function(e) {
-        console.log('typing');
         // select active letter
         let active = document.querySelector('#typingArea span.active');
         // run only if typing is enabled
