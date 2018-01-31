@@ -26,7 +26,6 @@
     <a id="toggleTypingBtn">Start Typing</a>
     <div id="timerArea">
       <h1 class="display__time-left">01:00</h1>
-      <p class="display__end-time"></p>
     </div>
     <!-- container for letters -->
     <div id="typingArea"></div> <!-- {1} -->
@@ -39,7 +38,6 @@
       const strArr = str.split('');
       const timerArea = document.querySelector('#timerArea');
       const timerDisplay = document.querySelector('.display__time-left');
-      const endTime = document.querySelector('.display__end-time');
       const typingArea = document.querySelector('#typingArea');
       const toggleTypingBtn = document.querySelector('#toggleTypingBtn');
 
@@ -50,15 +48,6 @@
         const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
         timerDisplay.textContent = display;
       }
-
-      function displayEndTime(timestamp) {
-        console.log(timestamp)
-        const end = new Date(timestamp);
-        const hour = end.getHours();
-        const adjustedHour = hour > 12 ? hour - 12 : hour;
-        const minutes = end.getMinutes();
-        endTime.textContent = `Be Back At ${adjustedHour}:${minutes < 10 ? '0' : ''}${minutes}`;
-      }
       var timer = function(seconds) {
         // clear any existing timers
         clearInterval(countdown);
@@ -66,7 +55,6 @@
         const now = Date.now();
         const then = now + seconds * 1000;
         displayTimeLeft(seconds);
-        displayEndTime(then);
 
         countdown = setInterval(() => {
           const secondsLeft = Math.round((then - Date.now()) / 1000);
@@ -138,6 +126,7 @@
         document.addEventListener('keyup', checkTyping, false);
       }
       var stopTyping = function() {
+        clearInterval(countdown);
         toggleTypingBtn.classList.remove('active');
         toggleTypingBtn.innerHTML = 'Start Typing';
         document.removeEventListener('keyup', checkTyping, false);
