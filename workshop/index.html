@@ -12,17 +12,25 @@
 		/*		1. Core JavaScript		*/
 		/********************************/
 
-        var a = 5;  // number
-        var b = "hi";  // string
-        var c = true;  // boolean
-        var d = null;  // null
-        var e;  // undefined
-        var f = ['html', 'css', 'js'];  // array
+		/******** Variables and Data Types ********/
+
+        // number
+        var a = 18;
+        // string
+        var b = "hi";
+        // boolean
+        var c = true;
+        // null
+        var d = null;
+        // undefined
+        var e;
+        // array
+        var f = ['html', 'css', 'js'];
         // object
         var g = {
-            "name":"rakesh",
-            "dob":"may 13",
-            sayHello: function() {
+            "subject":"css",  // object property 
+            "difficulty":"easy",
+            sayHello: function() {  // object method
                 console.log("Hi from object method!");
             }
         };
@@ -31,6 +39,136 @@
             console.log("Hi from function!")
         }
 
+        console.log(a, typeof a);
+
+
+		/******* Objects ********/
+
+		// Array Object
+		var subjects = ['html', 'css', 'js'];
+		console.log(subjects.reverse())
+
+		// Math Object
+		console.log(Math.round(10.6));
+
+		// Date Object
+		var now = new Date();
+		console.log(now.getDate());
+
+		// String Object
+		var str = "Good to see you all!";
+		console.log(str.toUpperCase());
+
+
+		/******* Conditional Statements ********/
+
+		var hour = 14;
+		
+		// if
+		if(hour < 12) {
+			console.log('Its AM now!');
+		}
+
+		// if else
+		if(hour < 12) {
+			console.log('Its AM now!');
+		} else {
+			console.log('Its PM now!');
+		}
+
+		// ternary operator
+		hour < 12 ? console.log('Its AM now!') : console.log('Its PM now!');
+
+		// switch
+		var day = null;
+		switch (now.getDay()) {
+		    case 0: day = "Sunday";
+		        break;
+		    case 1: day = "Monday";
+		        break;
+		    case 2: day = "Tuesday";
+		        break;
+		    case 3: day = "Wednesday";
+		        break;
+		    case 4: day = "Thursday";
+		        break;
+		    case 5: day = "Friday";
+		        break;
+		    case 6: day = "Saturday";
+		}
+		console.log(day);	
+
+
+		/******* Loops ********/
+
+		var subjects = ['html', 'css', 'js'];
+
+		// for
+		for(var i = 0; i < subjects.length; i++) {
+			console.log(subjects[i]);
+		}
+
+		// while
+		var i = 0;
+		while(i < subjects.length) {
+			console.log(subjects[i]);
+			i++;
+		}
+
+		// do while
+		var i = 0;
+		do {
+			console.log(subjects[i]);
+			i++;
+		} while(i < subjects.length);
+
+
+		/******* "use strict" ********/
+
+		"use strict"
+		// The "use strict" directive is only recognized at the beginning of a script or a function.
+		// code is executed in "strict mode".
+		PI = 3.14;  // will give error as variable PI is not declared
+
+
+		/******* functions ********/		
+
+        // function without return statement
+        function sayHi() {
+            console.log('Hi!');
+        }
+        sayHi(); // Hi
+
+
+        // function without return statement but with parameter
+        function output(msg) {
+            console.log(msg);
+        }
+        output('Hello!'); // Hello!
+
+        // 2nd argument is neglected
+        output('Hello again!', 'Good to see you!'); // Hello again!
+
+        output(); // undefined
+
+        // function using the return statement
+        function sum(num1, num2) {
+            return num1 + num2;
+        }
+        console.log(sum(1,2)); // 3
+
+
+		/********************************/
+		/*		2. DOM Scripting		*/
+		/********************************/        
+
+		// get references
+		document.getElementById('heading');
+		document.getElementsByClassName('text')[0];
+
+		/********************************/
+		/*		2. File Operations		*/
+		/********************************/        
 
 	</script>
 </body>
