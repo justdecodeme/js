@@ -49,18 +49,18 @@
 
             dropZone.addEventListener("dragenter", function() {
               event.preventDefault();
-              dropZone.style.background = 'rgba(0, 0, 0255, 0.2)';
+              dropZone.style.background = 'rgba(0, 0, 255, 0.2)';
             });
             dropZone.addEventListener("dragleave", function() {
               event.preventDefault();
-              dropZone.style.background = 'rgba(0, 0, 0255, 0.1)';
+              dropZone.style.background = 'rgba(0, 0, 255, 0.1)';
             });
             dropZone.addEventListener("dragover", function() {
-              dropZone.style.background = 'rgba(0, 0, 0255, 0.2)';
+              dropZone.style.background = 'rgba(0, 0, 255, 0.2)';
               event.preventDefault();
             });
             dropZone.addEventListener("drop", function() {
-              dropZone.style.background = 'rgba(0, 0, 0255, 0.1)';
+              dropZone.style.background = 'rgba(0, 0, 255, 0.1)';
               event.preventDefault();
               var newImage = document.createElement("img");
               newImage.src = event.dataTransfer.getData("text");
