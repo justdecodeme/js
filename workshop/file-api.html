@@ -23,12 +23,12 @@
 		  // files is a FileList of File objects. List some properties.
 		  var output = "";
 		  for (var i = 0, file; file = files[i]; i++) {
-		    output += '<li>' + file.name + ' | ' + file.size + 'bytes </li>';
+		    output += '<li><b>Name: </b>' + file.name + ' , <b>Size: </b>' + file.size + ' bytes  , <b>Type: </b>' + file.type + '</li>';
 		  }
 		  document.getElementById('list').innerHTML = output;
 		}
 
-		document.getElementById('files').addEventListener('change', handleFileSelect);		
-	</script>	
+		document.getElementById('files').addEventListener('change', handleFileSelect);
+	</script>
 </body>
 </html>

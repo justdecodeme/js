@@ -56,12 +56,14 @@
               dropZone.style.background = 'rgba(0, 0, 255, 0.1)';
             });
             dropZone.addEventListener("dragover", function() {
-              dropZone.style.background = 'rgba(0, 0, 255, 0.2)';
               event.preventDefault();
+              dropZone.style.background = 'rgba(0, 0, 255, 0.2)';
+              event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
             });
             dropZone.addEventListener("drop", function() {
-              dropZone.style.background = 'rgba(0, 0, 255, 0.1)';
+              event.stopPropagation();
               event.preventDefault();
+              dropZone.style.background = 'rgba(0, 0, 255, 0.1)';
               var newImage = document.createElement("img");
               newImage.src = event.dataTransfer.getData("text");
               dropZone.appendChild(newImage);

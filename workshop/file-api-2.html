@@ -5,10 +5,10 @@
 	<title>File API</title>
 	<style>
 		#drop_zone {
-		    background: rgba(0,0,0,0.1);
+		    background: rgba(0, 0, 0, 0.1);
 		    padding: 20px;
 		    border-radius: 10px;
-		    border: 2px dashed rgba(0,0,0,0.3);
+		    border: 2px dashed rgba(0, 0, 0, 0.3);
 		    text-align: center;
 		    font-size: 30px;
 		    font-family: monospace;
@@ -21,6 +21,8 @@
 	<ul id="list"></ul>
 
 	<script>
+		var dropZone = document.getElementById('drop_zone');
+
 		// Check for the various File API support.
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
 		  console.log('Great success! All the File APIs are supported.')
@@ -28,9 +30,25 @@
 		  alert('The File APIs are not fully supported in this browser.');
 		}
 
-		function handleFileSelect(event) {
-		  event.stopPropagation();
-		  event.preventDefault();
+		// Event listeners.
+		dropZone.addEventListener("dragenter", function() {
+			event.preventDefault();
+			dropZone.style.background = 'rgba(0, 0, 0, 0.2)'
+		});
+		dropZone.addEventListener("dragleave", function() {
+			event.preventDefault();
+			dropZone.style.background = 'rgba(0, 0, 0, 0.1)'
+		});
+		dropZone.addEventListener("dragover", function() {
+			event.preventDefault();
+			dropZone.style.background = 'rgba(0, 0, 0, 0.2)'
+		  event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+		});
+		dropZone.addEventListener("drop", function() {
+			event.stopPropagation();
+			event.preventDefault();
+
+			dropZone.style.background = 'rgba(0, 0, 0, 0.1)'
 
 		  var files = event.dataTransfer.files; // FileList object.
 
@@ -43,18 +61,7 @@
 		                '</li>');
 		  }
 		  document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-		}
-
-		function handleDragOver(event) {
-		  event.preventDefault();
-		  dropZone.style.background = 'rgba(0,0,0,0.2)'
-		  event.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
-		}
-
-		// Event listeners.
-		var dropZone = document.getElementById('drop_zone');
-		dropZone.addEventListener('dragover', handleDragOver);
-		dropZone.addEventListener('drop', handleFileSelect);	
-	</script>	
+		});
+	</script>
 </body>
 </html>
