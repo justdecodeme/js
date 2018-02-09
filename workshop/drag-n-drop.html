@@ -1,51 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Drag and Drop</title>
+    <style>
+      .box {
+        width: 100%;
+        min-height: 215px;
+        background: rgba(255, 0 , 0, 0.1);
+        padding: 10px;
+        border-radius: 10px;
+        box-sizing: border-box;
+
+      }
+      .box h1 {
+        margin-top: 0;
+      }
+      #dropZone {
+        margin-top: 10px;
+        background: rgba(0, 0, 0255, 0.1);
+      }
+    </style>
 </head>
 <body onload="doDragDrop()">
     <h1>Drag and Drop Example</h1>
-    <h2>Original Photo</h2>
-    <p><img src="ia.png" draggable="true" id="logo"></p>
-    <h2>Duplicated Photo</h2>
-    <div id="copy" style="height:150px;background:#ccc"></div>
+    <div class="box" id="dragZone">
+      <h1>Source</h1>
+      <img id="source" src="images/book.png" draggable="true">
+    </div>
+    <div class="box" id="dropZone">
+      <h1>Target</h1>
+    </div>
 
     <script>
         function doDragDrop() {
-            var image = document.getElementById("logo");
-            image.addEventListener("dragstart", startDrag, false);
+            var image = document.getElementById("source");
+            var dragZone = document.getElementById("dragZone");
+            var dropZone = document.getElementById("dropZone");
 
-            function startDrag(event) {
-                event.dataTransfer.setData("text", event.target.src);
-            }
+            image.addEventListener("dragstart", function(event) {
+              event.dataTransfer.setData("text", event.target.src);
+            });
+            image.addEventListener("drag", function() {
+              dragZone.style.background = 'rgba(255, 0 , 0, 0.2)';
+            });
+            image.addEventListener("dragend", function() {
+              dragZone.style.background = 'rgba(255, 0 , 0, 0.1)';
+            });
 
-            var copy = document.getElementById("copy");
-            copy.addEventListener("dragenter", enterDrag, false);
-
-            function enterDrag(event) {
-                event.preventDefault();
-            }
-            copy.addEventListener("dragleave", leaveDrag, false);
-
-            function leaveDrag(event) {
-                event.preventDefault();
-            }
-            copy.addEventListener("dragover", overDrag, false);
-
-            function overDrag(event) {
-                event.preventDefault();
-            }
-            copy.addEventListener("drop", endDrop, false);
-
-            function endDrop(event) {
-                event.preventDefault();
-                var newImage = document.createElement("img");
-                newImage.src = event.dataTransfer.getData("text");
-                copy.appendChild(newImage);
-            }
+            dropZone.addEventListener("dragenter", function() {
+              event.preventDefault();
+              dropZone.style.background = 'rgba(0, 0, 0255, 0.2)';
+            });
+            dropZone.addEventListener("dragleave", function() {
+              event.preventDefault();
+              dropZone.style.background = 'rgba(0, 0, 0255, 0.1)';
+            });
+            dropZone.addEventListener("dragover", function() {
+              dropZone.style.background = 'rgba(0, 0, 0255, 0.2)';
+              event.preventDefault();
+            });
+            dropZone.addEventListener("drop", function() {
+              dropZone.style.background = 'rgba(0, 0, 0255, 0.1)';
+              event.preventDefault();
+              var newImage = document.createElement("img");
+              newImage.src = event.dataTransfer.getData("text");
+              dropZone.appendChild(newImage);
+            });
         }
     </script>
 </body>
