@@ -1,0 +1,29 @@
+$color_active: rgba(0, 0, 255, 0.5);
+$color_success: rgba(0, 255, 0, 0.5);
+$color_error: rgba(255, 0, 0, 0.5);
+$bg_lightgrey: rgba(0, 0, 0, 0.05);
+
+span.active { background: $color_active; }
+span.success { color: $color_success; }
+span.error { background: $color_error; }
+
+#toggleTypingBtn {
+    background: $color_success;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    display: inline-block;
+}
+
+#toggleTypingBtn.active {
+  background: $color_active;
+}
+
+#typingArea {
+  font-size: 30px;
+  max-height: 250px;
+  overflow: scroll;
+  background:$bg_lightgrey;
+  padding: 10px;
+  border-radius: 10px;
+}
