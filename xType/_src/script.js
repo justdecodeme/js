@@ -1,4 +1,4 @@
-let isTypingEnabled, count, time, countdown = null, totolErrors = 0;
+let isTypingEnabled, totalTyped, time, totolErrors, countdown = null;
 // string to be typed
 const str = "this is a simple paragraph that is meant to be nice and easy to type which is why there will be mommas no periods or any capital letters so i guess this means that it cannot really be considered a paragraph but just a series of run on sentences this should help you get faster at typing as im trying not to use too many difficult words in it although i think that i might start making it hard by including some more difficult letters I'm typing pretty quickly so forgive me for any mistakes i think that i will not just tell you a story about the time i went to the zoo and found a monkey and a fox playing together they were so cute and i think that they were not supposed to be in the same cage but they somehow were and i loved watching them horse around forgive the pun well i hope that it has been highly enjoyable typing this paragraph and i wish you the best of luck getting the best score that you possibly can.";
 // convert string to array
@@ -12,7 +12,8 @@ const seekBar = document.querySelector('#seekBar');
 // FUNCTIONS
 var generateText = function() {
   initialTime = 5;
-  count = 0;
+  totolErrors = 0;
+  totalTyped = 0;
   let strHTML = '';
   isTypingEnabled = false;
   // to show correct
@@ -39,7 +40,10 @@ var displayTimeLeft = function(seconds) {
   timerDisplay.textContent = display;
   if(seconds == 0) {
     setTimeout(function(){
-      alert("Total Errors: " + totolErrors);
+      alert('Done, Check Console Tab!')
+      console.log("Total Errors: " + totolErrors);
+      console.log("Toal typed: " + totalTyped);
+      console.log("Acuracy: " + ((totalTyped-totolErrors)/totalTyped)*100 + '%');
     });
     // generateText();
     // toggleTypingBtn.classList.remove('active');
@@ -73,8 +77,10 @@ var checkTyping = function(e) {
   // run only if typing is enabled
   if(isTypingEnabled) {
     // check if we didn't reached last letter
-    if(count < str.length-1) {
-      count++;
+    if(totalTyped < str.length-1) {
+      totalTyped++;
+      // add typed class to current element
+      active.classList.add('typed');
       // add active class to next element
       active.nextSibling.classList.add('active');
       // if active letter is equal to typed letter
