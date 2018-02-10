@@ -1,29 +1,44 @@
-$color_active: rgba(0, 0, 255, 0.5);
-$color_success: rgba(0, 255, 0, 0.5);
-$color_error: rgba(255, 0, 0, 0.5);
-$bg_lightgrey: rgba(0, 0, 0, 0.05);
+$active: rgba(0, 0, 255, 0.5);
+$success: rgba(0, 255, 0, 0.5);
+$error: rgba(255, 0, 0, 0.5);
+$lightgrey05: rgba(0, 0, 0, 0.05);
+$lightgrey1: rgba(0, 0, 0, 0.1);
 
-span.active { background: $color_active; }
-span.success { color: $color_success; }
-span.error { background: $color_error; }
+span.active { background: $active; }
+span.success { color: $success; }
+span.error { background: $error; }
 
 #toggleTypingBtn {
-    background: $color_success;
-    padding: 10px;
-    cursor: pointer;
-    user-select: none;
-    display: inline-block;
+  background: $success;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+  display: inline-block;
 }
 
 #toggleTypingBtn.active {
-  background: $color_active;
+  background: $active;
+}
+
+div#progressBar {
+  height: 10px;
+  background: $lightgrey1;
+  border-radius: 20px;
+  margin: 10px 0;
+  #seekBar {
+    width: 0%;
+    background: $active;
+    height: 100%;
+    border-radius: 20px;
+    transition: 1s width linear;
+  }
 }
 
 #typingArea {
   font-size: 30px;
   max-height: 250px;
   overflow: scroll;
-  background:$bg_lightgrey;
+  background:$lightgrey05;
   padding: 10px;
   border-radius: 10px;
 }

@@ -7,14 +7,16 @@ const timerArea = document.querySelector('#timerArea');
 const timerDisplay = document.querySelector('.display__time-left');
 const typingArea = document.querySelector('#typingArea');
 const toggleTypingBtn = document.querySelector('#toggleTypingBtn');
+const seekBar = document.querySelector('#seekBar');
 
 // FUNCTIONS
 var generateText = function() {
-  seconds = 30;
+  initialTime = 5;
   count = 0;
   let strHTML = '';
   isTypingEnabled = false;
-  displayTimeLeft(seconds);
+  // to show correct
+  displayTimeLeft(initialTime);
   // convert string array to html
   strArr.forEach(letter => {
     strHTML += `<span class="letter">${letter}</span>`
@@ -29,18 +31,21 @@ var generateText = function() {
   letters[0].classList.add('active');
 };
 var displayTimeLeft = function(seconds) {
+  seekBar.style.width = ((initialTime - seconds) / initialTime) * 100 + '%';
+
   const minutes = Math.floor(seconds / 60);
   const remainderSeconds = seconds % 60;
   const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
   timerDisplay.textContent = display;
   if(seconds == 0) {
-    setTimeout(function(){ alert("DONE!"); });
-    generateText();
-    toggleTypingBtn.classList.remove('active');
-    toggleTypingBtn.innerHTML = 'Start Typing Again';
-    document.removeEventListener('keyup', checkTyping, false);
+    // setTimeout(function(){ alert("DONE!"); });
+    // generateText();
+    // toggleTypingBtn.classList.remove('active');
+    // toggleTypingBtn.innerHTML = 'Start Typing Again';
+    // document.removeEventListener('keyup', checkTyping, false);
   }
 }
+
 var timer = function(seconds) {
   // clear any existing timers
   clearInterval(countdown);
@@ -96,7 +101,7 @@ var checkTyping = function(e) {
   }
 }
 var startTyping = function() {
-  timer(seconds);
+  timer(initialTime);
   toggleTypingBtn.classList.add('active');
   toggleTypingBtn.innerHTML = 'Stop Typing';
   document.addEventListener('keyup', checkTyping, false);
@@ -125,3 +130,4 @@ var toggleTyping = function(e) {
 // EVENT LISTENERS
 generateText();
 toggleTypingBtn.addEventListener('click', toggleTyping, false);
+toggleTypingBtn.click();
