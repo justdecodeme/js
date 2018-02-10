@@ -1,4 +1,4 @@
-let isTypingEnabled, totalTyped, time, totolErrors, countdown = null;
+let isTypingEnabled, totalTyped, time, totolErrors, totolSuccesses, countdown = null;
 // string to be typed
 const str = "this is a simple paragraph that is meant to be nice and easy to type which is why there will be mommas no periods or any capital letters so i guess this means that it cannot really be considered a paragraph but just a series of run on sentences this should help you get faster at typing as im trying not to use too many difficult words in it although i think that i might start making it hard by including some more difficult letters I'm typing pretty quickly so forgive me for any mistakes i think that i will not just tell you a story about the time i went to the zoo and found a monkey and a fox playing together they were so cute and i think that they were not supposed to be in the same cage but they somehow were and i loved watching them horse around forgive the pun well i hope that it has been highly enjoyable typing this paragraph and i wish you the best of luck getting the best score that you possibly can.";
 // convert string to array
@@ -13,6 +13,7 @@ const seekBar = document.querySelector('#seekBar');
 var generateText = function() {
   initialTime = 5;
   totolErrors = 0;
+  totolSuccesses = 0;
   totalTyped = 0;
   let strHTML = '';
   isTypingEnabled = false;
@@ -42,8 +43,9 @@ var displayTimeLeft = function(seconds) {
     setTimeout(function(){
       alert('Done, Check Console Tab!')
       console.log("Total Errors: " + totolErrors);
+      console.log("Total Successes: " + totolSuccesses);
       console.log("Toal typed: " + totalTyped);
-      console.log("Acuracy: " + ((totalTyped-totolErrors)/totalTyped)*100 + '%');
+      console.log("Acuracy: " + ((totolSuccesses)/totalTyped)*100 + '%');
     });
     // generateText();
     // toggleTypingBtn.classList.remove('active');
@@ -85,6 +87,7 @@ var checkTyping = function(e) {
       active.nextSibling.classList.add('active');
       // if active letter is equal to typed letter
       if(active.innerHTML == e.key) {
+          totolSuccesses++;
           active.classList.add('success');
           active.classList.remove('active');
           // if active letter is not equal to typed letter
@@ -97,6 +100,7 @@ var checkTyping = function(e) {
     } else {
       active.classList.remove('active');
       if(active.innerHTML == e.key) {
+          totolSuccesses++;
           active.classList.add('success');
       } else if(active.innerHTML != e.key) {
           totolErrors++;
