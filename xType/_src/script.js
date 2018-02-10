@@ -1,4 +1,4 @@
-let isTypingEnabled, count, time, countdown = null;
+let isTypingEnabled, count, time, countdown = null, totolErrors = 0;
 // string to be typed
 const str = "this is a simple paragraph that is meant to be nice and easy to type which is why there will be mommas no periods or any capital letters so i guess this means that it cannot really be considered a paragraph but just a series of run on sentences this should help you get faster at typing as im trying not to use too many difficult words in it although i think that i might start making it hard by including some more difficult letters I'm typing pretty quickly so forgive me for any mistakes i think that i will not just tell you a story about the time i went to the zoo and found a monkey and a fox playing together they were so cute and i think that they were not supposed to be in the same cage but they somehow were and i loved watching them horse around forgive the pun well i hope that it has been highly enjoyable typing this paragraph and i wish you the best of luck getting the best score that you possibly can.";
 // convert string to array
@@ -38,7 +38,9 @@ var displayTimeLeft = function(seconds) {
   const display = `${minutes}:${remainderSeconds < 10 ? '0' : '' }${remainderSeconds}`;
   timerDisplay.textContent = display;
   if(seconds == 0) {
-    // setTimeout(function(){ alert("DONE!"); });
+    setTimeout(function(){
+      alert("Total Errors: " + totolErrors);
+    });
     // generateText();
     // toggleTypingBtn.classList.remove('active');
     // toggleTypingBtn.innerHTML = 'Start Typing Again';
@@ -81,6 +83,7 @@ var checkTyping = function(e) {
           active.classList.remove('active');
           // if active letter is not equal to typed letter
       } else if(active.innerHTML != e.key) {
+          totolErrors++;
           active.classList.add('error');
           active.classList.remove('active');
       }
@@ -90,9 +93,12 @@ var checkTyping = function(e) {
       if(active.innerHTML == e.key) {
           active.classList.add('success');
       } else if(active.innerHTML != e.key) {
+          totolErrors++;
           active.classList.add('error');
       }
-      setTimeout(function(){ alert("DONE!"); });
+      setTimeout(function(){
+        alert("DONE!");
+      });
       generateText();
       toggleTypingBtn.classList.remove('active');
       toggleTypingBtn.innerHTML = 'Start Typing Again';
