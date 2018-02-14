@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Indexed DB</title>
+</head>
+<body>
+  <input type="text" id="name" placeholder="name">
+  <input type="text" id="email" placeholder="email">
+  <button id="add" onclick="add()">Add</button>
+
+  <script>
+  // When you are interacting with the DB, you need to use transaction
+
+    // check if indexedDB is supported or not
+    if (!window.indexedDB) {
+      console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+    } else {
+      console.log('Everything is cool!');
+    }
+
+    // Let us open our database
+    var request = window.indexedDB.open("MyTestDatabase", 3);
+
+    // This event is only implemented in recent browsers
+    request.onupgradeneeded = function(event) {
+      // Save the IDBDatabase interface
+      var db = event.target.result;
+      console.log(event.target.result);
+
+      // Create an objectStore for this database
+      if(!db.objectStoreNames.contains('students')) {
+        var objectStore = db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
+      }
+    };
+
+    request.onerror = function(event) {
+      console.log('error');
+    };
+    request.onsuccess = function(event) {
+      db = event.target.result;
+      console.log('success');
+    };
+
+    // Add some data
+    function add() {
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+
+      var transaction = db.transaction(['students'], 'readwrite');
+      var store = transaction.objectStore('students');
+
+      var student = {
+        name: name,
+        email: email
+      }
+
+      var request = store.add(student);
+
+      request.onsuccess = function(e) {
+        console.log('added');
+      }
+      request.onerror = function(e) {
+        console.log('error');
+      }
+    }
+  </script>
+</body>
+</html>
