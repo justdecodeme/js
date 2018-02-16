@@ -80,8 +80,9 @@
 /***********/
 /* PAGE 24 */
 /***********/
-// In JS, each function gets its own scope (technically called lexical scope). Scope is basically a collection
-// of variables as well as the rules for how those variables are accessed by name.
+// In JS, each function gets its own scope (technically called lexical scope).
+// Scope is basically a collection of variables as well as the rules for how
+// those variables are accessed by name.
 
 /***********/
 /* PAGE 30 */
