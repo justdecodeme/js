@@ -95,7 +95,7 @@ function pauseGame() {
 function playGame() {
   if(playValue == true) {
     pauseValue = true;
-    playValue = false;  
+    playValue = false;
     document.getElementById("pause").style.display = 'none';
     document.getElementById("play").style.display = 'block';
 
@@ -169,14 +169,6 @@ function bricksInit() {
       ++brickCount;
       bricks[r][c] =  {x: 0, y: 0, status: 'visible', hardness: 1, power: 'none'} // brick is visible having hardness of 1 by default
       bricks[r][c].hardness = getRndInteger(1,3); // generating bricks of random hardness (of 1 or 2)
-      if(brickHavingPaddlePower == brickCount) {
-        bricks[r][c].hardness = 1;
-        bricks[r][c].power = 'paddlePower';
-      }
-      if(brickHavingBallPower == brickCount) {
-        bricks[r][c].hardness = 1;
-        bricks[r][c].power = 'ballPower';
-      }
     }
   }
 }
@@ -193,13 +185,6 @@ function drawBricks() {
         brick.y = brick.gapT + r * (brick.h + brick.gapBetween);
         ctx.beginPath();
         ctx.rect(brick.x, brick.y, brick.w, brick.h); // ctx.rect(x1, y1, x2, y2)
-        ctx.fillStyle = (bricks[r][c].hardness == 1) ? "#7f8c8d" : "#2c3e50";
-        if(bricks[r][c].power == 'paddlePower') {
-          ctx.fillStyle = "#8e44ad";
-        }
-        if(bricks[r][c].power == 'ballPower') {
-          ctx.fillStyle = "#d35400";
-        }
         ctx.fill();
         ctx.closePath();
         bricks[r][c].x = brick.x;
@@ -238,15 +223,6 @@ function collisionDetection() {
             ball.dy = -ball.dy;
             b.status = 'hidden';
             ++score;
-            if(b.power == 'paddlePower') {
-              alert(paddleAlert);
-              paddle.w += 100;
-            }
-            if(b.power == 'ballPower') {
-              alert(ballAlert);
-              ball.type = 'hard'; // used to bypass hardness detection case above.
-              ball.r += 2;
-            }
             if(score == totalNoOfBricks) {
               alert("you win");
               document.location.reload();
@@ -295,12 +271,8 @@ function draw() {
       if(ball.x > paddle.x && ball.x < paddle.x + paddle.w) { // paddle and ball collision detection
         ball.dy = -ball.dy;
     } else { // if ball hits the floor
-        setScoreLocally(score, localStorage.currentPlayer);
-        if(localStorage.currentPlayer < players) {
-          localStorage.currentPlayer = Number(localStorage.currentPlayer) + 1;
-          // console.log('1: ' + localStorage.currentPlayer);
           document.location.reload();
-        } 
+        }
         if(localStorage.currentPlayer == players+2) {
             alert("Winner of this Game is Player " + findWinner());
             window.localStorage.clear();
@@ -336,8 +308,12 @@ function draw() {
   ball.x += ball.dx;
   ball.y += ball.dy;
 
-  if(rightPressed && paddle.x < canvas.width - paddle.w) { paddle.x += 3 }
-  if(leftPressed && paddle.x > 0) { paddle.x -= 3 }
+  if(rightPressed && paddle.x < canvas.width - paddle.w) {
+    paddle.x += 3
+  }
+  if(leftPressed && paddle.x > 0) {
+    paddle.x -= 3
+  }
 
   // requestAnimationFrame(draw);
 }
