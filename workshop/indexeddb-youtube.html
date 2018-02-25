@@ -10,6 +10,11 @@
   <input type="text" id="name" placeholder="name">
   <input type="text" id="email" placeholder="email">
   <button id="add" onclick="add()">Add</button>
+  <hr>
+  <input type="text" id="id" placeholder="id">
+  <button type="button" id="get" onclick="get()">Get</button>
+  <hr>
+  <ul id="list"></ul>
 
   <script>
   // When you are interacting with the DB, you need to use transaction
@@ -33,6 +38,7 @@
       // Create an objectStore for this database
       if(!db.objectStoreNames.contains('students')) {
         var objectStore = db.createObjectStore("students", { keyPath: "id", autoIncrement: true });
+        objectStore.createIndex('name', 'name', {unique: false});
       }
     };
 
@@ -44,23 +50,47 @@
       console.log('success');
     };
 
-    // Add some data
-    function add() {
-      var name = document.getElementById('name').value;
-      var email = document.getElementById('email').value;
+      // Add some data
+      function add() {
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
 
-      var transaction = db.transaction(['students'], 'readwrite');
+        var transaction = db.transaction(['students'], 'readwrite');
+        var store = transaction.objectStore('students');
+
+        var student = {
+          name: name,
+          email: email
+        }
+
+        var request = store.add(student);
+
+        request.onsuccess = function(e) {
+          console.log('added');
+        }
+        request.onerror = function(e) {
+          console.log('error');
+        }
+      }
+    // Add some data
+    function get() {
+      var transaction = db.transaction(['students'], 'readonly');
       var store = transaction.objectStore('students');
 
-      var student = {
-        name: name,
-        email: email
+      var index = store.index('name');
+
+      var output = '';
+      index.openCursor().onsuccess = function(e) {
+        var cursor = e.target.result;
+        if(cursor) {
+          output += "<li>" + cursor.value.name + "</li>";
+          cursor.continue;
+        }document.getElementById('list').innerHTML = output;
       }
 
-      var request = store.add(student);
-
       request.onsuccess = function(e) {
-        console.log('added');
+        console.log('success');
+        console.log(request);
       }
       request.onerror = function(e) {
         console.log('error');

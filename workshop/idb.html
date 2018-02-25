@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <input type="text" id="name" placeholder="name">
+    <input type="text" id="language" placeholder="language">
+    <button id="add" onclick="add()">Add</button>
+    <hr>
+    <input type="text" id="id" placeholder="id">
+    <button type="button" id="get" onclick="get()">Get</button>
+
+    <script type="text/javascript">
+    var db;
+    var request = indexedDB.open("moviesDB");
+    // This event is only implemented in recent browsers
+    request.onupgradeneeded = function(event) {
+      // Save the IDBDatabase interface
+      db = event.target.result;
+      console.log(event.target.result);
+
+      // Create an objectStore for this database
+      var objectStore = db.createObjectStore("topMovies");
+    };
+    // Add some data
+    function add() {
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+
+      var transaction = db.transaction(['topMovies'], 'readwrite');
+      var store = transaction.objectStore('topMovies');
+
+      var movie = {
+        name: name,
+        lang: language
+      }
+
+      var request = store.add(student);
+
+      request.onsuccess = function(e) {
+        console.log('added');
+      }
+      request.onerror = function(e) {
+        console.log('error');
+      }
+    }
+
+    </script>
+  </body>
+</html>
