@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>AJAX PHP Form</title>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<p>Simple ajax call result: <span id="content"></span></p>
+	<input type="text" id="info"><br>
+	<button id="btn">jquery ajax call</button>
+	<div id="output"></div>
+
+	<script>
+	$(function() {
+		$.get('demo1.php', function(response) {
+			$('#content').text(response);  // server response
+		});
+
+		$.ajax({
+			url: 'demo1.php',
+			dataType: 'json',
+			cache: false,
+			success: function(data, status) {
+				console.log(data);
+				$.each(data, function(index) {
+					console.log(data[index]);
+				});
+			},
+			error: function(xhr, textStatus, err) {
+				console.log(xhr);
+				console.log(textStatus);
+				console.log(err);
+			}
+		});
+		
+		$('#btn').click(function(e) {
+			console.log('clicked');
+			$.ajax({
+				type: 'POST',
+				url: 'demo2.php',
+				data: 'm=' + $('#info').val(),
+				success: function(response) {
+					$('#output').html(response);
+				},
+				error: function(xhr, textStatus, err) {
+					console.log(xhr);
+					console.log(textStatus);
+					console.log(err);
+				}
+			});
+		});
+	});		
+	</script>
+</body>
+</html>

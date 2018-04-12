@@ -3,8 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Game</title>
+	<style>
+		canvas {
+			background: yellow;
+		}
+	</style>
+	<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
 </head>
-<body>
-	
+<body onload="init();">
+	<canvas id="canvas" width="500" height="300"></canvas>
+
+	<script>
+		function init() {
+			var stage = new createjs.Stage('canvas');
+			var circle = new createjs.Shape();
+
+			circle.graphics.beginFill('Red').drawCircle(0, 0, 50);
+			circle.x = 150;
+			circle.y = 150;
+			stage.addChild(circle);
+			stage.update();
+		}
+	</script>
 </body>
 </html>
