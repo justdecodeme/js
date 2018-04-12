@@ -66,9 +66,13 @@
       ctx.rect(lastX, lastY, 100, 100);
       ctx.fill();
     });
+    function preventBehavior(e) {
+      e.preventDefault();
+    };
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', () => isDrawing = false);
     canvas.addEventListener('mouseout', () => isDrawing = false);
+    document.addEventListener("touchmove", preventBehavior, false);
   </script>
 </body>
 </html>
