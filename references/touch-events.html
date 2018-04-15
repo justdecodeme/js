@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Touch Events</title>
+  <style>
+    html {
+      background: black;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Touch type: <span id="touchType">-</span></h3>
+
+  <script>
+    // Touch events consist of three interfaces (Touch, TouchEvent and TouchList)
+    // and the following event types: touchstart, touchmove, touchend, touchleave, touchcancel
+
+    window.addEventListener('load', function() {
+        var doc = document.querySelector('html');
+        var touchType = document.getElementById('touchType');
+        var startx = 0;
+        var dist = 0;
+
+        function touchHandler(e) {
+          // e.preventDefault();
+          // touchType.innerHTML = e.type;
+
+          // console.log(e.type);
+
+          // HANDLING TOUCHES
+          var totalActiveTouches = e.touches.length;
+
+          var touchId = e.changedTouches[0].identifier;
+          var x       = e.changedTouches[0].pageX;
+          var y       = e.changedTouches[0].pageY;
+          console.log(e.type, touchId, x, y, totalActiveTouches);
+        }
+
+        doc.addEventListener('touchstart', touchHandler, false);
+        doc.addEventListener('touchmove', touchHandler, false);
+        doc.addEventListener('touchend', touchHandler, false);
+        // doc.addEventListener('touchleave', touchHandler, false);
+        // doc.addEventListener('touchcancel', touchHandler, false);
+
+        // doc.addEventListener('mousedown', touchHandler, false);
+        // doc.addEventListener('click', touchHandler, false);
+        // doc.addEventListener('touchmove', touchHandler, false);
+        // doc.addEventListener('touchend', touchHandler, false);
+        // doc.addEventListener('touchleave', touchHandler, false);
+        // doc.addEventListener('touchcancel', touchHandler, false);
+    }, false);
+  </script>
+</body>
+</html>

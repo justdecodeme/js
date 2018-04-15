@@ -1,0 +1,10 @@
+For a single click the order of events is:
+------------------------------------------
+touchstart
+touchmove
+touchend
+mouseover
+mousemove
+mousedown
+mouseup
+click

@@ -1,6 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
     <title></title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -17,37 +16,43 @@
             line-height: 300px;
             color: yellow;
         }
-
         #d1 {
             background-color: red;
         }
 
         #d2 {
             background-color: green;
-
         }
-
         #d3 {
             background-color: blue;
         }
-
         #d4 {
-            position: absolute;
+            position: fixed;
             background-color: yellow;
-            height: 150px;
-            width: 120px;
             top: 0;
+            padding: 10px;
         }
     </style>
-    <script type="text/javascript">
+</head>
+<body>
+    <div id="d1" class="div">div1 height:300px width:1300px</div>
+    <div id="d2" class="div">div2 height:300px width:1300px</div>
+    <div id="d3" class="div">div3 height:300px width:1300px</div>
+    <div id="d4">move mouse</div>
 
+    <script>
+        // offsetX  relative to the parent container
+        // pageX  relative to the document
+        // clientX  relative to the browser window
+        // screenX  relative to the screen
         $(function () {
 
             window.onscroll = function () {
-                $("#d4").css("top", getScrollTop());
+                // $("#d4").css("top", getScrollTop());
             };
 
             document.onmousemove = function (e) {
+              // console.log(e);
                 if (e == null) {
                     e = window.event;
                 }
@@ -55,6 +60,8 @@
                 html += "screenY:" + e.screenY + "<br/><br/>";
                 html += "clientX:" + e.clientX + "<br/>";
                 html += "clientY:" + e.clientY + "<br/><br/>";
+                html += "offsetX:" + e.offsetX + "<br/>";
+                html += "offsetY:" + e.offsetY + "<br/><br/>";
                 if (e.pageX == null) {
                     html += "pageX:" + e.x + "<br/>";
                     html += "pageY:" + e.y + "<br/>";
@@ -73,11 +80,5 @@
             return top;
         }
     </script>
-</head>
-<body>
-    <div id="d1" class="div">div1 height:300px width:1300px</div>
-    <div id="d2" class="div">div2 height:300px width:1300px</div>
-    <div id="d3" class="div">div3 height:300px width:1300px</div>
-    <div id="d4"></div>
 </body>
 </html>

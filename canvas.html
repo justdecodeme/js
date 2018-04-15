@@ -10,7 +10,7 @@
     margin:0;
   }
   canvas {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.8);
     height: 100%;
     width: 100%;
   }
@@ -28,7 +28,7 @@
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.lineWidth = 0;
-    ctx.globalCompositeOperation = 'multiply';
+    // ctx.globalCompositeOperation = 'multiply';
     let isDrawing = false;
     let lastX = 0;
     let lastY = 0;
@@ -36,15 +36,26 @@
     let direction = true;
     function draw(e) {
       if (!isDrawing) return; // stop the fn from running when they are not moused down
+      console.log(e.type);
       ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
       ctx.beginPath();
       // start from
       ctx.moveTo(lastX, lastY);
       // go to
       // console.log(e.offsetX, e.offsetY);
-      ctx.lineTo(e.offsetX, e.offsetY);
-      ctx.stroke();
-      [lastX, lastY] = [e.offsetX, e.offsetY];
+
+      if(e.type == 'touchmove') {
+        ctx.lineTo(e.touches[0].clientX, e.touches[0].clientY);
+        ctx.stroke();
+        [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
+        ctx.fillStyle = 'yellow';
+      } else {
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        ctx.fillStyle = 'red';
+      }
+
       hue++;
       if (hue >= 360) {
         hue = 0;
@@ -58,21 +69,42 @@
         ctx.lineWidth--;
       }
     }
-    canvas.addEventListener('mousedown', (e) => {
-      isDrawing = true;
-      [lastX, lastY] = [e.offsetX, e.offsetY];
-      ctx.fillStyle = 'red';
-      ctx.beginPath();
-      ctx.rect(lastX, lastY, 100, 100);
-      ctx.fill();
-    });
-    function preventBehavior(e) {
+    function drawCancel(e) {
+      console.log(e.type);
+      isDrawing = false;
+    }
+    function drawRect(e) {
       e.preventDefault();
+      console.log(e);
+
+      isDrawing = true;
+      if(e.type == 'touchstart') {
+        [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY];
+        ctx.fillStyle = 'yellow';
+      } else {
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+        ctx.fillStyle = 'red';
+      }
+      // ctx.beginPath();
+      // ctx.rect(lastX, lastY, 100, 100);
+      // ctx.fill();
     };
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', () => isDrawing = false);
-    canvas.addEventListener('mouseout', () => isDrawing = false);
-    document.addEventListener("touchmove", preventBehavior, false);
+
+    canvas.addEventListener('mousedown', drawRect, false);
+    canvas.addEventListener('mousemove', draw, false);
+    canvas.addEventListener('mouseup', drawCancel, false);
+    canvas.addEventListener('mouseout', drawCancel, false);
+
+    canvas.addEventListener("touchstart", drawRect, false);
+    canvas.addEventListener('touchmove', draw, false);
+    canvas.addEventListener('touchend', drawCancel, false);
+    canvas.addEventListener('touchleave', drawCancel, false);
+    canvas.addEventListener('touchcancel', drawCancel, false);
+
+    // document.addEventListener("touchmove", preventBehavior, false);
+    // document.addEventListener("touchend", preventBehavior, false);
+    // document.addEventListener("touchleave", preventBehavior, false);
+    // document.addEventListener("touchcancel", preventBehavior, false);
   </script>
 </body>
 </html>
