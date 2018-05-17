@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .done {
+      text-decoration: line-through;
+      color: grey;
+    }
+  </style>
+</head>
+<body>
+  <!-- html elements  -->
+  <input id="inputText" type="text" placeholder="add item...">
+  <button id="addItem">Add Item</button>
+  <ul id="list"></ul>
+
+  <script>
+    var items = {};
+    var inputText = document.getElementById('inputText');
+    var addItem = document.getElementById('addItem');
+
+    // Initialize localStorage if not defined
+  	if (!localStorage.items) {
+  		localStorage.items = JSON.stringify(items);
+  	}
+
+    // update items object as same as localStorage
+    items = JSON.parse(localStorage.items);
+
+    // generage list on page load and after adding any new item
+    function generateList() {
+      var output = '';
+      var id = 0;
+      for (var key in items) {
+          if(items[key] == true) {
+            output += "<li class='done'><input id='"+id+"' type='checkbox' checked><label for='"+id+"'>"+key+"</label></li>"
+          } else {
+            output += "<li><input id='"+id+"' type='checkbox'><label for='"+id+"'>"+key+"</label></li>"
+          }
+          id++;
+      }
+      list.innerHTML = output;
+
+      // 'Checkbox' event handler
+      for (var j = 0; j < list.childElementCount; j++) {
+        list.childNodes[j].querySelector('input').addEventListener('change', function() {
+          // select id of selected checkbox
+          var selectedId = this.getAttribute('id');
+          // fetch text of label whose 'for' attribute is same as above selected id
+          var selectedItem = document.querySelector('label[for="'+selectedId+'"]').innerHTML;
+          // update 'true' for selected item in the 'items' object
+          items[selectedItem] = this.checked;
+          // toggle class 'done' based on checkbox status
+          if(this.checked) {
+            this.parentNode.classList.add('done');
+          } else {
+            this.parentNode.classList.remove('done');
+          }
+          // update the localStorage
+          localStorage.items = JSON.stringify(items);
+        })
+      }
+    }
+
+    // generate list on page load
+    generateList();
+
+    // 'Add Item' button event handler
+    addItem.addEventListener('click', function() {
+      // get value from input field
+      var newItem = inputText.value;
+      // set value to false by default for the new item added
+      items[newItem] = false;
+      // update localStorage
+      localStorage.items = JSON.stringify(items);
+      // make input box empty
+      inputText.value = '';
+      // generate list
+      generateList();
+    })
+  </script>
+</body>
+</html>
