@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Promise</title>
+</head>
+<body>
+  <script>
+    // The executor should call only one resolve or reject. The promise’s state change is final.
+    // All further calls of resolve and reject are ignored:
+
+    let promise = new Promise(function(resolve, reject) {
+      // the function is executed automatically when the promise is constructed
+      
+      // fulfilled promise
+      // after 1 second signal that the job is done with the result "done!"
+      // ------------------------------------------------------------------
+      setTimeout(() => resolve("done!"), 1000);
+      // rejecting the promise with an error
+      // after 1 second signal that the job is finished with an error
+      // ------------------------------------------------------------
+      setTimeout(() => reject(new Error("Whoops!")), 1000);
+    });
+
+    promise.then(
+      result => console.log(result),
+      error => console.log(error)
+    );
+
+    // If we’re interested only in successful completions, then we can provide only one function argument to .then:
+    // --------------------------
+    // let promise = new Promise(resolve => {
+    //   setTimeout(() => resolve("done!"), 1000);
+    // });
+    // promise.then(alert); // shows "done!" after 1 second
+    
+    // Or we can use .catch(errorHandlingFunction), which is exactly the same:
+    // If we’re interested only in errors, then we can use null as the first argument: .then(null, errorHandlingFunction). 
+    // The call .catch(f) is a complete analog of .then(null, f), it’s just a shorthand.
+    // --------------------------
+    // let promise = new Promise((resolve, reject) => {
+    //   setTimeout(() => reject(new Error("Whoops!")), 1000);
+    // });
+    // promise.catch(alert); // shows "Error: Whoops!" after 1 second  
+  </script>
+</body>
+</html>

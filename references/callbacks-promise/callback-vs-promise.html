@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Callbacks</title>
+</head>
+<body>
+  <script>
+    var log = console.log;
+    // --------------------
+    // Callback 
+    // --------------------
+    function loadScript1(src, callback) {
+      let script = document.createElement('script');
+      script.src = src;
+
+      // So the single callback function is used both for reporting errors and passing back results.
+      script.onload = () => callback(null, script);
+      script.onerror = () => callback(new Error(`Script load error for ${src}`));
+
+      document.head.append(script);
+    }
+
+    loadScript1('script-1.js', function(error, script) {
+      if (error) {
+        log(error)
+      } else {
+        log(`${script.src} loaded successfully`);
+      }
+    });    
+
+    // --------------------    
+    // Promise 
+    // --------------------    
+    function loadScript2(src) {
+      return new Promise(function(resolve, reject) {
+        let script = document.createElement('script');
+        script.src = src;
+
+        script.onload = () => resolve(script);
+        script.onerror = () => reject(new Error("Script load error: " + src));
+
+        document.head.append(script);
+      });
+    }
+
+    let promise = loadScript2("script-1.js");
+
+    promise.then(
+      script => log(`${script.src} is loaded!`),
+      error => log(`Error: ${error.message}`)
+    );
+
+    promise.then(script => log('One more handler to do something else!'));
+  </script>
+</body>
+</html>
