@@ -62,7 +62,7 @@
     // });    
 
     // 2.1 "Pyramid of doom" OR  "callback hell"
-    // ------------------------------------
+    // ----------------------------------------
     // As calls become more nested, the code becomes deeper and increasingly more difficult to manage, 
     // especially if we have a real code instead of "console.log(...)" that may include more loops,  
     // conditional statements and so on.
@@ -70,6 +70,7 @@
     // We load script-1.js, then if there’s no error.
     // We load script-2.js, then if there’s no error.
     // We load script-3.js, then if there’s no error – do something else (*).    
+    // there are other ways to avoid such pyramids. One of the best ways is to use “promises”
     // ----------------------------------------------------------------------------------------------
     // loadScript('script-1.js', function(error, script) {
     //   if (error) {
