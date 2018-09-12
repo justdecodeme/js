@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Promise</title>
+</head>
+<body>
+  <script>
+    // Without Handling errors
+    // -----------------------
+    function loadScript(src, callback) {
+      let script = document.createElement('script');
+      script.src = src;
+      
+      // the callback runs after the script is loaded
+      script.onload = function() {
+        callback(script);
+      }
+      document.head.append(script);
+    }
+
+    // 1 callback
+    // --------
+    loadScript('script-1.js', function(script) {
+      console.log(`${script.src} loaded`);
+    });
+
+    // 2 Callback in callback (fine for few actions, but not good for many)
+    // ------------------------------------------------------------------
+    // loadScript('script-1.js', function(script) {
+    //   console.log(`${script.src} loaded`);
+    //   loadScript('script-2.js', function(script) {
+    //     console.log(`${script.src} loaded`);
+    //     loadScript('script-3.js', function(script) {
+    //       console.log(`${script.src} loaded`);
+    //       // ...continue after all scripts are loaded
+    //       console.log("All scripts are loaded");
+    //     });
+    //   })
+    // });
+
+    // With Handling errors
+    // --------------------
+    // function loadScript(src, callback) {
+    //   let script = document.createElement('script');
+    //   script.src = src;
+
+    //   // So the single callback function is used both for reporting errors and passing back results.
+    //   script.onload = () => callback(null, script);
+    //   script.onerror = () => callback(new Error(`Script load error for ${src}`));
+
+    //   document.head.append(script);
+    // }
+
+    // 1 “error-first callback” style
+    // ----------------------------
+    // loadScript('script-1.js', function(error, script) {
+    //   if (error) {
+    //     console.log(error)
+    //   } else {
+    //     console.log(`${script.src} script loaded successfully`);
+    //   }
+    // });    
+
+    // 2.1 "Pyramid of doom" OR  "callback hell"
+    // ------------------------------------
+    // As calls become more nested, the code becomes deeper and increasingly more difficult to manage, 
+    // especially if we have a real code instead of "console.log(...)" that may include more loops,  
+    // conditional statements and so on.
+    // In the code above:
+    // We load script-1.js, then if there’s no error.
+    // We load script-2.js, then if there’s no error.
+    // We load script-3.js, then if there’s no error – do something else (*).    
+    // ----------------------------------------------------------------------------------------------
+    // loadScript('script-1.js', function(error, script) {
+    //   if (error) {
+    //     handleError(error);
+    //   } else {
+    //     console.log(`${script.src} loaded`);
+    //     loadScript('script-2.js', function(error, script) {
+    //       if (error) {
+    //         handleError(error);
+    //       } else {
+    //         console.log(`${script.src} loaded`);
+    //         loadScript('script-3.js', function(error, script) {
+    //           if (error) {
+    //             handleError(error);
+    //           } else {
+    //             console.log(`${script.src} loaded`);
+    //             // ...continue after all scripts are loaded (*)
+    //             console.log("All scripts are loaded");
+    //           }
+    //         });
+
+    //       }
+    //     })
+    //   }
+    // });    
+    
+    // 2.2 It does the same, and there’s no deep nesting now, because we made every action a separate top-level function.
+    // It works, but the code looks like a torn apart spreadsheet. It’s difficult to read, you probably noticed that. 
+    // One needs to eye-jump between pieces while reading it. That’s inconvenient, especially the reader is not 
+    // familiar with the code and doesn’t know where to eye-jump.
+    // ----------------------------------------------------------------------------------------------
+    // loadScript('script-1.js', step1);
+    // function step1(error, script) {
+    //   if (error) {
+    //     handleError(error);
+    //   } else {
+    //     console.log(`${script.src} loaded`);
+    //     loadScript('script-2.js', step2);
+    //   }
+    // }
+    // function step2(error, script) {
+    //   if (error) {
+    //     handleError(error);
+    //   } else {
+    //     console.log(`${script.src} loaded`);
+    //     loadScript('script-3.js', step3);
+    //   }
+    // }
+    // function step3(error, script) {
+    //   if (error) {
+    //     handleError(error);
+    //   } else {
+    //     console.log(`${script.src} loaded`);
+    //     // ...continue after all scripts are loaded (*)
+    //     console.log("All scripts are loaded");
+    //   }
+    // };    
+  </script>
+</body>
+</html>
