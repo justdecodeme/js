@@ -50,6 +50,121 @@ function getMousePosition(e, el) {
   return point;
 }
 
+function parseToFloat(number, decimal) {
+  return parseFloat(number.toFixed(decimal));
+}
+
+function getPointsCoordinates() {
+  pointsObj = {};
+  var set = document.querySelector('#scale');
+  var pointsEl = set.querySelectorAll('.point');
+  var canvasPosition = getElPosition(cv);
+  for (let i = 0; i < pointsEl.length; i++) {
+    var pointObj = {
+      x: '',
+      y: ''
+    };
+    var cvLeft = canvasPosition.x;
+    var cvTop = canvasPosition.y;
+    var pointLeft = pointsEl[i].getBoundingClientRect().left;
+    var pointTop = pointsEl[i].getBoundingClientRect().top;
+    var pointWidth = pointsEl[i].getBoundingClientRect().width;
+    var pointHeight = pointsEl[i].getBoundingClientRect().height;
+
+    pointObj['x'] = parseFloat((pointLeft + (pointWidth / 2) - cvLeft).toFixed(2));
+    pointObj['y'] = parseFloat((pointTop + (pointHeight / 2) - cvTop).toFixed(2));
+    pointsObj[i + 1] = pointObj;
+  }
+}
+
+function getLines() {
+  var pointsLength = Object.size(pointsObj);
+  for (let i = 1; i <= pointsLength; i++) {
+    var j = (i == pointsLength) ? 1 : i + 1;
+    var line = {
+      'p1': pointsObj[i],
+      'p2': pointsObj[j]
+    };
+    linesss['l' + i + j] = line;
+  }
+}
+
+function getSlope(line) {
+  // m = (y2 - y1) / (x2 - x1)
+  var slope = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x);
+  return parseToFloat(slope, 2);
+}
+
+// function getLineEquation() {
+//   var m = slope;
+//   // y - y1 = m (x - x1) || mx - y + y1 - mx1 = 0
+//   // return `y-${linesss.l12.p1.y} = ${m} (x-${linesss.l12.p1.x})`;
+//   // y - mx = y1 - m*x1
+//   return `y - ${m}x = ${linesss.l12.p1.y - (m * linesss.l12.p1.x)}`;
+// }
+
+function calculatePerpendicularDistFromLine(line, point, m) {
+  if (m == Infinity || m == -Infinity) return Math.abs(line.p1.x - point.x);
+  return Math.abs((m * point.x - point.y + line.p1.y - m * line.p1.x) / (Math.sqrt(1 + m * m)));
+}
+var nearestLine;
+
+function checkDrawingSide(curPoint) {
+  // to check if point is between parallel lines
+  // d = (x−x1)(y2−y1)−(y−y1)(x2−x1)
+  var check12 = (curPoint.x - (linesss.l12.p1.x)) * (linesss.l12.p2.y - linesss.l12.p1.y) - (curPoint.y - linesss.l12.p1.y) * (linesss.l12.p2.x - linesss.l12.p1.x);
+  var check34 = (curPoint.x - (linesss.l34.p1.x)) * (linesss.l34.p2.y - linesss.l34.p1.y) - (curPoint.y - linesss.l34.p1.y) * (linesss.l34.p2.x - linesss.l34.p1.x);
+
+  var check23 = (curPoint.x - (linesss.l23.p1.x)) * (linesss.l23.p2.y - linesss.l23.p1.y) - (curPoint.y - linesss.l23.p1.y) * (linesss.l23.p2.x - linesss.l23.p1.x);
+  var check41 = (curPoint.x - (linesss.l41.p1.x)) * (linesss.l41.p2.y - linesss.l41.p1.y) - (curPoint.y - linesss.l41.p1.y) * (linesss.l41.p2.x - linesss.l41.p1.x);
+
+  var isInBtwParallelLines = ((check12 < 0 && check34 < 0) || (check12 > 0 && check34 > 0) || (check23 < 0 && check41 < 0) || (check23 > 0 && check41 > 0)) ? true : false;
+
+  var line;
+  var perpendicularDist;
+  // to check if point lies between parallel lines
+  if (isInBtwParallelLines) {
+    line = ((check12 < 0 && check34 < 0) || (check12 > 0 && check34 > 0)) ? '12_34' : '23_41';
+    // checking nearest line
+    if (line == '12_34') {
+      slope = getSlope(linesss.l23);
+      var d23 = calculatePerpendicularDistFromLine(linesss.l23, curPoint, slope);
+      var d41 = calculatePerpendicularDistFromLine(linesss.l41, curPoint, slope);
+      if (d23 < d41) {
+        perpendicularDist = d23;
+        nearestLine = linesss.l23
+        console.log('Side 2');
+        startPt = curPoint;
+      } else {
+        perpendicularDist = d41;
+        nearestLine = linesss.l41;
+        console.log('Side 4');
+      }
+    } else {
+      slope = getSlope(linesss.l12);
+      var d12 = calculatePerpendicularDistFromLine(linesss.l12, curPoint, slope);
+      var d34 = calculatePerpendicularDistFromLine(linesss.l34, curPoint, slope);
+      if (d12 < d34) {
+        perpendicularDist = d12;
+        nearestLine = linesss.l12;
+        console.log('Side 1');
+      } else {
+        perpendicularDist = d34;
+        nearestLine = linesss.l34
+        console.log('Side 3');
+      }
+    }
+    if (toolDrawingOffset >= perpendicularDist) {
+      inRange = true;
+    } else {
+      // make it false if not drawing
+      if (!isDrawingModeOn) inRange = false;
+    }
+  } else {
+    if (!isDrawingModeOn) inRange = false;
+  }
+}
+
 
 /*******************************/
 //     functions - specific
@@ -745,6 +860,7 @@ var initPanel = (function (e) {
 
       var panel = document.querySelector('[data-panel="' + panelType + '"]');
       var panelCloseBtn = panel.querySelector('.close-btn');
+      var rotateBtns = panel.querySelectorAll('.rotate-btn');
       var draggableSeals = panel.getElementsByClassName('draggable-seal');
       
       target.classList.add('active');
@@ -759,6 +875,11 @@ var initPanel = (function (e) {
       initElDrag.init(panel, 'add');
       for (var i = 0; i < draggableSeals.length; i++) {
         draggableSeals[i].addEventListener('dragstart', initSealsDrag.dragStart, false);
+      }
+      if (rotateBtns.length > 0) {
+        rotateBtns.forEach(rotateBtn => {
+          rotateBtn.addEventListener('mousedown', initRotate.rotateStart, false);
+        });
       }
 
       // update current geometry set type
@@ -785,10 +906,11 @@ var initPanel = (function (e) {
       panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
     }
-    
+
     draggableSeals = panel.getElementsByClassName('draggable-seal');
     panel.classList.remove('active');
     panelBtn.classList.remove('active');
+    rotateBtns = panel.querySelectorAll('.rotate-btn');
 
     // REMOVE EVENT LISTENERS
     panelCloseBtn.removeEventListener('click', close, false);
@@ -796,7 +918,11 @@ var initPanel = (function (e) {
     for (var i = 0; i < draggableSeals.length; i++) {
       draggableSeals[i].removeEventListener('dragstart', initSealsDrag.dragStart, false);
     }
-
+    if (rotateBtns.length > 0) {
+      rotateBtns.forEach(rotateBtn => {
+        rotateBtn.removeEventListener('mousedown', initRotate.rotateStart, false);
+      });
+    }
     // update current geometry set type to null
     if (panel.dataset.panelSet) {
       currSetType = null;
@@ -1358,7 +1484,7 @@ var initRotate = (function () {
 
     var rotateBtn = e.target;
     panel = rotateBtn.closest('.draggable');
-    panelType = panel.dataset.panelWidget;
+    panelType = panel.dataset.panel;
     rotatable = rotateBtn.closest('.rotatable');
     // startAngle = panel.dataset.startAngle;
 
@@ -1368,7 +1494,7 @@ var initRotate = (function () {
 
     var height, left, top, width, x, y, _ref;
 
-
+    
     if (panelType == 'clock') {
       _ref = rotateBtn.closest('.draggable').getBoundingClientRect();
     } else {
@@ -1388,16 +1514,8 @@ var initRotate = (function () {
     x = e.clientX - refPoint.x;
     y = e.clientY - refPoint.y;
 
-    // if 'clock' widget, set startAngle = 0 otherwise = 'data-angle' attr value which will
-    // calculated for first time
-    // if(panelType == 'clock') {
-    //   startAngle = 0;
-    // } else {
-    // }
-    //
     if (startAngle == null) {
       startAngle = Math.floor(R2D * Math.atan2(y, x));
-      // panel.setAttribute('data-start-angle', startAngle);
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
@@ -1417,7 +1535,7 @@ var initRotate = (function () {
     rotation = d - startAngle;
 
     if (panelType == 'clock') {
-      rotatable.style.transform = "translateY(-50%) rotate(" + rotation + "deg)";
+      rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
     } else {
       rotatable.style.transform = "rotate(" + rotation + "deg)";
     }
@@ -1445,3 +1563,50 @@ var initRotate = (function () {
     rotateStart: rotateStart
   }
 })();
+
+var initCalc = function (e) {
+  // console.log('calculating');
+  var calc = document.querySelector('[data-panel-widget="calculator"]');
+  var buttons = calc.querySelectorAll('[data-button-type]');
+  var result = document.getElementById('result');
+  var num = "";
+
+  buttons.forEach(button => {
+    button.addEventListener('click', calculate, false);
+  })
+
+  function calculate(e) {
+    var buttonType = e.target.closest('g[data-button-type]').dataset.buttonType;
+    var buttonValue = e.target.closest('g[data-button-type]').dataset.buttonValue;
+
+    if (buttonType == "num") {
+      num += buttonValue;
+      result.innerHTML = num;
+    } else if (buttonType == "func") {
+      switch (buttonValue) {
+        case "=":
+          num = eval(num).toString();
+          result.innerHTML = num;
+          break;
+        case "<-":
+          num = num.slice(0, -1);
+          result.innerHTML = num;
+          break;
+        case "c":
+        case "ac":
+          result.innerHTML = num = "";
+          break;
+        case "*":
+        case "/":
+        case "+":
+        case "-":
+          num += " " + buttonValue + " ";
+          result.innerHTML = num;
+          break;
+
+      }
+    }
+
+  }
+}
+// initCalc(e);
