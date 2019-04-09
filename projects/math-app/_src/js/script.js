@@ -785,8 +785,10 @@ var initSealsDrag = (function () {
           <div class="dot dot-bottom"></div>
           <div class="dot dot-left"></div>
           <div class="dot dot-right"></div>
-        `;
-      } else { // generate a seal
+          `;
+
+          draggable.addEventListener('dblclick', initCubes.detach, false);
+        } else { // generate a seal
         draggable = document.createElement('img');
         draggable.src = src;
         draggable.width = width;
@@ -794,9 +796,8 @@ var initSealsDrag = (function () {
         draggable.classList.add('dropped-seal');
         draggable.classList.add('drag-area');
         draggable.setAttribute('data-seal-type', sealType);
-        // draggable.innerHTML = `
-        //   <img class="dropped-seal drag-aread" src="${src} data-seal-type=${sealType}";
-        // `;
+
+        draggable.addEventListener('dblclick', (e) => { draggable.remove(); }, false);
       }
 
       draggable.setAttribute('data-id', ++initSealsDrag.draggablesId);
@@ -808,9 +809,6 @@ var initSealsDrag = (function () {
       cvOuter.appendChild(draggable);
 
       initSealsDrag.dropElHeight = draggable.getBoundingClientRect().height;
-
-      // draggable.addEventListener('dblclick', (e) => { draggable.remove(); }, false);
-      draggable.addEventListener('dblclick', initCubes.detach, false);
 
       initElDrag.init(draggable, 'add');
 
@@ -1480,7 +1478,7 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var rotateStart = function (e) {
-    console.log('rotateStart');
+    // console.log('rotateStart');
 
     var rotateBtn = e.target;
     panel = rotateBtn.closest('.draggable');
@@ -1523,7 +1521,7 @@ var initRotate = (function () {
   };
 
   var rotate = function (e) {
-    console.log('rotate');
+    // console.log('rotate');
 
     var d, x, y;
     e.preventDefault();
