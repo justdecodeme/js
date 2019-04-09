@@ -4,6 +4,18 @@
 var cv = document.getElementById('cv');
 var cvOuter = document.getElementById('cvOuter');
 
+///////////////////////////
+var pointsObj = {};
+var linesss = {};
+var isSetInRange = false;
+var toolDrawingOffset = 50;
+var inRange = false;
+var slope = 0;
+var isDrawingModeOn = false;
+var isStartedInRange = false;
+var nearestLineStarted;
+var nearestLine;
+///////////////////////////
 
 /*******************************/
 //     functions - helping
@@ -50,10 +62,10 @@ function getMousePosition(e, el) {
   return point;
 }
 
+///////////////////////////
 function parseToFloat(number, decimal) {
   return parseFloat(number.toFixed(decimal));
 }
-
 function getPointsCoordinates() {
   pointsObj = {};
   var set = document.querySelector('#scale');
@@ -64,8 +76,8 @@ function getPointsCoordinates() {
       x: '',
       y: ''
     };
-    var cvLeft = canvasPosition.x;
-    var cvTop = canvasPosition.y;
+    var cvLeft = canvasPosition.left;
+    var cvTop = canvasPosition.right;
     var pointLeft = pointsEl[i].getBoundingClientRect().left;
     var pointTop = pointsEl[i].getBoundingClientRect().top;
     var pointWidth = pointsEl[i].getBoundingClientRect().width;
@@ -76,7 +88,6 @@ function getPointsCoordinates() {
     pointsObj[i + 1] = pointObj;
   }
 }
-
 function getLines() {
   var pointsLength = Object.size(pointsObj);
   for (let i = 1; i <= pointsLength; i++) {
@@ -88,13 +99,11 @@ function getLines() {
     linesss['l' + i + j] = line;
   }
 }
-
 function getSlope(line) {
   // m = (y2 - y1) / (x2 - x1)
   var slope = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x);
   return parseToFloat(slope, 2);
 }
-
 // function getLineEquation() {
 //   var m = slope;
 //   // y - y1 = m (x - x1) || mx - y + y1 - mx1 = 0
@@ -102,56 +111,54 @@ function getSlope(line) {
 //   // y - mx = y1 - m*x1
 //   return `y - ${m}x = ${linesss.l12.p1.y - (m * linesss.l12.p1.x)}`;
 // }
-
 function calculatePerpendicularDistFromLine(line, point, m) {
   if (m == Infinity || m == -Infinity) return Math.abs(line.p1.x - point.x);
   return Math.abs((m * point.x - point.y + line.p1.y - m * line.p1.x) / (Math.sqrt(1 + m * m)));
 }
-var nearestLine;
-
-function checkDrawingSide(curPoint) {
+function checkDrawingSide(currPoint) {
   // to check if point is between parallel lines
   // d = (x−x1)(y2−y1)−(y−y1)(x2−x1)
-  var check12 = (curPoint.x - (linesss.l12.p1.x)) * (linesss.l12.p2.y - linesss.l12.p1.y) - (curPoint.y - linesss.l12.p1.y) * (linesss.l12.p2.x - linesss.l12.p1.x);
-  var check34 = (curPoint.x - (linesss.l34.p1.x)) * (linesss.l34.p2.y - linesss.l34.p1.y) - (curPoint.y - linesss.l34.p1.y) * (linesss.l34.p2.x - linesss.l34.p1.x);
+  var check12 = (currPoint.x - (linesss.l12.p1.x)) * (linesss.l12.p2.y - linesss.l12.p1.y) - (currPoint.y - linesss.l12.p1.y) * (linesss.l12.p2.x - linesss.l12.p1.x);
+  var check34 = (currPoint.x - (linesss.l34.p1.x)) * (linesss.l34.p2.y - linesss.l34.p1.y) - (currPoint.y - linesss.l34.p1.y) * (linesss.l34.p2.x - linesss.l34.p1.x);
 
-  var check23 = (curPoint.x - (linesss.l23.p1.x)) * (linesss.l23.p2.y - linesss.l23.p1.y) - (curPoint.y - linesss.l23.p1.y) * (linesss.l23.p2.x - linesss.l23.p1.x);
-  var check41 = (curPoint.x - (linesss.l41.p1.x)) * (linesss.l41.p2.y - linesss.l41.p1.y) - (curPoint.y - linesss.l41.p1.y) * (linesss.l41.p2.x - linesss.l41.p1.x);
+  var check23 = (currPoint.x - (linesss.l23.p1.x)) * (linesss.l23.p2.y - linesss.l23.p1.y) - (currPoint.y - linesss.l23.p1.y) * (linesss.l23.p2.x - linesss.l23.p1.x);
+  var check41 = (currPoint.x - (linesss.l41.p1.x)) * (linesss.l41.p2.y - linesss.l41.p1.y) - (currPoint.y - linesss.l41.p1.y) * (linesss.l41.p2.x - linesss.l41.p1.x);
 
   var isInBtwParallelLines = ((check12 < 0 && check34 < 0) || (check12 > 0 && check34 > 0) || (check23 < 0 && check41 < 0) || (check23 > 0 && check41 > 0)) ? true : false;
 
   var line;
   var perpendicularDist;
+  var side = '';
   // to check if point lies between parallel lines
   if (isInBtwParallelLines) {
     line = ((check12 < 0 && check34 < 0) || (check12 > 0 && check34 > 0)) ? '12_34' : '23_41';
     // checking nearest line
     if (line == '12_34') {
       slope = getSlope(linesss.l23);
-      var d23 = calculatePerpendicularDistFromLine(linesss.l23, curPoint, slope);
-      var d41 = calculatePerpendicularDistFromLine(linesss.l41, curPoint, slope);
+      var d23 = calculatePerpendicularDistFromLine(linesss.l23, currPoint, slope);
+      var d41 = calculatePerpendicularDistFromLine(linesss.l41, currPoint, slope);
       if (d23 < d41) {
         perpendicularDist = d23;
         nearestLine = linesss.l23
-        console.log('Side 2');
-        startPt = curPoint;
+        side = 'Side 2';
+        startPoint = currPoint;
       } else {
         perpendicularDist = d41;
         nearestLine = linesss.l41;
-        console.log('Side 4');
+        side = 'Side 4';
       }
     } else {
       slope = getSlope(linesss.l12);
-      var d12 = calculatePerpendicularDistFromLine(linesss.l12, curPoint, slope);
-      var d34 = calculatePerpendicularDistFromLine(linesss.l34, curPoint, slope);
+      var d12 = calculatePerpendicularDistFromLine(linesss.l12, currPoint, slope);
+      var d34 = calculatePerpendicularDistFromLine(linesss.l34, currPoint, slope);
       if (d12 < d34) {
         perpendicularDist = d12;
         nearestLine = linesss.l12;
-        console.log('Side 1');
+        side = 'Side 1';
       } else {
         perpendicularDist = d34;
         nearestLine = linesss.l34
-        console.log('Side 3');
+        side = 'Side 3';
       }
     }
     if (toolDrawingOffset >= perpendicularDist) {
@@ -163,8 +170,10 @@ function checkDrawingSide(curPoint) {
   } else {
     if (!isDrawingModeOn) inRange = false;
   }
+  // just for debugging
+  if (inRange) console.log(side);
 }
-
+///////////////////////////
 
 /*******************************/
 //     functions - specific
@@ -513,6 +522,18 @@ var initDraw = (function () {
     var currPoint = getMousePosition(e, cv);
     currId = 'shape' + index;
 
+    ///////////////////////////
+    isDrawingModeOn = true;
+    getPointsCoordinates();
+    getLines();
+    checkDrawingSide(currPoint);
+    if (inRange) {
+      isStartedInRange = true;
+      nearestLineStarted = nearestLine;
+    } else {
+      isStartedInRange = false;
+    }
+    ///////////////////////////
 
     if(currToolType == "pen" || currToolType == "marker") {
       if(currToolType == "pen") {
@@ -539,16 +560,56 @@ var initDraw = (function () {
     var currPoint = getMousePosition(e, cv);
     var polyline, points;
 
+    ///////////////////////////
+    var x, y;
+    ///////////////////////////
+
     if (currToolType == "pen" || currToolType == "marker") {
       polyline = document.getElementById(currId);
       points = polyline.getAttribute('points');
 
-      if (currToolType == "pen") {
-        points += ' ' + currPoint.x + ',' + currPoint.y;
-      } else if (currToolType == "marker") {
+      if (currToolType == "marker") {
         points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
-      }
+      } else if (currToolType == "pen") {
 
+        ///////////////////////////
+        if (isStartedInRange) {
+          if (nearestLineStarted != nearestLine) {
+            nearestLineStarted = nearestLine;
+            // startPoint = currPoint;
+            console.log('side updated')
+          }
+          checkDrawingSide(currPoint);
+        }
+        ///////////////////////////
+
+        if (inRange) { // drawing with set
+          var m = slope;
+          // console.log('inRange')
+          // y = m (x - x1) + y1
+          // y = m (x - x2) + y2
+          // console.log('Eq1: ', `y = ${slope}(x - ${startPoint.x}) + ${startPoint.y}`)
+          // console.log('Eq2: ', `y = ${-1/slope}(x - ${currPoint.x}) + ${currPoint.y}`)
+          // x coordinate of intersection of two lines
+          // var x = (m * (y2 - y1) + m * m * x1 - x2) / ((m * m) + m)
+          if (m == 0) {
+            x = currPoint.x;
+            y = startPoint.y;
+            console.log('111111111')
+          } else if (m == Infinity || m == -Infinity) {
+            x = startPoint.x;
+            y = currPoint.y;
+            console.log('2222222222')
+          } else {
+            console.log('3333333333')
+            x = ((currPoint.x / m) + (m * startPoint.x) + currPoint.y - startPoint.y) / (m + (1 / m));
+            y = 1 * (m * (x - startPoint.x) + startPoint.y);
+          }
+          points += ' ' + x + ',' + y;
+        } else { // simple drawing
+          points += ' ' + currPoint.x + ',' + currPoint.y;
+        }
+      }
       polyline.setAttribute('points', points);
     } else if (currToolType == "eraser") {
       var target = e.target;
@@ -1608,3 +1669,5 @@ var initCalc = function (e) {
   }
 }
 // initCalc(e);
+
+document.querySelector('[data-tool-type1="pen"]').click();
