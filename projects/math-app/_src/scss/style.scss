@@ -38,9 +38,12 @@ body {
 //        cv-outer
 /***********************************/
 .cv-outer {
-  // height: calc(100vh - 50px);
-  height: 100vh;
-  // background: rgba(200, 255, 0, 0.267);
+  position: relative;
+  width: 90vw;
+  height: 90vh;
+  background: rgba(0, 0, 0, 0.096);
+  margin-top: 5vh;
+  margin-left: 5vw;
   position: relative;
   .cv {
     width: 100%;
@@ -201,6 +204,7 @@ body {
   &.draggable-tools {
     display: block;
   }
+  &.draggable-set,
   &.draggable-seal,
   &.draggable-tool,
   &.draggable-widget {
@@ -379,4 +383,222 @@ body {
   &.cant-snap {
     transition: all .05s ease;
   }  
+}
+
+/***********************************/
+//        widget panels
+/***********************************/
+[data-panel=clock] {
+  svg {
+    width: 300px;
+    height: auto;
+  }
+  .clock-hand {
+    position: absolute;
+    /* opacity: .3; */
+    background: black;
+    left: 50%;
+    top: 50%;
+    border-radius: 40px;
+    transform: translateY(-50%);
+    transform-origin: left center;
+
+    &.hour {
+      height: 20px;
+      width: 90px;
+      transform: translateY(-50%) rotateZ(-70deg);
+    }
+
+    &.minute {
+      height: 10px;
+      width: 90px;
+      // transform: translateY(-50%) rotateZ(210deg);
+    }
+
+    &.second {
+      height: 4px;
+      width: 120px;
+      // transform: translateY(-50%) rotateZ(40deg);
+    }
+  }
+}
+[data-panel=calculator] {
+
+  .display,
+  .display-placeholder {
+    position: absolute;
+    background: rgba(255, 0, 0, 0);
+    top: 8%;
+    left: 10%;
+    width: 80%;
+    height: 13%;
+    font-size: 98px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 5px;
+    overflow: hidden;
+    user-select: none;
+    font-family: "digital-dismay";
+  }
+
+  .display-placeholder {
+    opacity: .05;
+    color: black;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .display {
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  svg {
+    [data-button-type] {
+      cursor: pointer;
+
+      &:hover {
+        opacity: .7;
+      }
+
+      &:active {
+        opacity: .9;
+      }
+    }
+  }
+}
+
+[data-panel=scale] {
+  background: rgba(144, 238, 144, 0.288);
+  height: 100px;
+  width: 300px;
+  left: 500px;
+  top: 300px;
+  /* transform: rotate(45deg); */
+  
+  .borderlr,
+  .bordertb {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(0, 0, 0, .1); */
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+  
+  .borderlr:before,
+  .borderlr:after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 4000px;
+    background: black;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .borderlr:before {
+    left: 0;
+  }
+  
+  .borderlr:after {
+    right: 0;
+  }
+  
+  .bordertb:before,
+  .bordertb:after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: 4000px;
+    background: black;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .bordertb:before {
+    top: 0;
+  }
+  
+  .bordertb:after {
+    bottom: 0;
+  }
+  
+  .point {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgb(0, 0, 0);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .point:before {
+    position: absolute;
+    font-size: 14px;
+    color: White;
+    z-index: 19;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .point-1 {
+    left: 0;
+  }
+  
+  .point-1:before {
+    content: '1';
+    /* left: 5px;
+    top: 5px; */
+  }
+  
+  .point-2 {
+    left: 100%;
+    top: 0;
+  }
+  
+  .point-2:before {
+    content: '2';
+    /* right: 5px;
+    top: 5px; */
+  }
+  
+  .point-3 {
+    left: 100%;
+    top: 100%;
+  }
+  
+  .point-3:before {
+    content: '3';
+    /* bottom: 5px;
+    right: 5px; */
+  }
+  
+  .point-4 {
+    top: 100%;
+    left: 0;
+  }
+  
+  .point-4:before {
+    content: '4';
+    /* bottom: 5px;
+    left: 5px; */
+  }
+  .rotate-btn {
+    position: absolute;
+    right: 0;
+    width: 20px;
+    top: 0;
+    transform: translate(50%, -50%);
+  }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    width: 20px;
+    bottom: 0;
+    transform: translate(50%, 50%);
+  }
 }

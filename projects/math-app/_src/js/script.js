@@ -111,7 +111,7 @@ var initTools = (function () {
               break;
             case "opacity": n = i + 6.5; 
               break;
-            case "scale": n = i + 6; 
+            case "scale": n = i - 5.3; 
               break;
           }
 
@@ -661,6 +661,7 @@ var initSealsDrag = (function () {
       if (sealType == "cubes") { // generate new draggable group
         draggable = document.createElement('div');
         // <div class="cube"><img src="${src}" style="width: ${width-50}px; height: ${height-50}px;"></div>
+        draggable.classList.add('draggable-cubes');
         draggable.innerHTML = `
           <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
             <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
@@ -683,7 +684,6 @@ var initSealsDrag = (function () {
         // `;
       }
 
-      draggable.classList.add('draggable-cubes');
       draggable.setAttribute('data-id', ++initSealsDrag.draggablesId);
       draggable.style.zIndex = ++initElDrag.dragParentzIndex;
       draggable.style.left = e.offsetX - dragEloffsetX + 'px';
@@ -1337,5 +1337,111 @@ var initCubes = (function (e) {
     highlight: highlight,
     snap, snap,
     detach, detach
+  }
+})();
+
+// rotate behaviour of tools/widgets/seals
+var initRotate = (function () {
+  var startAngle = null;
+  var rotation = null;
+  var rotatable = null;
+  var panel;
+  var panelType = null;
+  var refPoint = {
+    x: 0,
+    y: 0
+  };
+  var R2D = 180 / Math.PI;
+
+  var rotateStart = function (e) {
+    console.log('rotateStart');
+
+    var rotateBtn = e.target;
+    panel = rotateBtn.closest('.draggable');
+    panelType = panel.dataset.panelWidget;
+    rotatable = rotateBtn.closest('.rotatable');
+    // startAngle = panel.dataset.startAngle;
+
+    e.preventDefault();
+
+    cvOuter.classList.add('rotating');
+
+    var height, left, top, width, x, y, _ref;
+
+
+    if (panelType == 'clock') {
+      _ref = rotateBtn.closest('.draggable').getBoundingClientRect();
+    } else {
+      _ref = rotatable.getBoundingClientRect();
+    }
+
+    top = _ref.top,
+      left = _ref.left,
+      height = _ref.height,
+      width = _ref.width;
+
+    refPoint = {
+      x: left + (width / 2),
+      y: top + (height / 2)
+    };
+
+    x = e.clientX - refPoint.x;
+    y = e.clientY - refPoint.y;
+
+    // if 'clock' widget, set startAngle = 0 otherwise = 'data-angle' attr value which will
+    // calculated for first time
+    // if(panelType == 'clock') {
+    //   startAngle = 0;
+    // } else {
+    // }
+    //
+    if (startAngle == null) {
+      startAngle = Math.floor(R2D * Math.atan2(y, x));
+      // panel.setAttribute('data-start-angle', startAngle);
+    }
+
+    cvOuter.addEventListener('mousemove', rotate, false);
+    cvOuter.addEventListener('mouseup', rotateEnd, false);
+  };
+
+  var rotate = function (e) {
+    console.log('rotate');
+
+    var d, x, y;
+    e.preventDefault();
+
+    x = e.clientX - refPoint.x;
+    y = e.clientY - refPoint.y;
+    var d = Math.floor(R2D * Math.atan2(y, x));
+
+    rotation = d - startAngle;
+
+    if (panelType == 'clock') {
+      rotatable.style.transform = "translateY(-50%) rotate(" + rotation + "deg)";
+    } else {
+      rotatable.style.transform = "rotate(" + rotation + "deg)";
+    }
+  };
+
+  var rotateEnd = function (e) {
+    // console.log('rotateEnd');
+
+    if (rotation < 0) {
+      panel.dataset.angle = (rotation + 360);
+    } else {
+      panel.dataset.angle = rotation;
+    }
+
+    cvOuter.classList.remove('rotating');
+
+    cvOuter.removeEventListener('mousemove', rotate, false);
+    cvOuter.removeEventListener('mouseup', rotateEnd, false);
+  };
+
+  // Explicitly reveal public pointers to the private functions 
+  // that we want to reveal publicly
+
+  return {
+    rotateStart: rotateStart
   }
 })();
