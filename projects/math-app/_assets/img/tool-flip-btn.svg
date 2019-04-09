@@ -1,0 +1,25 @@
+<svg id="_12.3.a_左右反転" data-name="12.3.a 左右反転" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62" height="62" viewBox="0 0 62 62">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#b1b3b4"/>
+      <stop offset="0.232" stop-color="#8b8b8b"/>
+      <stop offset="1" stop-color="#c2c4c6"/>
+    </linearGradient>
+  </defs>
+  <rect id="Rectangle_94" data-name="Rectangle 94" width="62" height="62" rx="8" fill="url(#linear-gradient)"/>
+  <g id="Rectangle_95" data-name="Rectangle 95" transform="translate(3 3)" fill="#afafaf" stroke="#747474" stroke-width="0.1">
+    <rect width="56" height="56" rx="7" stroke="none"/>
+    <rect x="0.05" y="0.05" width="55.9" height="55.9" rx="6.95" fill="none"/>
+  </g>
+  <g id="Group_519" data-name="Group 519" transform="translate(-85.153 21.522)">
+    <g id="Group_516" data-name="Group 516" transform="translate(99.491 7.234)">
+      <rect id="Rectangle_383" data-name="Rectangle 383" width="33.198" height="4.183" fill="#fff"/>
+    </g>
+    <g id="Group_517" data-name="Group 517" transform="translate(95.153 0.478)">
+      <path id="Path_2154" data-name="Path 2154" d="M106.983,15.216l-2.957,2.957L95.153,9.3,103.98.478l2.957,2.958L101.068,9.3Z" transform="translate(-95.153 -0.478)" fill="#fff"/>
+    </g>
+    <g id="Group_518" data-name="Group 518" transform="translate(125.323 0.478)">
+      <path id="Path_2155" data-name="Path 2155" d="M99.792,3.435,102.75.478l8.872,8.872-8.828,8.824-2.957-2.958,5.87-5.866Z" transform="translate(-99.792 -0.478)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

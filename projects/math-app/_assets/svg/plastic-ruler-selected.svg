@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 537.5 151.4" style="enable-background:new 0 0 537.5 151.4;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.15;fill:#0000FF;}
+	.st1{fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#4029E5;stroke-miterlimit:10;}
+	.st3{fill:#FFFFFF;stroke:#4029E5;stroke-miterlimit:10;}
+	.st4{fill:#4029E5;}
+	.st5{fill:#FF0000;}
+	.st6{font-family:'KozGoPr6N-Regular-90ms-RKSJ-H';}
+	.st7{font-size:21px;}
+</style>
+<title>Asset 2</title>
+<g id="Layer_2_1_">
+	<g id="Layer_1-2">
+		<rect x="14.5" y="26.5" class="st0" width="496" height="96"/>
+		<path d="M508.5,28.5v92h-492v-92H508.5 M512.5,24.5h-500v100h500V24.5z"/>
+		<line class="st1" x1="38.5" y1="25" x2="38.5" y2="75"/>
+		<line class="st1" x1="113.5" y1="25" x2="113.5" y2="50"/>
+		<line class="st1" x1="188.5" y1="25" x2="188.5" y2="75"/>
+		<line class="st1" x1="263.5" y1="25" x2="263.5" y2="50"/>
+		<line class="st1" x1="338.5" y1="25" x2="338.5" y2="75"/>
+		<line class="st1" x1="413.5" y1="25" x2="413.5" y2="50"/>
+		<line class="st1" x1="488.5" y1="25" x2="488.5" y2="75"/>
+		<rect x="0.5" y="12" class="st2" width="524" height="124"/>
+		<rect x="513" y="0.5" class="st3" width="24" height="24"/>
+		<rect x="513" y="124.5" class="st3" width="24" height="24"/>
+		<path class="st4" d="M522.6,7c0.7-0.3,1.5-0.5,2.3-0.5c3-0.1,5.5,2.3,5.6,5.3c0,0.1,0,0.1,0,0.2h3.7c-0.1-5-4.2-9-9.3-9
+			c-1.8,0-3.5,0.5-5,1.4l-1.6-1.5v6h6.3L522.6,7z"/>
+		<path class="st4" d="M526.8,17.3c-0.7,0.3-1.4,0.5-2.2,0.5c-3.1,0-5.6-2.5-5.6-5.6c0-0.1,0-0.1,0-0.2h-3.7c0,5.2,4.1,9.4,9.3,9.5
+			c1.7,0,3.4-0.5,4.8-1.4l1.8,1.9v-6.7H525L526.8,17.3z"/>
+		<text transform="matrix(1 0 0 1 519.5 144.33)" class="st5 st6 st7">×</text>
+	</g>
+</g>
+</svg>

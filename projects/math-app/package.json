@@ -1,0 +1,28 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.23.3",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.2.0",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-minify": "^2.1.0",
+    "gulp-plumber": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-riot": "^1.1.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-watch": "^4.3.11"
+  },
+  "dependencies": {
+    "jslint": "^0.12.0"
+  }
+}

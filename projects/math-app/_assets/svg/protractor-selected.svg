@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 487 273">
+    <defs>
+    <style>
+        .cls-1{
+            fill:none;
+            stroke:#4029e5;
+            stroke-miterlimit:10;
+        }
+        .cls-2{
+            stroke:#4029e5;
+            stroke-miterlimit:10;
+            fill:#fff;
+        }
+        .cls-3{
+            fill:#4029e5;
+        }
+        .cls-4{
+            fill:red;
+        }
+        .cls-5{
+            fill:#3900ff;
+        }
+        .cls-6{
+            fill:blue;
+        }
+        .cls-7{
+            stroke:#000;
+            stroke-width:4px;
+            fill:none;
+            stroke-miterlimit:10;
+        }
+    </style>
+    </defs>
+    <title>Asset 1</title>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+        <rect class="cls-1" x="0.5" y="12" width="474" height="249"/>
+        <rect class="cls-2" x="462.5" y="0.5" width="24" height="24"/>
+        <rect class="cls-2" x="462.5" y="248.5" width="24" height="24"/>
+        <path class="cls-3" d="M472.35,7.3a5.91,5.91,0,0,1,2.3-.5,5.46,5.46,0,0,1,5.6,5.3v.2H484a9.29,9.29,0,0,0-9.3-9,9.7,9.7,0,0,0-5,1.4l-1.6-1.5v6h6.3Z"/>
+        <path class="cls-3" d="M476.55,17.6a5.4,5.4,0,0,1-2.2.5,5.59,5.59,0,0,1-5.6-5.58v0h0v-.2h-3.7a9.45,9.45,0,0,0,9.3,9.5,9,9,0,0,0,4.8-1.4l1.8,1.9V15.6h-6.2Z"/>
+        <rect class="cls-2" x="462.5" y="124.5" width="24" height="24"/>
+        <path class="cls-4" d="M481.2,142.2l-.9,1-5.8-5.8-5.8,5.8-.9-1,5.8-5.8-5.8-5.8.9-.9,5.8,5.8,5.8-5.8.9.9-5.8,5.8Z"/>
+        <polygon class="cls-5" points="474.5 252.7 471.6 255.6 478.9 262.9 481.8 260 481.7 268.2 473.5 268.3 476.4 265.4 469.1 258.1 466.2 261 466.3 252.8 474.5 252.7"/>
+        <path class="cls-6" d="M15.11,247A223,223,0,0,1,395.79,91.31,221.53,221.53,0,0,1,461.09,247Z"/>
+        <path d="M238.1,28a220.81,220.81,0,0,1,221,217H17.14a220.82,220.82,0,0,1,221-217m0-4c-124.26,0-225,100.74-225,225h450c0-124.26-100.74-225-225-225Z"/>
+        <line class="cls-7" x1="15.16" y1="240.98" x2="55.16" y2="240.98"/>
+        <line class="cls-7" x1="238.1" y1="24.5" x2="238.1" y2="64.5"/>
+        <line class="cls-7" x1="420.5" y1="240.98" x2="460.5" y2="240.98"/>
+        </g>
+    </g>
+</svg>

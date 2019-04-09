@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+    <defs>
+        <style>
+        .cls-1{fill:#fff;stroke:#4029e5;stroke-miterlimit:10;}.cls-2{fill:#3900ff;}
+        </style>
+    </defs>
+    <title>Asset 2f</title>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="Layer_1-2" data-name="Layer 1">
+            <rect class="cls-1" x="0.5" y="0.5" width="24" height="24"/>
+            <polygon class="cls-2" points="12.5 4.7 9.6 7.6 16.9 14.9 19.8 12 19.7 20.2 11.5 20.3 14.4 17.4 7.1 10.1 4.2 13 4.3 4.8 12.5 4.7"/>
+        </g>
+    </g>
+</svg>
