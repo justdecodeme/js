@@ -1004,13 +1004,8 @@ var initPanel = (function (e) {
     }
     oldPanel = panel;
   }
-  // to use panel as Trash
-  var isCursorIn = function (e) {
-    console.log(getMousePosition(e, cv))
-  }
   return {
-    toggle: toggle,
-    isCursorIn: isCursorIn
+    toggle: toggle
   }
 })();
 
