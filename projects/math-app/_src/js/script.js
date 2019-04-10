@@ -916,7 +916,8 @@ var fetchSeals = (function () {
 
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
-  var panel = oldPanel = panelType = panelBtn = panelCloseBtn = draggableSeals = rotateBtns = null;
+  var panel = oldPanel = panelType = panelBtn = 
+      panelCloseBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
 
   var toggle = function(target) {
     panelType = target.dataset.panelBtn;
@@ -927,9 +928,10 @@ var initPanel = (function (e) {
 
       panel = document.querySelector('[data-panel="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
+      panelScaleBtn = panel.querySelector('.scale-btn');
       rotateBtns = panel.querySelectorAll('.rotate-btn');
       draggableSeals = panel.getElementsByClassName('draggable-seal');
-      
+
       target.classList.add('active');
       panel.classList.add('active');
       panel.style.zIndex = ++initMove.dragParentzIndex;
@@ -946,8 +948,11 @@ var initPanel = (function (e) {
       }
       if (rotateBtns.length > 0) {
         rotateBtns.forEach(rotateBtn => {
-          rotateBtn.addEventListener('mousedown', initRotate.rotateStart, false);
+          rotateBtn.addEventListener('mousedown', initRotate.start, false);
         });
+      }
+      if(panelScaleBtn) {
+        panelScaleBtn.addEventListener('mousedown', initScale.start, false);
       }
 
       // update current geometry set type
@@ -964,15 +969,14 @@ var initPanel = (function (e) {
     // clicked on closed button and 'type' property exist
     if(e.type) {
       panel = this.closest('.draggable');
-      var panelType = panel.dataset.panel;
-      panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
-      panelCloseBtn = this;
+      panelType = panel.dataset.panel;
     } else { // clicked on panel btn itself and called 'closePanel' function so 'e.type' not defined
-      var panelType = e;
+      panelType = e;
       panel = document.querySelector('[data-panel="' + panelType + '"]');;
-      panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
-      panelCloseBtn = panel.querySelector('.close-btn');
     }
+    panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
+    panelCloseBtn = panel.querySelector('.close-btn');
+    panelScaleBtn = panel.querySelector('.scale-btn');
 
     draggableSeals = panel.getElementsByClassName('draggable-seal');
     panel.classList.remove('active');
@@ -988,9 +992,13 @@ var initPanel = (function (e) {
     }
     if (rotateBtns.length > 0) {
       rotateBtns.forEach(rotateBtn => {
-        rotateBtn.removeEventListener('mousedown', initRotate.rotateStart, false);
+        rotateBtn.removeEventListener('mousedown', initRotate.start, false);
       });
     }
+    if (panelScaleBtn) {
+      panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
+    }
+
     // update current geometry set type to null
     if (panel.dataset.panelSet) {
       currSetType = null;
@@ -1548,6 +1556,7 @@ var initRotate = (function () {
   var rotation = null;
   var rotatable = null;
   var panel;
+  var oldPanel = null;
   var panelType = null;
   var refPoint = {
     x: 0,
@@ -1555,16 +1564,21 @@ var initRotate = (function () {
   };
   var R2D = 180 / Math.PI;
 
-  var rotateStart = function (e) {
-    // console.log('rotateStart');
-
+  var start = function (e) {
+    // console.log('start');
+    e.preventDefault();
+    
     var rotateBtn = e.target;
     panel = rotateBtn.closest('.draggable');
     panelType = panel.dataset.panel;
     rotatable = rotateBtn.closest('.rotatable');
     // startAngle = panel.dataset.startAngle;
 
-    e.preventDefault();
+    // reset 'startAngle' if panel is different each time
+    if (oldPanel != panel) {
+      startAngle = null;
+    }
+    oldPanel = panel;
 
     cvOuter.classList.add('rotating');
 
@@ -1595,7 +1609,7 @@ var initRotate = (function () {
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
-    cvOuter.addEventListener('mouseup', rotateEnd, false);
+    cvOuter.addEventListener('mouseup', end, false);
   };
 
   var rotate = function (e) {
@@ -1610,15 +1624,19 @@ var initRotate = (function () {
 
     rotation = d - startAngle;
 
+    console.log(panelType)
+
     if (panelType == 'clock') {
       rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+    } else if(panelType == 'compass') {
+      rotatable.style.transform = "translateX(-50%) rotate(" + d + "deg)";
     } else {
       rotatable.style.transform = "rotate(" + rotation + "deg)";
     }
   };
 
-  var rotateEnd = function (e) {
-    // console.log('rotateEnd');
+  var end = function (e) {
+    // console.log('end');
 
     if (rotation < 0) {
       panel.dataset.angle = (rotation + 360);
@@ -1629,16 +1647,41 @@ var initRotate = (function () {
     cvOuter.classList.remove('rotating');
 
     cvOuter.removeEventListener('mousemove', rotate, false);
-    cvOuter.removeEventListener('mouseup', rotateEnd, false);
+    cvOuter.removeEventListener('mouseup', end, false);
   };
 
   // Explicitly reveal public pointers to the private functions 
   // that we want to reveal publicly
 
   return {
-    rotateStart: rotateStart
+    start: start
   }
 })();
+
+var initScale = (function (e) {
+  console.log('scaling');
+
+  var start = function(e) {
+    console.log('start');
+
+    cvOuter.addEventListener('mousemove', scale, false);
+    cvOuter.addEventListener('mouseup', end, false);
+  }
+  var scale = function(e) {
+    console.log('scale');
+    e.preventDefault();
+  }
+  var end = function(e) {
+    console.log('end');
+
+    cvOuter.removeEventListener('mousemove', scale, false);
+    cvOuter.removeEventListener('mouseup', end, false);
+  }
+
+  return {
+    start: start
+  }
+})()
 
 var initCalc = function (e) {
   // console.log('calculating');
@@ -1686,7 +1729,7 @@ var initCalc = function (e) {
 
   }
 }
-initCalc(e);
+// initCalc(e);
 
 var initAbacus = function() {
   window.onload = init
@@ -1764,6 +1807,6 @@ var initAbacus = function() {
   }
 
 }
-initAbacus();
+// initAbacus();
 
 document.querySelector('[data-tool-type1="pen"]').click();
