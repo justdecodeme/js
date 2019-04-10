@@ -39,11 +39,11 @@ body {
 /***********************************/
 .cv-outer {
   position: relative;
-  width: 90vw;
-  height: 90vh;
-  background: rgba(0, 0, 0, 0.096);
-  margin-top: 5vh;
-  margin-left: 5vw;
+  width: 100vw;
+  height: 100vh;
+  // background: rgba(0, 0, 0, 0.096);
+  // margin-top: 5vh;
+  // margin-left: 5vw;
   position: relative;
   .cv {
     width: 100%;
@@ -64,15 +64,15 @@ body {
   $borderColor: #EAEAEA;
   // background: rgba(66, 66, 66, 0.055);
   height: 0;
-  width: 300px;
+  width: 280px;
   left: 20px;
   bottom: 120px;
   transition: 0s height .2s ease;
   .tools-planet {
     // display: none;
     opacity: 0;
-    height: 55%;
-    width: 55%;      
+    height: 50%;
+    width: 50%;      
     // height: 160px;
     // width: 160px;      
     cursor: move;
@@ -87,8 +87,8 @@ body {
     .tools-satellite {
       position: absolute;
       border-radius: 50%;
-      width: 25%;
-      height: 25%;
+      width: 35%;
+      height: 35%;
       // width: 40px;
       // height: 40px;
     }      
@@ -105,9 +105,19 @@ body {
       background-repeat: no-repeat;
     }
     &:after {
-      width: calc(100% + 15px);
-      height: calc(100% + 15px);
-      background: $borderColor;
+      width: calc(100% + 16px);
+      height: calc(100% + 16px);
+      // background: $borderColor;
+
+      background: rgba(211,211,211,1);
+      background: -moz-linear-gradient(top, rgba(211,211,211,1) 0%, rgba(193,193,193,1) 21%, rgba(181,181,181,1) 38%, rgba(229,229,229,1) 100%);
+      background: -webkit-gradient(top top, right top, color-stop(0%, rgba(211,211,211,1)), color-stop(21%, rgba(193,193,193,1)), color-stop(38%, rgba(181,181,181,1)), color-stop(100%, rgba(229,229,229,1)));
+      background: -webkit-linear-gradient(top, rgba(211,211,211,1) 0%, rgba(193,193,193,1) 21%, rgba(181,181,181,1) 38%, rgba(229,229,229,1) 100%);
+      background: -o-linear-gradient(top, rgba(211,211,211,1) 0%, rgba(193,193,193,1) 21%, rgba(181,181,181,1) 38%, rgba(229,229,229,1) 100%);
+      background: -ms-linear-gradient(top, rgba(211,211,211,1) 0%, rgba(193,193,193,1) 21%, rgba(181,181,181,1) 38%, rgba(229,229,229,1) 100%);
+      background: linear-gradient(to top, rgba(211,211,211,1) 0%, rgba(193,193,193,1) 21%, rgba(181,181,181,1) 38%, rgba(229,229,229,1) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d3d3d3', endColorstr='#e5e5e5', GradientType=1 );
+
       z-index: 1;
     }
     &.active {
@@ -119,7 +129,7 @@ body {
       &:before {
         background-image: url('../../_assets/img/tools.svg');
         background-position: 60% center;
-        background-size: 60%;
+        background-size: 65%;
       }
     }
     &.tools-planet-pens {
@@ -136,18 +146,20 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 150px;
+    // width: 200px;
     display: flex;
     height: 45px;
     justify-content: space-between;
     .tools-satellite {
       width: 30%;
+      // width: 22%;
       border-radius: 6px;
     }     
   }    
   .tools-satellite {
     @include flex();
     background-color: $bgColor;
-    border: 2px solid $borderColor;
+    border: 3px solid $borderColor;
     cursor: pointer;
     img {
       max-width: 100%;
@@ -191,7 +203,7 @@ body {
     }
   }
   &.active {
-    height: 300px;
+    height: 280px;
     transition: 0s height 0s ease;
   }
 }
@@ -468,7 +480,6 @@ body {
     }
   }
 }
-
 [data-panel=scale] {
   background: rgba(144, 238, 144, 0.288);
   height: 100px;
@@ -601,5 +612,19 @@ body {
     width: 20px;
     bottom: 0;
     transform: translate(50%, 50%);
+  }
+}
+[data-panel=abacus] {
+  div.drag-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(202, 202, 202);
+    z-index: -1;  
+  }
+  g {
+    cursor: pointer;
   }
 }

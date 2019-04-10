@@ -15,17 +15,17 @@
       <div class="tools-planet tools-planet-sets drag-area" id="toolsPlanetSets">
         <button class="tools-satellite primary" data-panel-btn="cubes"><img src="./_assets/img/box.svg"></button>
 
-        <button class="tools-satellite primary has-child disabled" data-tool-group-type="scale"><img src="./_assets/img/scale.svg"></button>
+        <button class="tools-satellite primary has-child" data-tool-group-type="scale"><img src="./_assets/img/scale.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-wooden-sm.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-wooden-lg.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-transparent-sm.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-transparent-lg.svg"></button>
 
-        <button class="tools-satellite primary" data-panel-btn="scale"><img src="./_assets/img/set-square-isosceles.svg"></button>
+        <button class="tools-satellite primary disabled" data-panel-btn="scale"><img src="./_assets/img/set-square-isosceles.svg"></button>
         <button class="tools-satellite primary disabled"><img src="./_assets/img/protractor.svg"></button>
-        <button class="tools-satellite primary disabled" data-panel-btn="compass"><img src="./_assets/img/compass.svg"></button>
-        <button class="tools-satellite primary disabled" data-panel-btn="abacus"><img src="./_assets/img/abacus.svg"></button>
-        <button class="tools-satellite primary disabled" data-panel-btn="calculator"><img src="./_assets/img/calc.svg"></button>
+        <button class="tools-satellite primary" data-panel-btn="compass"><img src="./_assets/img/compass.svg"></button>
+        <button class="tools-satellite primary" data-panel-btn="abacus"><img src="./_assets/img/abacus.svg"></button>
+        <button class="tools-satellite primary" data-panel-btn="calculator"><img src="./_assets/img/calc.svg"></button>
         <button class="tools-satellite primary" data-panel-btn="clock"><img src="./_assets/img/clock.svg"></button>
         <button class="tools-satellite primary" data-panel-btn="flowers"><img src="./_assets/img/flower.svg"></button>
         <button class="tools-satellite primary" data-panel-btn="money"><img src="./_assets/img/yen.svg"></button>
@@ -62,7 +62,7 @@
         <button class="tools-satellite primary" id="undo"><img src="./_assets/img/undo.svg"></button>
         <button class="tools-satellite primary" id="redo"><img src="./_assets/img/redo.svg"></button>
         <button class="tools-satellite primary" data-tool-type1="eraser"><img src="./_assets/img/eraser.png"></button>
-        <button class="tools-satellite primary" id="clear"><img src="./_assets/img/clear.png"></button>
+        <!-- <button class="tools-satellite primary" id="clear"><img src="./_assets/img/clear.png"></button> -->
       </div>
 
       <div class="tools-toggle">
@@ -88,307 +88,313 @@
 
     <!-- widget panels -->
     <div class="draggable draggable-widget" data-panel="abacus">
-      <div class="drag-area"></div>
+      <!-- <div class="drag-area"></div> -->
       <div class="close-btn"></div>
-      <svg xmlns="http://www.w3.org/2000/svg" width="600" height="204.805">
+      <svg class="drag-area" xmlns="http://www.w3.org/2000/svg" width="600" height="204.805">
+        <!-- Lower Layer -->
         <g data-name="Group 455">
-          <path data-name="Rectangle 209" fill="#b68b62" d="M552.436 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 393" fill-rule="evenodd">
-            <g data-name="Group 389">
+          <path class="drag-area" data-name="Rectangle 209" fill="#b68b62" d="M552.436 69.146h2.086v122.152h-2.086z" />
+      
+          <!-- RightMost Layer Bottom -->
+          <g data-name="Group 393" fill-rule="evenodd" id="column11" class="column">
+            <g class="bottom_boxes" data-state="down" data-name="Group 389" data-pos="0">
               <path data-name="Path 1917" d="M573.577 122.308h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1918" d="M573.577 122.308h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 390">
+            <g class="bottom_boxes" data-state="down" data-name="Group 390" data-pos="1">
               <path data-name="Path 1919" d="M573.577 141.081h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1920" d="M573.577 141.081h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 391">
+            <g class="bottom_boxes" data-state="down" data-name="Group 391" data-pos="2">
               <path data-name="Path 1921" d="M573.577 159.853h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1922" d="M573.577 159.853h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 392">
+            <g class="bottom_boxes" data-state="down" data-name="Group 392" data-pos="3">
               <path data-name="Path 1923" d="M573.577 178.625h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1924" d="M573.577 178.625h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 210" fill="#b68b62" d="M501.723 69.146h2.085v122.152h-2.085z" />
-          <g data-name="Group 398" fill-rule="evenodd">
-            <g data-name="Group 394">
+      
+          <path class="drag-area" data-name="Rectangle 210" fill="#b68b62" d="M501.723 69.146h2.085v122.152h-2.085z" />
+          <g data-name="Group 398" fill-rule="evenodd" id="column10">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 394">
               <path data-name="Path 1925" d="M522.864 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1926" d="M522.864 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 395">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 395">
               <path data-name="Path 1927" d="M522.864 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1928" d="M522.864 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 396">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 396">
               <path data-name="Path 1929" d="M522.864 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1930" d="M522.864 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 397">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 397">
               <path data-name="Path 1931" d="M522.864 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1932" d="M522.864 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 211" fill="#b68b62" d="M451.009 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 403" fill-rule="evenodd">
-            <g data-name="Group 399">
+          <path class="drag-area" data-name="Rectangle 211" fill="#b68b62" d="M451.009 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 403" fill-rule="evenodd" id="column9">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 399">
               <path data-name="Path 1933" d="M472.15 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1934" d="M472.15 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 400">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 400">
               <path data-name="Path 1935" d="M472.15 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1936" d="M472.15 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 401">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 401">
               <path data-name="Path 1937" d="M472.15 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1938" d="M472.15 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 402">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 402">
               <path data-name="Path 1939" d="M472.15 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1940" d="M472.15 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 212" fill="#b68b62" d="M400.295 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 408" fill-rule="evenodd">
-            <g data-name="Group 404">
+          <path class="drag-area" data-name="Rectangle 212" fill="#b68b62" d="M400.295 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 408" fill-rule="evenodd" id="column8">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 404">
               <path data-name="Path 1941" d="M421.436 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1942" d="M421.436 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 405">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 405">
               <path data-name="Path 1943" d="M421.436 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1944" d="M421.436 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 406">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 406">
               <path data-name="Path 1945" d="M421.436 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1946" d="M421.436 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 407">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 407">
               <path data-name="Path 1947" d="M421.436 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1948" d="M421.436 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 213" fill="#b68b62" d="M349.582 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 413" fill-rule="evenodd">
-            <g data-name="Group 409">
+          <path class="drag-area" data-name="Rectangle 213" fill="#b68b62" d="M349.582 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 413" fill-rule="evenodd" id="column7">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 409">
               <path data-name="Path 1949" d="M370.722 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1950" d="M370.722 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 410">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 410">
               <path data-name="Path 1951" d="M370.722 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1952" d="M370.722 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 411">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 411">
               <path data-name="Path 1953" d="M370.722 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1954" d="M370.722 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 412">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 412">
               <path data-name="Path 1955" d="M370.722 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1956" d="M370.722 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 214" fill="#b68b62" d="M298.868 69.146h2.085v122.152h-2.085z" />
-          <g data-name="Group 418" fill-rule="evenodd">
-            <g data-name="Group 414">
+          <path class="drag-area" data-name="Rectangle 214" fill="#b68b62" d="M298.868 69.146h2.085v122.152h-2.085z" />
+          <g data-name="Group 418" fill-rule="evenodd" id="column6">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 414">
               <path data-name="Path 1957" d="M320.009 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1958" d="M320.009 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 415">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 415">
               <path data-name="Path 1959" d="M320.009 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1960" d="M320.009 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 416">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 416">
               <path data-name="Path 1961" d="M320.009 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1962" d="M320.009 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 417">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 417">
               <path data-name="Path 1963" d="M320.009 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1964" d="M320.009 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 215" fill="#b68b62" d="M248.154 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 423" fill-rule="evenodd">
-            <g data-name="Group 419">
+          <path class="drag-area" data-name="Rectangle 215" fill="#b68b62" d="M248.154 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 423" fill-rule="evenodd" id="column5">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 419">
               <path data-name="Path 1965" d="M269.295 122.308h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1966" d="M269.295 122.308h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 420">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 420">
               <path data-name="Path 1967" d="M269.295 141.081h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1968" d="M269.295 141.081h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 421">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 421">
               <path data-name="Path 1969" d="M269.295 159.853h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1970" d="M269.295 159.853h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 422">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 422">
               <path data-name="Path 1971" d="M269.295 178.625h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1972" d="M269.295 178.625h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 216" fill="#b68b62" d="M197.441 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 428" fill-rule="evenodd">
-            <g data-name="Group 424">
+          <path class="drag-area" data-name="Rectangle 216" fill="#b68b62" d="M197.441 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 428" fill-rule="evenodd" id="column4">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 424">
               <path data-name="Path 1973" d="M218.582 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1974" d="M218.582 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 425">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 425">
               <path data-name="Path 1975" d="M218.582 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1976" d="M218.582 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 426">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 426">
               <path data-name="Path 1977" d="M218.582 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1978" d="M218.582 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 427">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 427">
               <path data-name="Path 1979" d="M218.582 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1980" d="M218.582 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 217" fill="#b68b62" d="M146.727 69.146h2.086v122.152h-2.086z" />
-          <g data-name="Group 433" fill-rule="evenodd">
-            <g data-name="Group 429">
+          <path class="drag-area" data-name="Rectangle 217" fill="#b68b62" d="M146.727 69.146h2.086v122.152h-2.086z" />
+          <g data-name="Group 433" fill-rule="evenodd" id="column3">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 429">
               <path data-name="Path 1981" d="M167.868 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1982" d="M167.868 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 430">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 430">
               <path data-name="Path 1983" d="M167.868 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1984" d="M167.868 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 431">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 431">
               <path data-name="Path 1985" d="M167.868 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1986" d="M167.868 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 432">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 432">
               <path data-name="Path 1987" d="M167.868 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1988" d="M167.868 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 218" fill="#b68b62" d="M96.013 69.146h2.085v122.152h-2.085z" />
-          <g data-name="Group 438" fill-rule="evenodd">
-            <g data-name="Group 434">
+          <path class="drag-area" data-name="Rectangle 218" fill="#b68b62" d="M96.013 69.146h2.085v122.152h-2.085z" />
+          <g data-name="Group 438" fill-rule="evenodd" id="column2">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 434">
               <path data-name="Path 1989" d="M117.154 122.308h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1990" d="M117.154 122.308h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 435">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 435">
               <path data-name="Path 1991" d="M117.154 141.081h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1992" d="M117.154 141.081h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 436">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 436">
               <path data-name="Path 1993" d="M117.154 159.853h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1994" d="M117.154 159.853h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 437">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 437">
               <path data-name="Path 1995" d="M117.154 178.625h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1996" d="M117.154 178.625h-40.2c2.562 5.426 10.59 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
-          <path data-name="Rectangle 219" fill="#b68b62" d="M45.3 69.146h2.086v122.152H45.3z" />
-          <g data-name="Group 443" fill-rule="evenodd">
-            <g data-name="Group 439">
+          <path class="drag-area" data-name="Rectangle 219" fill="#b68b62" d="M45.3 69.146h2.086v122.152H45.3z" />
+          <g data-name="Group 443" fill-rule="evenodd" id="column1">
+            <g class="bottom_boxes" data-state="down" data-pos="0" data-name="Group 439">
               <path data-name="Path 1997" d="M66.441 122.308h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 1998" d="M66.441 122.308h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.961 20.1-9.387z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 440">
+            <g class="bottom_boxes" data-state="down" data-pos="1" data-name="Group 440">
               <path data-name="Path 1999" d="M66.441 141.081h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 2000" d="M66.441 141.081h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 441">
+            <g class="bottom_boxes" data-state="down" data-pos="2" data-name="Group 441">
               <path data-name="Path 2001" d="M66.441 159.853h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 2002" d="M66.441 159.853h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.96 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
-            <g data-name="Group 442">
+            <g class="bottom_boxes" data-state="down" data-pos="3" data-name="Group 442">
               <path data-name="Path 2003" d="M66.441 178.625h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
                 fill="#fbe4cd" />
               <path data-name="Path 2004" d="M66.441 178.625h-40.2c2.562 5.426 10.589 9.386 20.1 9.386s17.538-3.962 20.1-9.386z"
                 fill="#f5d1ae" />
             </g>
           </g>
+      
+          <!-- upper layer spikes -->
           <path data-name="Rectangle 220" fill="#b68b62" d="M552.436 13.505h2.086v42.136h-2.086z" />
           <path data-name="Rectangle 221" fill="#b68b62" d="M501.723 13.505h2.085v42.136h-2.085z" />
           <path data-name="Rectangle 222" fill="#b68b62" d="M451.009 13.505h2.086v42.136h-2.086z" />
@@ -400,86 +406,89 @@
           <path data-name="Rectangle 228" fill="#b68b62" d="M146.727 13.505h2.086v42.136h-2.086z" />
           <path data-name="Rectangle 229" fill="#b68b62" d="M96.013 13.505h2.085v42.136h-2.085z" />
           <path data-name="Rectangle 230" fill="#b68b62" d="M45.3 13.505h2.086v42.136H45.3z" />
-          <g data-name="Group 444" fill-rule="evenodd">
+      
+          <!-- Upper Layer of boxes -->
+          <g data-pos="down" class="upper_layer" data-name="Group 444" id="Group_444" fill-rule="evenodd">
             <path data-name="Path 2005" d="M573.577 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2006" d="M573.577 42.97h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 445" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 445" fill-rule="evenodd">
             <path data-name="Path 2007" d="M522.864 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2008" d="M522.864 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 446" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 446" fill-rule="evenodd">
             <path data-name="Path 2009" d="M472.15 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2010" d="M472.15 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 447" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 447" fill-rule="evenodd">
             <path data-name="Path 2011" d="M421.436 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2012" d="M421.436 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 448" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 448" fill-rule="evenodd">
             <path data-name="Path 2013" d="M370.722 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2014" d="M370.722 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 449" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 449" fill-rule="evenodd">
             <path data-name="Path 2015" d="M320.009 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2016" d="M320.009 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 450" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 450" fill-rule="evenodd">
             <path data-name="Path 2017" d="M269.295 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2018" d="M269.295 42.97h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 451" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 451" fill-rule="evenodd">
             <path data-name="Path 2019" d="M218.582 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2020" d="M218.582 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 452" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 452" fill-rule="evenodd">
             <path data-name="Path 2021" d="M167.868 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2022" d="M167.868 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 453" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 453" fill-rule="evenodd">
             <path data-name="Path 2023" d="M117.154 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2024" d="M117.154 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
-          <g data-name="Group 454" fill-rule="evenodd">
+          <g data-pos="down" class="upper_layer" data-name="Group 454" fill-rule="evenodd">
             <path data-name="Path 2025" d="M66.441 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z"
               fill="#fbe4cd" />
             <path data-name="Path 2026" d="M66.441 42.97h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.962 20.1-9.387z"
               fill="#f5d1ae" />
           </g>
+          <!-- Box Path -->
           <path data-name="Rectangle 231" fill="none" d="M586.478 55.641h.017v13.505h-.017z" />
-          <path data-name="Rectangle 232" fill="none" d="M13.506 69.146h572.972v122.152H13.506z" />
+          <path class="drag-area" data-name="Rectangle 232" fill="none" d="M13.506 69.146h572.972v122.152H13.506z" />
           <path data-name="Rectangle 233" fill="none" d="M586.478 13.505h.017v42.136h-.017z" />
           <path data-name="Rectangle 234" fill="none" d="M586.478 69.146h.017v122.152h-.017z" />
           <path data-name="Rectangle 235" fill="none" d="M13.506 13.505h572.972v42.136H13.506z" />
-          <path data-name="Rectangle 236" fill="#633" d="M13.506 55.641h572.972v13.505H13.506z" />
-          <path data-name="Path 2027" d="M586.477 13.505h.017V-.001H13.506v13.506z" fill="#633" />
-          <path data-name="Path 2028" d="M586.477 191.298H13.506v13.506h572.989v-13.506z" fill="#633" />
-          <path data-name="Path 2029" d="M586.597 13.505v42.136h-.105v13.5h.105v122.152h13.4V13.505z" fill="#633" />
-          <path data-name="Rectangle 237" fill="#633" d="M586.495 13.505h.106v42.136h-.106z" />
+          <path class="drag-area" data-name="Rectangle 236" fill="#633" d="M13.506 55.641h572.972v13.505H13.506z" />
+          <path class="drag-area" data-name="Path 2027" d="M586.477 13.505h.017V-.001H13.506v13.506z" fill="#633" />
+          <path class="drag-area" data-name="Path 2028" d="M586.477 191.298H13.506v13.506h572.989v-13.506z" fill="#633" />
+          <path class="drag-area" data-name="Path 2029" d="M586.597 13.505v42.136h-.105v13.5h.105v122.152h13.4V13.505z" fill="#633" />
+          <path class="drag-area" data-name="Rectangle 237" fill="#633" d="M586.495 13.505h.106v42.136h-.106z" />
           <path data-name="Rectangle 238" fill="#633" d="M586.495 69.146h.106v122.152h-.106z" />
           <path data-name="Path 2030" d="M586.597 13.505h13.4V-.001h-13.5v13.506z" fill="#633" />
           <path data-name="Path 2031" d="M586.497 191.298v13.506h13.5v-13.506h-13.5z" fill="#633" />
-          <path data-name="Path 2032" d="M13.222 69.146h.251v-13.5h-.251V13.51H.001v177.793h13.221z" fill="#633" />
+          <path class="drag-area" data-name="Path 2032" d="M13.222 69.146h.251v-13.5h-.251V13.51H.001v177.793h13.221z" fill="#633" />
           <path data-name="Rectangle 239" fill="#633" d="M13.472 69.146h.033v122.152h-.033z" />
           <path data-name="Rectangle 240" fill="#633" d="M13.222 13.505h.251v42.136h-.251z" />
           <path data-name="Rectangle 241" fill="#633" d="M13.472 13.505h.033v42.136h-.033z" />
@@ -491,9 +500,8 @@
       </svg>
     </div>
     <div class="draggable draggable-widget" data-panel="calculator">
-      <div class="drag-area"></div>
       <div class="close-btn"></div>
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="751.425">
+      <svg class="drag-area" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="751.425">
         <defs>
           <linearGradient id="b" x1=".5" x2=".5" y2="1" gradientUnits="objectBoundingBox">
             <stop offset="0" stop-color="#01141a" />
@@ -546,14 +554,14 @@
             <stop offset="1" stop-color="#73330c" />
           </linearGradient>
         </defs>
-        <g data-name="Group 483" transform="translate(-411.226 -6300.709)">
+        <g class="drag-area" data-name="Group 483" transform="translate(-411.226 -6300.709)">
           <path data-name="Rectangle 300" d="M469.758 6300.709h382.936a58.532 58.532 0 0 1 58.532 58.532v634.362a58.531 58.531 0 0 1-58.531 58.531H469.757a58.531 58.531 0 0 1-58.531-58.531v-634.362a58.532 58.532 0 0 1 58.532-58.532z"
             fill="#01151a" />
-          <path data-name="Rectangle 301" d="M469.855 6309.003h382.739a50.338 50.338 0 0 1 50.338 50.338v634.162a50.337 50.337 0 0 1-50.337 50.337H469.856a50.337 50.337 0 0 1-50.337-50.337v-634.164a50.336 50.336 0 0 1 50.336-50.336z"
+          <path class="drag-area" data-name="Rectangle 301" d="M469.855 6309.003h382.739a50.338 50.338 0 0 1 50.338 50.338v634.162a50.337 50.337 0 0 1-50.337 50.337H469.856a50.337 50.337 0 0 1-50.337-50.337v-634.164a50.336 50.336 0 0 1 50.336-50.336z"
             fill="#939598" />
-          <path data-name="Rectangle 302" transform="translate(455.855 6355.211)" fill="url(#b)" d="M0 0h410.741v109.005H0z" />
+          <path class="drag-area" data-name="Rectangle 302" transform="translate(455.855 6355.211)" fill="url(#b)" d="M0 0h410.741v109.005H0z" />
           <g>
-            <path data-name="Rectangle 303" fill="#acbf8a" d="M461.779 6361.135h398.894v97.157H461.779z" />
+            <path class="drag-area" data-name="Rectangle 303" fill="#acbf8a" d="M461.779 6361.135h398.894v97.157H461.779z" />
           </g>
           <g data-button-type="num" data-button-value="0">
             <path data-name="Rectangle 310" d="M16.705 0h55.058a16.705 16.705 0 0 1 16.705 16.705v55.061a16.7 16.7 0 0 1-16.7 16.7H16.7A16.7 16.7 0 0 1 0 71.766V16.705A16.705 16.705 0 0 1 16.705 0z"
@@ -1008,8 +1016,7 @@
   </div>
   
   <script src="./_assets/config/settings.json"></script>
-  <!-- <script async src="./_assets/js/script.min.js"></script> -->
-  <script async src="./_src/js/script.js"></script>
+  <script async src="./_assets/js/script.min.js"></script>
 </body>
 
 </html>

@@ -201,13 +201,12 @@ var initTools = (function () {
     var totaltoolsSatellites = toolsSatellites.length;
     // var rotation = 360 / totaltoolsSatellites;
     var rotation = 30;
-    var radius = (toolsUniverseWidth - toolsSatellitesWidth) / 2;
-    // var radius = 130;
+    // var radius = (toolsUniverseWidth - toolsSatellitesWidth) / 2;
+    var radius = 110;
     var totalOffset = (toolsPlanetWidth - toolsSatellitesWidth) / 2;
     // var totalOffset = 60;
 
-    toolsSatellites.forEach(function (toolsSatellite, i) {
-      // place primary tools
+    toolsSatellites.forEach(function (toolsSatellite, i) { // place primary tools
       var n = i - 3; // to start from top side instead of rigth side
       var x = Math.round(Math.cos((rotation * n) * (Math.PI / 180)) * radius);
       var y = Math.round(Math.sin((rotation * n) * (Math.PI / 180)) * radius);
@@ -215,27 +214,26 @@ var initTools = (function () {
       var top = Math.round(y + totalOffset);
       toolsSatellite.style.left = left + "px";
       toolsSatellite.style.top = top + "px";
-
-      // place secondary tools if any
-      if (toolsSatellite.classList.contains('has-child')) {
+      
+      if (toolsSatellite.classList.contains('has-child')) { // place secondary tools if any
         let toolGroupType = toolsSatellite.dataset.toolGroupType;
         let toolsSatellites = toolsPlanet.querySelectorAll('[data-tool-group-type="' + toolGroupType + '"].secondary');
-        let rotation = 16;
-        let radius = 178;
+        let rotation = 19;
+        let radius = 165;
 
         toolsSatellites.forEach(function (toolsSatellite, i) {
           let n = i - 4.5;
 
           switch (toolGroupType) {
-            case "pastel1": n = i + 1; 
+            case "pastel1": n = i + .7; 
               break;
-            case "pastel2": n = i + 2.7; 
+            case "pastel2": n = i + 2.2; 
               break;
-            case "stroke": n = i + 4.7;
+            case "stroke": n = i + 3.8;
               break;
-            case "opacity": n = i + 6.5; 
+            case "opacity": n = i + 5.2; 
               break;
-            case "scale": n = i - 5.3; 
+            case "scale": n = i - 4.5; 
               break;
           }
 
@@ -655,8 +653,8 @@ var initDraw = (function () {
   }  
 })();
 
-// drag behaviour of elements - tools/panels/sets
-var initElDrag = (function() {
+// move behaviour of elements - tools/panels/sets
+var initMove = (function() {
   var startX = 0, startY = 0, endX = 0, endY = 0;
   var dragParentzIndex = 0; // update only if drag parent is different each dragging time
   var dragParent = dropParent = oldDragParent = null;
@@ -668,32 +666,37 @@ var initElDrag = (function() {
     
     if(listener == "add") { // ADD EVENT LISTENERS
       // console.log('adding')
+
+      
       if (dragAreas.length > 0) { // if `dragArea` is available, use that to drag
+        // if(draggable.classList.contains('drag-area')) {
+        //   draggable.addEventListener('mousedown', start, false);
+        // }
         dragAreas.forEach(function (dragArea) {
-          dragArea.addEventListener('mousedown', dragStart, false);
+          dragArea.addEventListener('mousedown', start, false);
         })
       } else { // otherwise move the element anywhere from with in element
-        draggable.addEventListener('mousedown', dragStart, false);
+        draggable.addEventListener('mousedown', start, false);
       }    
     } else if(listener == "remove") { // REMOVE EVENT LISTENERS
       // console.log('removing')
       if (dragAreas.length > 0) {
         dragAreas.forEach(function (dragArea) {
-          dragArea.removeEventListener('mousedown', dragStart, false);
+          dragArea.removeEventListener('mousedown', start, false);
         })
       } else {
-        draggable.removeEventListener('mousedown', dragStart, false);
+        draggable.removeEventListener('mousedown', start, false);
       }    
     }
   }
 
-  var dragStart = function(e) {
-    // console.log('dragStart');
+  var start = function(e) {
+    console.log('moveStart');
 
     var currPoint = getMousePosition(e, cv);
-    initElDrag.dragParent = e.target.closest('.draggable');
-    var dragParent = initElDrag.dragParent;
-    // var oldDragParent = initElDrag.oldDragParent;
+    initMove.dragParent = e.target.closest('.draggable');
+    var dragParent = initMove.dragParent;
+    // var oldDragParent = initMove.oldDragParent;
     
     // drag only if current element has class 'drag-area'
     if (e.target.classList.contains('drag-area')) {
@@ -704,27 +707,28 @@ var initElDrag = (function() {
       startX = currPoint.x;
       startY = currPoint.y;
         
-      if(dragParent != initElDrag.oldDragParent) {
-        dragParent.style.zIndex = ++initElDrag.dragParentzIndex;
+      if(dragParent != initMove.oldDragParent) {
+        dragParent.style.zIndex = ++initMove.dragParentzIndex;
       } 
-      initElDrag.oldDragParent = initElDrag.dragParent;
+      initMove.oldDragParent = initMove.dragParent;
 
       // get coordinates of nearby draggable cubes
       if (dragParent.classList.contains('draggable-cubes')) {
         initCubes.getCoords();
       }
 
-      cvOuter.addEventListener('mousemove', drag, false);
-      cvOuter.addEventListener('mouseup', dragEnd, false);
+      cvOuter.addEventListener('mousemove', move, false);
+      cvOuter.addEventListener('mouseup', end, false);
+      dragParent.addEventListener('dragstart', initDrag.start, false);
     }
   }
 
-  var drag = function(e) {
-    // console.log('drag')
+  var move = function(e) {
+    console.log('move')
     e.preventDefault();
 
     var currPoint = getMousePosition(e, cv);
-    var dragParent = initElDrag.dragParent;
+    var dragParent = initMove.dragParent;
 
     // calculate the new cursor position:
     endX = startX - currPoint.x;
@@ -759,11 +763,11 @@ var initElDrag = (function() {
     }
   }
 
-  var dragEnd = function(e) {
-    // console.log('dragEnd')
+  var end = function(e) {
+    console.log('moveEnd')
     e.preventDefault();
 
-    var dragParent = initElDrag.dragParent;
+    var dragParent = initMove.dragParent;
 
     cvOuter.classList.remove('dragging');
 
@@ -776,8 +780,9 @@ var initElDrag = (function() {
     }
     // initCubes.isSnapping = false;
 
-    cvOuter.removeEventListener('mousemove', drag, false);
-    cvOuter.removeEventListener('mouseup', dragEnd, false);
+    cvOuter.removeEventListener('mousemove', move, false);
+    cvOuter.removeEventListener('mouseup', end, false);
+    dragParent.removeEventListener('dragstart', initDrag.start, false);
   }
 
   init(toolsUniverse, 'add');
@@ -792,13 +797,18 @@ var initElDrag = (function() {
 })();
 
 // drag behaviour of seals - cubes/money/numbers/flowers
-var initSealsDrag = (function () {
+var initDrag = (function () {
   var dragEloffsetX, dragEloffsetY;
   var draggablesId = 0;
   var dropElHeight = 0;
+  var dragParent = null;
 
-  var dragStart = function(e) {
-    // console.log('dragStart');
+  var start = function(e) {
+    console.log('dragStart');
+
+    console.log(e.target)
+    var dragParent = e.target;
+    console.log(dragParent)
 
     dragEloffsetX = e.offsetX;
     dragEloffsetY = e.offsetY;
@@ -807,14 +817,19 @@ var initSealsDrag = (function () {
     e.dataTransfer.setData("height", e.target.getBoundingClientRect().height);
     e.dataTransfer.setData("sealType", e.target.dataset.sealType);
     
-    cvOuter.addEventListener('dragenter', dragEnter, false);
-    cvOuter.addEventListener('dragleave', dragLeave, false);
-    cvOuter.addEventListener('dragover', dragOver, false);
+    e.target.addEventListener('drag', drag, false);
+    cvOuter.addEventListener('dragenter', enter, false);
+    cvOuter.addEventListener('dragleave', leave, false);
+    cvOuter.addEventListener('dragover', over, false);
     cvOuter.addEventListener('drop', drop, false);
   }
-  var dragEnter = function(e) { e.preventDefault(); }
-  var dragLeave = function(e) { e.preventDefault(); }
-  var dragOver = function(e) {
+  var drag = function(e) { 
+    e.preventDefault(); 
+    console.log('drag');
+  }
+  var enter = function(e) { e.preventDefault(); }
+  var leave = function(e) { e.preventDefault(); }
+  var over = function(e) {
     e.preventDefault();
     cvOuter.classList.add('dropping');
   }
@@ -861,21 +876,21 @@ var initSealsDrag = (function () {
         draggable.addEventListener('dblclick', (e) => { draggable.remove(); }, false);
       }
 
-      draggable.setAttribute('data-id', ++initSealsDrag.draggablesId);
-      draggable.style.zIndex = ++initElDrag.dragParentzIndex;
+      draggable.setAttribute('data-id', ++initDrag.draggablesId);
+      draggable.style.zIndex = ++initMove.dragParentzIndex;
       draggable.style.left = e.offsetX - dragEloffsetX + 'px';
       draggable.style.top = e.offsetY - dragEloffsetY + 'px';
       draggable.classList.add('draggable');
       
       cvOuter.appendChild(draggable);
 
-      initSealsDrag.dropElHeight = draggable.getBoundingClientRect().height;
+      initDrag.dropElHeight = draggable.getBoundingClientRect().height;
 
-      initElDrag.init(draggable, 'add');
+      initMove.init(draggable, 'add');
 
-      cvOuter.removeEventListener('dragenter', dragEnter)
-      cvOuter.removeEventListener('dragleave', dragLeave)
-      cvOuter.removeEventListener('dragover', dragOver)
+      cvOuter.removeEventListener('dragenter', enter)
+      cvOuter.removeEventListener('dragleave', leave)
+      cvOuter.removeEventListener('dragover', over)
       cvOuter.removeEventListener('drop', drop)
     } else {
       alert('You can only place max ' + totalSealsAllowed + ' of ' + sealType + ' seal type.');
@@ -883,7 +898,7 @@ var initSealsDrag = (function () {
   }
 
   return {
-    dragStart: dragStart,
+    start: start,
     draggablesId: draggablesId,
     dropElHeight: dropElHeight
   }
@@ -910,30 +925,33 @@ var fetchSeals = (function () {
 
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
+  var panel = oldPanel = panelType = panelBtn = panelCloseBtn = draggableSeals = rotateBtns = null;
+
   var toggle = function(target) {
-    var panelType = target.dataset.panelBtn;
+    panelType = target.dataset.panelBtn;
     
     // open panel
     if (!target.classList.contains('active')) {
       // console.log('open panel');
 
-      var panel = document.querySelector('[data-panel="' + panelType + '"]');
-      var panelCloseBtn = panel.querySelector('.close-btn');
-      var rotateBtns = panel.querySelectorAll('.rotate-btn');
-      var draggableSeals = panel.getElementsByClassName('draggable-seal');
+      panel = document.querySelector('[data-panel="' + panelType + '"]');
+      panelCloseBtn = panel.querySelector('.close-btn');
+      rotateBtns = panel.querySelectorAll('.rotate-btn');
+      draggableSeals = panel.getElementsByClassName('draggable-seal');
       
       target.classList.add('active');
       panel.classList.add('active');
-      panel.style.zIndex = ++initElDrag.dragParentzIndex;
+      panel.style.zIndex = ++initMove.dragParentzIndex;
 
-      initElDrag.dragParent = panel;
-      initElDrag.oldDragParent = panel;
+      initMove.dragParent = panel;
+      initMove.oldDragParent = panel;
 
       // ADD EVENT LISTENERS
+      panel.addEventListener('click', bringInFront, false);
       panelCloseBtn.addEventListener('click', close, false);
-      initElDrag.init(panel, 'add');
+      initMove.init(panel, 'add');
       for (var i = 0; i < draggableSeals.length; i++) {
-        draggableSeals[i].addEventListener('dragstart', initSealsDrag.dragStart, false);
+        draggableSeals[i].addEventListener('dragstart', initDrag.start, false);
       }
       if (rotateBtns.length > 0) {
         rotateBtns.forEach(rotateBtn => {
@@ -951,7 +969,6 @@ var initPanel = (function (e) {
   }
   var close = function(e) {
     // console.log('close panel')
-    var panel = panelBtn = panelCloseBtn = draggableSeals = null;
 
     // clicked on closed button and 'type' property exist
     if(e.type) {
@@ -972,10 +989,11 @@ var initPanel = (function (e) {
     rotateBtns = panel.querySelectorAll('.rotate-btn');
 
     // REMOVE EVENT LISTENERS
+    panel.removeEventListener('click', bringInFront, false);
     panelCloseBtn.removeEventListener('click', close, false);
-    initElDrag.init(panel, 'remove');
+    initMove.init(panel, 'remove');
     for (var i = 0; i < draggableSeals.length; i++) {
-      draggableSeals[i].removeEventListener('dragstart', initSealsDrag.dragStart, false);
+      draggableSeals[i].removeEventListener('dragstart', initDrag.start, false);
     }
     if (rotateBtns.length > 0) {
       rotateBtns.forEach(rotateBtn => {
@@ -986,6 +1004,14 @@ var initPanel = (function (e) {
     if (panel.dataset.panelSet) {
       currSetType = null;
     }    
+  }
+  var bringInFront = function(e) {
+    panel = this.closest('.draggable');
+
+    if(oldPanel != panel) {
+      panel.style.zIndex = ++initMove.dragParentzIndex;
+    }
+    oldPanel = panel;
   }
   return {
     toggle: toggle
@@ -1009,7 +1035,7 @@ var initCubes = (function (e) {
   var getCoords = function() {
     // console.log('geting Coordingates');
 
-    dragParent = initElDrag.dragParent;
+    dragParent = initMove.dragParent;
 
     snapType = (dragParent.classList.contains('vertical')) ? 'horizontal' : 'vertical';
     detachType = (dragParent.classList.contains('horizontal')) ? 'horizontal' : 'vertical';
@@ -1107,7 +1133,7 @@ var initCubes = (function (e) {
             }
 
             initCubes.shortestDist = shortestDist;
-            dropParent = initElDrag.dropParent = document.querySelector('[data-id="' + dropCoord + '"');
+            dropParent = initMove.dropParent = document.querySelector('[data-id="' + dropCoord + '"');
 
             // no highlighting if element has already enought cubes in column
             if(snapType == 'vertical') {
@@ -1175,8 +1201,8 @@ var initCubes = (function (e) {
             </div>        
           `;
         }
-        initElDrag.dropParent.innerHTML += cubeOuter;
-        dropParent = initElDrag.dropParent;
+        initMove.dropParent.innerHTML += cubeOuter;
+        dropParent = initMove.dropParent;
       } else if (snapType == "horizontal") {
         cubeOuter = '';
         for (var c = 0; c < totalCubes; c++) {
@@ -1193,9 +1219,9 @@ var initCubes = (function (e) {
           <div class="dot dot-left"></div>
           <div class="dot dot-right"></div>     
         `;        
-        initElDrag.dropParent.innerHTML = cubeOuter;  
-        dropParent = initElDrag.dropParent;
-        initElDrag.init(dropParent, 'add');
+        initMove.dropParent.innerHTML = cubeOuter;  
+        dropParent = initMove.dropParent;
+        initMove.init(dropParent, 'add');
       }
       
       if (snapType == "horizontal") dropParent.classList.add('horizontal');
@@ -1220,17 +1246,17 @@ var initCubes = (function (e) {
             <div class="dot dot-right"></div>     
           `;
 
-          initElDrag.dropParent.innerHTML = cubeOuter;
-          dropParent = initElDrag.dropParent;
+          initMove.dropParent.innerHTML = cubeOuter;
+          dropParent = initMove.dropParent;
           dropParent.classList.add('vertical');
         } else if(snapType == "horizontal") {
-          dropParent = initElDrag.dropParent;
+          dropParent = initMove.dropParent;
         }
         
         console.log('limit reached!!!!!!!!!!');
       }
       // console.log(dropParent);
-      initElDrag.init(dropParent, 'add');
+      initMove.init(dropParent, 'add');
       dragParent.remove();
     } else if(totalCubes > cubeLimit) {
       // console.log('totalCubes > cubeLimit');
@@ -1252,8 +1278,8 @@ var initCubes = (function (e) {
           <div class="dot dot-right"></div>     
         `;
         
-        initElDrag.dropParent.innerHTML = cubeOuter;
-        dropParent = initElDrag.dropParent;
+        initMove.dropParent.innerHTML = cubeOuter;
+        dropParent = initMove.dropParent;
         dropParent.classList.add('vertical');
 
         // remove cubes from dragParent
@@ -1271,8 +1297,8 @@ var initCubes = (function (e) {
           }
           cubeOuter += '</div>';
         }
-        initElDrag.dropParent.innerHTML += cubeOuter;
-        dropParent = initElDrag.dropParent;
+        initMove.dropParent.innerHTML += cubeOuter;
+        dropParent = initMove.dropParent;
         // dropParent.classList.remove('vertical');
 
         if(remainingCubes == 1) {
@@ -1289,9 +1315,9 @@ var initCubes = (function (e) {
             <div class="dot dot-right"></div>     
           `;   
   
-          initElDrag.dragParent.innerHTML = cubeOuter;
-          dragParent = initElDrag.dragParent;
-          initElDrag.init(dragParent, 'add');        
+          initMove.dragParent.innerHTML = cubeOuter;
+          dragParent = initMove.dragParent;
+          initMove.init(dragParent, 'add');        
           dragParent.classList.remove('horizontal');
         } else {
           // remove cubes from dragParent
@@ -1301,12 +1327,12 @@ var initCubes = (function (e) {
         }
       }
       
-      initElDrag.init(dropParent, 'add');
+      initMove.init(dropParent, 'add');
 
       
       dragParent.style.left = dragParentLeft;
       dragParent.style.top = dragParentTop;
-      initElDrag.init(dragParent, 'add');
+      initMove.init(dragParent, 'add');
       dragParent.classList.add('cant-snap');
 
       console.log('limit reached!!!!!!!!!!');
@@ -1366,11 +1392,11 @@ var initCubes = (function (e) {
             <div class="dot dot-left"></div>
             <div class="dot dot-right"></div>     
           `;   
-          initElDrag.dragParent.innerHTML = cubeOuter;
-          dragParent = initElDrag.dragParent;          
+          initMove.dragParent.innerHTML = cubeOuter;
+          dragParent = initMove.dragParent;          
           dragParent.classList.remove('vertical');
 
-          initElDrag.init(dragParent, 'add');
+          initMove.init(dragParent, 'add');
           dragParent.addEventListener('dblclick', detach, false);
         }
 
@@ -1380,10 +1406,10 @@ var initCubes = (function (e) {
         var draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.classList.add('draggable');
-        draggable.setAttribute('data-id', ++initSealsDrag.draggablesId);
+        draggable.setAttribute('data-id', ++initDrag.draggablesId);
         draggable.style.left = left + 'px';
         draggable.style.top = top + 'px';
-        draggable.style.zIndex = ++initElDrag.dragParentzIndex;
+        draggable.style.zIndex = ++initMove.dragParentzIndex;
   
         cubeOuter = '';
         for (var r = 0; r < detachCubes; r++) {
@@ -1403,7 +1429,7 @@ var initCubes = (function (e) {
         draggable.innerHTML = cubeOuter;
         cvOuter.appendChild(draggable);
   
-        initElDrag.init(draggable, 'add');
+        initMove.init(draggable, 'add');
         draggable.addEventListener('dblclick', detach, false);
       } else {
         console.warn("Can't remove from here!");
@@ -1444,9 +1470,9 @@ var initCubes = (function (e) {
             <div class="dot dot-right"></div>     
           `;   
 
-          initElDrag.dragParent.innerHTML = cubeOuter;
-          dragParent = initElDrag.dragParent;
-          initElDrag.init(dragParent, 'add');
+          initMove.dragParent.innerHTML = cubeOuter;
+          dragParent = initMove.dragParent;
+          initMove.init(dragParent, 'add');
           dragParent.classList.remove('horizontal');
         } else {
           for (var r = index; r < totalCubes; r++) {
@@ -1461,10 +1487,10 @@ var initCubes = (function (e) {
         var draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.classList.add('draggable');
-        draggable.setAttribute('data-id', ++initSealsDrag.draggablesId);
+        draggable.setAttribute('data-id', ++initDrag.draggablesId);
         draggable.style.left = left + 'px';
         draggable.style.top = top + 'px';
-        draggable.style.zIndex = ++initElDrag.dragParentzIndex;
+        draggable.style.zIndex = ++initMove.dragParentzIndex;
   
         if(detachCubes == 1) { // detach partion is only 1
           cubeOuter = `<div class="cube-outer">`;
@@ -1498,14 +1524,14 @@ var initCubes = (function (e) {
           draggable.classList.add('horizontal');
         }
 
-        initElDrag.dropParent = draggable;
-        // dropParent = initElDrag.dropParent;
+        initMove.dropParent = draggable;
+        // dropParent = initMove.dropParent;
 
         draggable.classList.add('vertical');
         draggable.innerHTML = cubeOuter;
         cvOuter.appendChild(draggable);
   
-        initElDrag.init(draggable, 'add');
+        initMove.init(draggable, 'add');
         draggable.addEventListener('dblclick', detach, false);
       } else {
         console.warn("Can't remove from here!");
@@ -1625,7 +1651,8 @@ var initRotate = (function () {
 
 var initCalc = function (e) {
   // console.log('calculating');
-  var calc = document.querySelector('[data-panel-widget="calculator"]');
+
+  var calc = document.querySelector('[data-panel="calculator"]');
   var buttons = calc.querySelectorAll('[data-button-type]');
   var result = document.getElementById('result');
   var num = "";
@@ -1668,6 +1695,84 @@ var initCalc = function (e) {
 
   }
 }
-// initCalc(e);
+initCalc(e);
+
+var initAbacus = function() {
+  window.onload = init
+  function init() {
+    mousedown = 0;
+    body = document.querySelector('body');
+    body.addEventListener('mousedown', function(){
+      mousedown = 1;
+    });
+    body.addEventListener('mouseup', function(){
+      mousedown = 0;
+    });
+    upper_part = document.querySelectorAll('.upper_layer');
+    upper_part.forEach(function(x){
+      x.addEventListener('click', change_pos.bind(null,event,x));
+      x.addEventListener('mousemove',reset_upper_boxes.bind(null,event,x));
+    });
+    // check = document.querySelector("#Group_389");
+    // check.setAttribute('transform','translate(0,-43)');
+
+    lower_part = document.querySelectorAll('.bottom_boxes');
+    lower_part.forEach(function(x){
+      x.addEventListener('click',change_pos_lower.bind(null,event,x));
+      x.addEventListener('mousemove',reset_lower_boxes.bind(null,event,x));
+    });
+  }
+
+  function reset_lower_boxes(a,evt,c) {
+    column_id = evt.parentNode.getAttribute('id');
+    boxes = document.querySelectorAll('#'+column_id+' .bottom_boxes');
+    if(mousedown) {
+      if(evt.dataset.state=="up") {
+        for(i=0; i<=3; ++i) {
+          boxes[i].setAttribute('transform','translate(0,0)');
+          boxes[i].dataset.state = "down";	
+        }
+      }
+    }
+  }
+
+  function reset_upper_boxes(a,evt,c) {
+    if(mousedown) {
+      evt.setAttribute('transform','translate(0,0)');
+    }
+  }
+
+  function change_pos_lower(a,evt,c) {
+    column_id = evt.parentNode.getAttribute('id');
+    boxes = document.querySelectorAll('#'+column_id+' .bottom_boxes');
+    till = evt.dataset.pos;
+    if(evt.dataset.state == "down") {
+      for(i=0;i<=till;++i) {
+        boxes[i].setAttribute('transform','translate(0,-43)');
+        boxes[i].dataset.state = "up";
+      }
+    }
+    else {
+      for(i=till;i<=3;++i) {
+      boxes[i].setAttribute('transform','translate(0,0)');
+        boxes[i].dataset.state = "down";	
+      }
+    }
+  }
+
+  function change_pos(a,evt,c) {
+    evt.style.background = 'red';
+    if(evt.dataset.pos == "down") {
+      evt.setAttribute('transform','translate(0,-20)');
+      evt.dataset.pos = "up";
+    }
+    else {
+      evt.setAttribute('transform','translate(0,0)');
+      evt.dataset.pos = "down";	
+    }
+  }
+
+}
+initAbacus();
 
 document.querySelector('[data-tool-type1="pen"]').click();
