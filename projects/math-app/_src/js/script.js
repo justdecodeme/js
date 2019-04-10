@@ -691,7 +691,7 @@ var initMove = (function() {
   }
 
   var start = function(e) {
-    console.log('moveStart');
+    // console.log('moveStart');
 
     var currPoint = getMousePosition(e, cv);
     initMove.dragParent = e.target.closest('.draggable');
@@ -724,7 +724,7 @@ var initMove = (function() {
   }
 
   var move = function(e) {
-    console.log('move')
+    // console.log('move')
     e.preventDefault();
 
     var currPoint = getMousePosition(e, cv);
@@ -764,7 +764,7 @@ var initMove = (function() {
   }
 
   var end = function(e) {
-    console.log('moveEnd')
+    // console.log('moveEnd')
     e.preventDefault();
 
     var dragParent = initMove.dragParent;
@@ -804,11 +804,7 @@ var initDrag = (function () {
   var dragParent = null;
 
   var start = function(e) {
-    console.log('dragStart');
-
-    console.log(e.target)
-    var dragParent = e.target;
-    console.log(dragParent)
+    // console.log('dragStart');
 
     dragEloffsetX = e.offsetX;
     dragEloffsetY = e.offsetY;
@@ -817,15 +813,10 @@ var initDrag = (function () {
     e.dataTransfer.setData("height", e.target.getBoundingClientRect().height);
     e.dataTransfer.setData("sealType", e.target.dataset.sealType);
     
-    e.target.addEventListener('drag', drag, false);
     cvOuter.addEventListener('dragenter', enter, false);
     cvOuter.addEventListener('dragleave', leave, false);
     cvOuter.addEventListener('dragover', over, false);
     cvOuter.addEventListener('drop', drop, false);
-  }
-  var drag = function(e) { 
-    e.preventDefault(); 
-    console.log('drag');
   }
   var enter = function(e) { e.preventDefault(); }
   var leave = function(e) { e.preventDefault(); }
@@ -1013,8 +1004,13 @@ var initPanel = (function (e) {
     }
     oldPanel = panel;
   }
+  // to use panel as Trash
+  var isCursorIn = function (e) {
+    console.log(getMousePosition(e, cv))
+  }
   return {
-    toggle: toggle
+    toggle: toggle,
+    isCursorIn: isCursorIn
   }
 })();
 

@@ -15,7 +15,7 @@
       <div class="tools-planet tools-planet-sets drag-area" id="toolsPlanetSets">
         <button class="tools-satellite primary" data-panel-btn="cubes"><img src="./_assets/img/box.svg"></button>
 
-        <button class="tools-satellite primary has-child" data-tool-group-type="scale"><img src="./_assets/img/scale.svg"></button>
+        <button class="tools-satellite primary disabled has-child" data-tool-group-type="scale"><img src="./_assets/img/scale.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-wooden-sm.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-wooden-lg.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale"><img src="./_assets/img/scale-transparent-sm.svg"></button>
@@ -24,13 +24,13 @@
         <button class="tools-satellite primary disabled" data-panel-btn="scale"><img src="./_assets/img/set-square-isosceles.svg"></button>
         <button class="tools-satellite primary disabled"><img src="./_assets/img/protractor.svg"></button>
         <button class="tools-satellite primary" data-panel-btn="compass"><img src="./_assets/img/compass.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="abacus"><img src="./_assets/img/abacus.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="calculator"><img src="./_assets/img/calc.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="clock"><img src="./_assets/img/clock.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="flowers"><img src="./_assets/img/flower.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="money"><img src="./_assets/img/yen.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="shapes"><img src="./_assets/img/stack.svg"></button>
-        <button class="tools-satellite primary" data-panel-btn="numbers"><img src="./_assets/img/21.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="abacus"><img src="./_assets/img/abacus.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="calculator"><img src="./_assets/img/calc.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="clock"><img src="./_assets/img/clock.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="flowers"><img src="./_assets/img/flower.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="money"><img src="./_assets/img/yen.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="shapes"><img src="./_assets/img/stack.svg"></button>
+        <button class="tools-satellite disabled primary" data-panel-btn="numbers"><img src="./_assets/img/21.svg"></button>
       </div>
 
       <div class="tools-planet tools-planet-pens drag-area" id="toolsPlanetPens">
@@ -76,6 +76,16 @@
 
     <!-- set panels -->
     <div class="draggable draggable-set rotatable drag-area" data-panel="scale" data-panel-set="scale" id="scale">
+      <span class="borderlr"></span>
+      <span class="bordertb"></span>
+      <span class="point point-1"></span>
+      <span class="point point-2"></span>
+      <span class="point point-3"></span>
+      <span class="point point-4"></span>
+      <img class="rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
+      <img class="close-btn" src="./_assets/img/tool-close-btn.svg">
+    </div>    
+    <div class="draggable draggable-set rotatable drag-area" data-panel="compass" data-panel-set="compass">
       <span class="borderlr"></span>
       <span class="bordertb"></span>
       <span class="point point-1"></span>
@@ -1016,7 +1026,8 @@
   </div>
   
   <script src="./_assets/config/settings.json"></script>
-  <script async src="./_assets/js/script.min.js"></script>
+  <!-- <script async src="./_assets/js/script.min.js"></script> -->
+  <script async src="./_src/js/script.js"></script>
 </body>
 
 </html>
