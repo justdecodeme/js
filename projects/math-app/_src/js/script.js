@@ -1645,41 +1645,39 @@ var initCubes = (function (e) {
         var cubesToDetach = dragParent.querySelectorAll('.drag-area').length;
         // dragParent.querySelector('.detach-btn').remove();
 
+        // top one
         for(var i = 1; i < cubesToDetach; i++) {
           dragParent.querySelector('[data-index="'+i+'"]').remove();
           dragParent.classList.remove('detach')
         }
 
+        // bottom cubes
         for(var i = 1; i < cubesToDetach; i++) {
-          console.log(i);
+          var draggable = document.createElement('div');
+          draggable.classList.add('draggable-cubes');
+          draggable.classList.add('draggable');
+          draggable.setAttribute('data-id', ++initDrag.draggablesId);
+          draggable.setAttribute('data-seal-type', sealType);
+          draggable.style.left = left + 'px';
+          draggable.style.top = parseFloat(dragParentTop)  + cubeHeight * i + 30*i + 'px';
+          draggable.style.zIndex = ++initMove.dragParentzIndex;
 
+          cubeOuter = `
+            <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
+              <div class="cube"><img src="./_assets/img/cube.png" style="width: 68px;"></div>
+            </div>        
+            <div class="dot dot-top"></div>
+            <div class="dot dot-bottom"></div>
+            <div class="dot dot-left"></div>
+            <div class="dot dot-right"></div>     
+            <div class="detach"></div>     
+          `;
 
-        var draggable = document.createElement('div');
-        draggable.classList.add('draggable-cubes');
-        draggable.classList.add('draggable');
-        draggable.setAttribute('data-id', ++initDrag.draggablesId);
-        draggable.setAttribute('data-seal-type', sealType);
-        draggable.style.left = left + 'px';
-        draggable.style.top = parseFloat(dragParentTop)  + cubeHeight * i + 30*i + 'px';
-        draggable.style.zIndex = ++initMove.dragParentzIndex;
+          draggable.innerHTML = cubeOuter;
+          cvOuter.appendChild(draggable);
 
-        cubeOuter = `
-          <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
-            <div class="cube"><img src="./_assets/img/cube.png" style="width: 68px;"></div>
-          </div>        
-          <div class="dot dot-top"></div>
-          <div class="dot dot-bottom"></div>
-          <div class="dot dot-left"></div>
-          <div class="dot dot-right"></div>     
-          <div class="detach"></div>     
-        `;
-
-        draggable.innerHTML = cubeOuter;
-        cvOuter.appendChild(draggable);
-
-        initMove.init(draggable, 'add');
-        draggable.addEventListener('dblclick', remove, false);
-
+          initMove.init(draggable, 'add');
+          draggable.addEventListener('dblclick', remove, false);
         }
 
       } else {
