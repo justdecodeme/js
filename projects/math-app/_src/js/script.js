@@ -798,6 +798,8 @@ var initMove = (function() {
       }
     }  
 
+    // dragParent.classList.remove('detach');
+
     cvOuter.removeEventListener('mousemove', move, false);
     cvOuter.removeEventListener('mouseup', end, false);
     dragParent.removeEventListener('dragstart', initDrag.start, false);
@@ -862,6 +864,7 @@ var initDrag = (function () {
         draggable = document.createElement('div');
         // <div class="cube"><img src="${src}" style="width: ${width-50}px; height: ${height-50}px;"></div>
         draggable.classList.add('draggable-cubes');
+        draggable.classList.add('draggable-cubes');
         draggable.setAttribute('data-seal-type', sealType);
         draggable.innerHTML = `
           <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
@@ -871,9 +874,12 @@ var initDrag = (function () {
           <div class="dot dot-bottom"></div>
           <div class="dot dot-left"></div>
           <div class="dot dot-right"></div>
+          <div class="detach-btn"></div>
           `;
 
-          draggable.addEventListener('dblclick', initCubes.detach, false);
+          draggable.addEventListener('dblclick', initCubes.remove, false);
+          // draggable.addEventListener('click', initCubes.detach, false);
+          draggable.addEventListener('click', initCubes.detachUI, false);
         } else { // generate a seal
         draggable = document.createElement('img');
         draggable.src = src;
@@ -1057,10 +1063,13 @@ var initPanel = (function (e) {
         y1: panelPos.top,
         y2: panelPos.top + panelPos.height
       }
+    }
+
+    if(mode == "move") {
       panel.style.zIndex = initMove.dragParentzIndex;
       panel.classList.add('trash');
     }
-
+    
     // highlight trash cubes if mouse is in
     if(mousePosObj.x > panelPosObj.x1 && mousePosObj.x < panelPosObj.x2 &&
       mousePosObj.y > panelPosObj.y1 && mousePosObj.y < panelPosObj.y2) {
@@ -1093,7 +1102,7 @@ var initCubes = (function (e) {
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
   var snapDist = 40;
   var snapInfo = { i: 0, j: 0, id: '' };
-  var row = 3;
+  var row = 5;
   var col = 3; 
   var dragParentLeft = dragParentTop = shortestDist = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
   var detachType = null;
@@ -1286,7 +1295,8 @@ var initCubes = (function (e) {
           <div class="dot dot-top"></div>
           <div class="dot dot-bottom"></div>
           <div class="dot dot-left"></div>
-          <div class="dot dot-right"></div>     
+          <div class="dot dot-right"></div>
+          <div class="detach-btn"></div>     
         `;        
         initMove.dropParent.innerHTML = cubeOuter;  
         dropParent = initMove.dropParent;
@@ -1313,6 +1323,7 @@ var initCubes = (function (e) {
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
             <div class="dot dot-right"></div>     
+            <div class="detach-btn"></div>
           `;
 
           initMove.dropParent.innerHTML = cubeOuter;
@@ -1345,6 +1356,7 @@ var initCubes = (function (e) {
           <div class="dot dot-bottom"></div>
           <div class="dot dot-left"></div>
           <div class="dot dot-right"></div>     
+          <div class="detach-btn"></div>
         `;
         
         initMove.dropParent.innerHTML = cubeOuter;
@@ -1382,6 +1394,7 @@ var initCubes = (function (e) {
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
             <div class="dot dot-right"></div>     
+            <div class="detach-btn"></div>
           `;   
   
           initMove.dragParent.innerHTML = cubeOuter;
@@ -1415,6 +1428,7 @@ var initCubes = (function (e) {
     dragParent.classList.remove('highlight');
     dropParent.classList.remove('highlight');
   }
+  // code logic NOT NEEDED for now 
   var detach = function(e) {
     // console.log('detaching');
 
@@ -1432,7 +1446,7 @@ var initCubes = (function (e) {
 
       dragParentLeft = dragParent.style.left;
       dragParentTop = dragParent.style.top;
-
+    
       // console.log('target: ', target);
       // console.log('index: ', index);
       // console.log('detachCubes: ', detachCubes);
@@ -1504,7 +1518,7 @@ var initCubes = (function (e) {
       } else {
         console.warn("Can't remove from here!");
       }
-    } else { // horizontal detach
+    } else if(detachType == 'horizontal') { // horizontal detach
       var target = e.target;
 
       var index = parseInt(target.dataset.index);
@@ -1609,6 +1623,85 @@ var initCubes = (function (e) {
       }      
     }
   }
+  var detachUI = function(e) {
+    // console.log('detachUI');
+
+    var dragParentLeft = dragParent.style.left;
+    var dragParentTop = dragParent.style.top;
+    var left = parseFloat(dragParentLeft);
+    // var top = parseFloat(dragParentTop) + dragParent.getBoundingClientRect().height;
+    var cubeHeight = dragParent.querySelector('.drag-area').getBoundingClientRect().height;
+    var cubeOuter;
+    //  console.lo
+    var sealType = dragParent.dataset.sealType;
+
+    if(e.target.classList.contains('detach-btn')) { // detach all cubes
+      // console.log('detaching All');
+
+      
+      if(detachType == 'vertical') {
+        console.log('vertical detaching all')
+        
+        var cubesToDetach = dragParent.querySelectorAll('.drag-area').length;
+        // dragParent.querySelector('.detach-btn').remove();
+
+        for(var i = 1; i < cubesToDetach; i++) {
+          dragParent.querySelector('[data-index="'+i+'"]').remove();
+          dragParent.classList.remove('detach')
+        }
+
+        for(var i = 1; i < cubesToDetach; i++) {
+          console.log(i);
+
+
+        var draggable = document.createElement('div');
+        draggable.classList.add('draggable-cubes');
+        draggable.classList.add('draggable');
+        draggable.setAttribute('data-id', ++initDrag.draggablesId);
+        draggable.setAttribute('data-seal-type', sealType);
+        draggable.style.left = left + 'px';
+        draggable.style.top = parseFloat(dragParentTop)  + cubeHeight * i + 30*i + 'px';
+        draggable.style.zIndex = ++initMove.dragParentzIndex;
+
+        cubeOuter = `
+          <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
+            <div class="cube"><img src="./_assets/img/cube.png" style="width: 68px;"></div>
+          </div>        
+          <div class="dot dot-top"></div>
+          <div class="dot dot-bottom"></div>
+          <div class="dot dot-left"></div>
+          <div class="dot dot-right"></div>     
+          <div class="detach"></div>     
+        `;
+
+        draggable.innerHTML = cubeOuter;
+        cvOuter.appendChild(draggable);
+
+        initMove.init(draggable, 'add');
+        draggable.addEventListener('dblclick', remove, false);
+
+        }
+
+      } else {
+        console.log('horizontal detaching all')
+
+      }
+    } else { // toggle 'detach-btn'
+      if (dragParent.querySelectorAll('.drag-area').length > 1) {
+        if (dragParent.classList.contains('detach')) {
+          dragParent.classList.remove('detach');
+        } else {
+          dragParent.classList.add('detach');
+        }
+      }
+    }
+  }
+  var remove = function(e) {
+    // console.log('deleting');
+
+    // delete complete 'draggable' group
+    e.target.closest('.draggable').remove();
+  }
 
   return {
     isSnapping: isSnapping,
@@ -1618,7 +1711,8 @@ var initCubes = (function (e) {
     getShortestDist: getShortestDist,
     highlight: highlight,
     snap, snap,
-    detach, detach
+    detachUI, detachUI,
+    remove, remove
   }
 })();
 

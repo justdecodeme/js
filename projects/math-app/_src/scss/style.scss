@@ -459,6 +459,26 @@ body {
       background: rgb(5, 155, 255);
     }
   }
+  .detach-btn {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    background: #e0e0e0;
+    left: calc(100% + 8px);
+    top: 0;
+    border-radius: 10px;
+    background-image: url(../img/detach.png);
+    background-repeat: no-repeat;
+    background-size: 78%;
+    background-position: center;
+    display: none;
+    padding: 7px;
+    cursor: pointer;
+    background-clip: border-box;
+    &:hover {
+      opacity: .8;
+    }
+  }
 
   &.vertical,
   &.horizontal {
@@ -485,6 +505,11 @@ body {
 
   &.cant-snap {
     transition: all .05s ease;
+  }
+  &.detach {
+    .detach-btn {
+      display: block;
+    }
   }
 }
 
