@@ -319,6 +319,9 @@ body {
     background: #EBEBEB;
     border: 6px solid #DBDBDB;
     border-radius: 4px;
+    transition: 
+      background .3s ease,
+      border .3s ease;
 
     .drag-area {
       background-color: transparent;
@@ -359,6 +362,12 @@ body {
         }
       }
     }
+    &.trash {
+      background: #e2acac;
+      &.trash-active {
+        border: 6px solid #d17676;   
+      }  
+    }
   }
 
   &.draggable-set {
@@ -390,7 +399,6 @@ body {
 .draggable-cubes {
   // border: 5px solid black;
   box-shadow: 0 0 5px 5PX rgba(0, 0, 0, 0.151);
-
   .cube-outer {
 
     // border: 5px solid lightgreen;

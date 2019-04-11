@@ -721,6 +721,12 @@ var initMove = (function() {
       cvOuter.addEventListener('mouseup', end, false);
       dragParent.addEventListener('dragstart', initDrag.start, false);
     }
+
+    
+    // bring TRASH can on top if sealType is present
+    if(dragParent.dataset.sealType) {
+      initPanel.trashPanel(e, 'start', dragParent.dataset.sealType);
+    }  
   }
 
   var move = function(e) {
@@ -760,7 +766,12 @@ var initMove = (function() {
           initCubes.highlight(false);
         }
       }
-    }
+    }  
+
+    // highlight TRASH cubes if mouse is in
+    if(dragParent.dataset.sealType) {
+      initPanel.trashPanel(e, 'move');
+    }  
   }
 
   var end = function(e) {
@@ -779,6 +790,13 @@ var initMove = (function() {
       }
     }
     // initCubes.isSnapping = false;
+
+    // delete dragParent if dropped on TRASH panel
+    if(dragParent.dataset.sealType) {
+      if(initPanel.trashPanel(e, 'end')) { 
+        dragParent.remove();
+      }
+    }  
 
     cvOuter.removeEventListener('mousemove', move, false);
     cvOuter.removeEventListener('mouseup', end, false);
@@ -844,6 +862,7 @@ var initDrag = (function () {
         draggable = document.createElement('div');
         // <div class="cube"><img src="${src}" style="width: ${width-50}px; height: ${height-50}px;"></div>
         draggable.classList.add('draggable-cubes');
+        draggable.setAttribute('data-seal-type', sealType);
         draggable.innerHTML = `
           <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
             <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
@@ -916,7 +935,7 @@ var fetchSeals = (function () {
 
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
-  var panel = oldPanel = panelType = panelBtn = 
+  var panel = oldPanel = panelType = panelBtn = panelPosObj = 
       panelCloseBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
 
   var toggle = function(target) {
@@ -1012,8 +1031,46 @@ var initPanel = (function (e) {
     }
     oldPanel = panel;
   }
+  var trashPanel = function(e, mode, sealType) {
+    var mousePosObj = getMousePosition(e, cv);
+    
+    // bring trash can on top if draggin cubes
+    if(mode == "start") {
+      panel = document.querySelector('[data-panel="'+sealType+'"]');
+      var panelPos = panel.getBoundingClientRect();
+      panelPosObj  = {
+        x1: panelPos.left,
+        x2: panelPos.left + panelPos.width,
+        y1: panelPos.top,
+        y2: panelPos.top + panelPos.height
+      }
+      panel.style.zIndex = initMove.dragParentzIndex;
+      panel.classList.add('trash');
+    }
+
+    // highlight trash cubes if mouse is in
+    if(mousePosObj.x > panelPosObj.x1 && mousePosObj.x < panelPosObj.x2 &&
+      mousePosObj.y > panelPosObj.y1 && mousePosObj.y < panelPosObj.y2) {
+      panel.classList.add('trash-active');
+    } else {
+      panel.classList.remove('trash-active');
+    }
+
+    // delete dragParent if dropped on trash panel
+    if(mode == 'end') {
+      panel.classList.remove('trash')
+      if(panel.classList.contains('trash-active')) {
+        panel.classList.remove('trash-active')
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   return {
-    toggle: toggle
+    toggle: toggle,
+    trashPanel: trashPanel
   }
 })();
 
@@ -1406,6 +1463,7 @@ var initCubes = (function (e) {
         draggable.classList.add('draggable-cubes');
         draggable.classList.add('draggable');
         draggable.setAttribute('data-id', ++initDrag.draggablesId);
+        draggable.setAttribute('data-seal-type', sealType);
         draggable.style.left = left + 'px';
         draggable.style.top = top + 'px';
         draggable.style.zIndex = ++initMove.dragParentzIndex;
@@ -1486,6 +1544,7 @@ var initCubes = (function (e) {
         var draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.classList.add('draggable');
+        draggable.setAttribute('data-seal-type', sealType);
         draggable.setAttribute('data-id', ++initDrag.draggablesId);
         draggable.style.left = left + 'px';
         draggable.style.top = top + 'px';
@@ -1659,7 +1718,7 @@ var initRotate = (function () {
 })();
 
 var initScale = (function (e) {
-  console.log('scaling');
+  // console.log('scaling');
 
   var start = function(e) {
     console.log('start');
