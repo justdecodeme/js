@@ -959,20 +959,27 @@ var initPanel = (function (e) {
       initMove.oldDragParent = panel;
 
       // ADD EVENT LISTENERS
-      panel.addEventListener('click', bringInFront, false);
       panelCloseBtn.addEventListener('click', close, false);
       initMove.init(panel, 'add');
       for (var i = 0; i < draggableSeals.length; i++) {
         draggableSeals[i].addEventListener('dragstart', initDrag.start, false);
       }
-      if (rotateBtns.length > 0) {
-        rotateBtns.forEach(rotateBtn => {
-          rotateBtn.addEventListener('mousedown', initRotate.start, false);
-        });
+      for (var i = 0; i < rotateBtns.length; i++) {
+        rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
       }
       if(panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
       }
+      if (panelType == "calculator") {
+        var buttons = panel.querySelectorAll('[data-button-type]');
+        for(var i = 0; i < buttons.length; i++) {
+          buttons[i].addEventListener('click', initCalc.calculate, false);
+        }
+      }
+      if (panel.classList.contains('draggable-seal')) {
+        panel.addEventListener('click', bringInFront, false);
+      }
+
 
       // update current geometry set type
       if (panel.dataset.panelSet) {
@@ -1003,19 +1010,25 @@ var initPanel = (function (e) {
     rotateBtns = panel.querySelectorAll('.rotate-btn');
 
     // REMOVE EVENT LISTENERS
-    panel.removeEventListener('click', bringInFront, false);
     panelCloseBtn.removeEventListener('click', close, false);
     initMove.init(panel, 'remove');
     for (var i = 0; i < draggableSeals.length; i++) {
       draggableSeals[i].removeEventListener('dragstart', initDrag.start, false);
     }
-    if (rotateBtns.length > 0) {
-      rotateBtns.forEach(rotateBtn => {
-        rotateBtn.removeEventListener('mousedown', initRotate.start, false);
-      });
+    for (var i = 0; i < rotateBtns.length; i++) {
+      rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
     }
     if (panelScaleBtn) {
       panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
+    }
+    if (panelType == "calculator") {
+      var buttons = panel.querySelectorAll('[data-button-type]');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].removeEventListener('click', initCalc.calculate, false);
+      }
+    }
+    if (panel.classList.contains('draggable-seal')) {
+      panel.addEventListener('click', bringInFront, false);
     }
 
     // update current geometry set type to null
@@ -1683,8 +1696,6 @@ var initRotate = (function () {
 
     rotation = d - startAngle;
 
-    console.log(panelType)
-
     if (panelType == 'clock') {
       rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
     } else if(panelType == 'compass') {
@@ -1717,6 +1728,7 @@ var initRotate = (function () {
   }
 })();
 
+// scale sets logics
 var initScale = (function (e) {
   // console.log('scaling');
 
@@ -1742,19 +1754,14 @@ var initScale = (function (e) {
   }
 })()
 
-var initCalc = function (e) {
-  // console.log('calculating');
-
-  var calc = document.querySelector('[data-panel="calculator"]');
-  var buttons = calc.querySelectorAll('[data-button-type]');
-  var result = document.getElementById('result');
+// calculator logic
+var initCalc = (function (e) {
+  
   var num = "";
+  var calculate = function (e) {
+    // console.log('calculating');
 
-  buttons.forEach(button => {
-    button.addEventListener('click', calculate, false);
-  })
-
-  function calculate(e) {
+    var result = document.querySelector('[data-panel="calculator"] #result');
     var buttonType = e.target.closest('g[data-button-type]').dataset.buttonType;
     var buttonValue = e.target.closest('g[data-button-type]').dataset.buttonValue;
 
@@ -1765,31 +1772,32 @@ var initCalc = function (e) {
       switch (buttonValue) {
         case "=":
           num = eval(num).toString();
-          result.innerHTML = num;
           break;
         case "<-":
           num = num.slice(0, -1);
-          result.innerHTML = num;
           break;
         case "c":
         case "ac":
-          result.innerHTML = num = "";
+          num = "";
           break;
         case "*":
         case "/":
         case "+":
         case "-":
           num += " " + buttonValue + " ";
-          result.innerHTML = num;
           break;
-
       }
+      result.innerHTML = num;
     }
 
   }
-}
-// initCalc(e);
 
+  return {
+    calculate: calculate
+  }
+})();
+
+// abacus logic
 var initAbacus = function() {
   window.onload = init
   function init() {
