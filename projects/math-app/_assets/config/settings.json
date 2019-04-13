@@ -18,18 +18,22 @@ var sealTypes = {
   },
   "numbers": {
     "max": 50,
-    "values": [
-      "number-white-1.svg",
-      "number-white-10.svg",
-      "number-white-100.svg",
-      "number-white-1000.svg",
-      "number-white-10000.svg",
-      "number-blue-1.svg",
-      "number-blue-10.svg",
-      "number-blue-100.svg",
-      "number-blue-1000.svg",
-      "number-blue-10000.svg"
-    ],
+    "values": {
+      'white': [
+        ["number-white-1.svg", 1],
+        ["number-white-10.svg", 10],
+        ["number-white-100.svg", 100],
+        ["number-white-1000.svg", 1000],
+        ["number-white-10000.svg", 10000]
+      ],
+      'blue': [
+        ["number-blue-1.svg", 1],
+        ["number-blue-10.svg", 10],
+        ["number-blue-100.svg", 100],
+        ["number-blue-1000.svg", 1000],
+        ["number-blue-10000.svg", 10000]
+      ]
+    }
   },
   "shapes": {
     "max": 50,

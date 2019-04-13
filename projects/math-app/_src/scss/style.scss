@@ -272,11 +272,14 @@ body {
   &.draggable-tool,
   &.draggable-widget {
     display: none;
-    left: 200px;
-    top: 100px;
+    left: 400px;
+    top: 180px;
 
     &.active {
       display: block;
+      &[data-panel="scale"] {
+        display: flex;
+      }      
     }
   }
 
@@ -371,11 +374,13 @@ body {
   }
 
   &.draggable-set {
-
+    .btn {
+      position: absolute;
+      width: 20px;
+    }    
     .close-btn,
     .rotate-btn {
       cursor: pointer;
-
       &:hover {
         opacity: .8;
       }
@@ -605,9 +610,9 @@ body {
 
 [data-panel=scale],
 [data-panel=compass] {
-
   .borderlr,
   .bordertb {
+    display: none;
     position: absolute;
     width: 100%;
     height: 100%;
@@ -618,16 +623,21 @@ body {
   }
 
   .borderlr:before,
-  .borderlr:after {
+  .borderlr:after,
+  .bordertb:before,
+  .bordertb:after {
     content: '';
     position: absolute;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .borderlr:before,
+  .borderlr:after {
     width: 1px;
     height: 4000px;
-    background: black;
     top: 50%;
     transform: translateY(-50%);
   }
-
   .borderlr:before {
     left: 0;
   }
@@ -638,11 +648,8 @@ body {
 
   .bordertb:before,
   .bordertb:after {
-    content: '';
-    position: absolute;
     height: 1px;
     width: 4000px;
-    background: black;
     left: 50%;
     transform: translateX(-50%);
   }
@@ -656,93 +663,77 @@ body {
   }
 
   .point {
+    display: none;
     position: absolute;
     width: 10px;
     height: 10px;
     background: rgb(0, 0, 0);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-  }
-
-  .point:before {
-    position: absolute;
-    font-size: 14px;
-    color: White;
-    z-index: 19;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .point-1 {
-    left: 0;
-  }
-
-  .point-1:before {
-    content: '1';
-    /* left: 5px;
-    top: 5px; */
-  }
-
-  .point-2 {
-    left: 100%;
-    top: 0;
-  }
-
-  .point-2:before {
-    content: '2';
-    /* right: 5px;
-    top: 5px; */
-  }
-
-  .point-3 {
-    left: 100%;
-    top: 100%;
-  }
-
-  .point-3:before {
-    content: '3';
-    /* bottom: 5px;
-    right: 5px; */
-  }
-
-  .point-4 {
-    top: 100%;
-    left: 0;
-  }
-
-  .point-4:before {
-    content: '4';
-    /* bottom: 5px;
-    left: 5px; */
-  }
-
-  img {
-    position: absolute;
-    width: 20px;
-
+    &:before {
+      position: absolute;
+      font-size: 14px;
+      color: White;
+      z-index: 19;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &.point-1 {
+      left: 0;
+    }
+    &.point-1:before {
+      content: '1';
+      /* left: 5px;
+      top: 5px; */
+    }
+    &.point-2 {
+      left: 100%;
+      top: 0;
+    }
+    &.point-2:before {
+      content: '2';
+      /* right: 5px;
+      top: 5px; */
+    }
+    &.point-3 {
+      left: 100%;
+      top: 100%;
+    }
+    &.point-3:before {
+      content: '3';
+      /* bottom: 5px;
+      right: 5px; */
+    }
+    &.point-4 {
+      top: 100%;
+      left: 0;
+    }
+    &.point-4:before {
+      content: '4';
+      /* bottom: 5px;
+      left: 5px; */
+    }
   }
 }
 
 [data-panel=scale] {
-  background: rgba(144, 238, 144, 0.288);
-  height: 100px;
-  width: 300px;
+  // background: rgba(144, 238, 144, 0.288);
   left: 500px;
   top: 300px;
-
-  // display: block!important;
   /* transform: rotate(45deg); */
   .rotate-btn {
     right: 0;
     top: 0;
     transform: translate(50%, -50%);
   }
-
   .close-btn {
     right: 0;
     bottom: 0;
     transform: translate(50%, 50%);
+  }
+  .scale {
+    height: 70px;
   }
 }
 
