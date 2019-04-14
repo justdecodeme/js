@@ -20,6 +20,7 @@
         <button class="tools-satellite secondary" data-tool-group-type="scale" data-panel-btn="scale-wooden-lg"><img src="./_assets/img/scale-wooden-lg.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale" data-panel-btn="scale-transparent-sm"><img src="./_assets/img/scale-transparent-sm.svg"></button>
         <button class="tools-satellite secondary" data-tool-group-type="scale" data-panel-btn="scale-transparent-lg"><img src="./_assets/img/scale-transparent-lg.svg"></button>
+        <button class="tools-satellite secondary" data-tool-group-type="scale" data-panel-btn="scale-new"><img src="./_assets/img/scale-new.svg"></button>
 
         <button class="tools-satellite primary" data-panel-btn="set-square"><img src="./_assets/img/set-square-isosceles.svg"></button>
         <button class="tools-satellite primary"><img src="./_assets/img/protractor.svg"></button>
@@ -107,6 +108,7 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
+      <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg">
     </div>        
     <div class="draggable draggable-set rotatable" data-panel="scale-transparent-lg" data-panel-set="scale">
       <img class="drag-area scale" src="./_assets/widgets/scale-transparent-lg.svg">
@@ -118,17 +120,32 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
-    </div>          
-    <div class="draggable draggable-set rotatable" data-panel="compass" data-panel-set="compass">
+      <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg">
+    </div>  
+    <div class="draggable draggable-set rotatable" data-panel="scale-new" data-panel-set="scale">
+      <img class="drag-area scale" src="./_assets/widgets/scale-new.svg">
+      <span class="borderlr"></span>
+      <span class="bordertb"></span>
+      <span class="point point-1"></span>
+      <span class="point point-2"></span>
+      <span class="point point-3"></span>
+      <span class="point point-4"></span>
+      <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
+      <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
+      <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg">
+    </div>  
+
+    <div class="draggable draggable-set rotatable" data-panel="compass" data-panel-set>
       <div class="outer">
         <div class="hold-move drag-area"></div>
-        <div class="hold-rotate rotate-btn"></div>
-        <div class="hand-point rotatable rotate-btn">
-          <div class="end-point"></div>
+        <div class="rotate-compass rotate-btn"></div>
+        <div class="rotate-point rotatable rotate-btn">
+          <div class="rotate-compass-ref"></div>
         </div>
-        <div class="hand-pencil rotatable rotate-btn">
-          <div class="end-point"></div>
+        <div class="rotate-pencil rotatable rotate-btn">
+          <div class="rotate-pencil-ref"></div>
         </div>
+        <div class="rotate-hand-ref"></div>
       </div>
 
       <span class="borderlr"></span>
@@ -137,10 +154,10 @@
       <span class="point point-2"></span>
       <span class="point point-3"></span>
       <span class="point point-4"></span>
-      <img class="rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
-      <img class="close-btn" src="./_assets/img/tool-close-btn.svg">
-      <img class="flip-btn" src="./_assets/img/tool-flip-btn.svg">
-      <img class="scale-btn" src="./_assets/img/tool-scale-btn.svg">
+      <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
+      <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
+      <img class="btn flip-btn" src="./_assets/img/tool-flip-btn.svg">
+      <img class="btn scale-btn" src="./_assets/img/tool-scale-btn.svg">
     </div>    
 
     <!-- widget panels -->

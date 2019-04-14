@@ -228,7 +228,7 @@ var initTools = (function () {
 
   // handling of satellite buttons which has childrens
   var updateToolsGroup = function (toolGroupType, target, isPrimary, isSecondary) {
-    console.log('updateToolsGroup');
+    // console.log('updateToolsGroup');
 
     if (isPrimary) {
       // console.log('isPrimary')
@@ -255,18 +255,24 @@ var initTools = (function () {
         toolGroupType = "pastel";
       }
 
-      if(toolGroupType == 'scale') {
-        initPanel.toggle(target);
-      }
-
       // remove 'active' class from old child having 'active' class
-      if (oldToolBtn) {
+      if (oldToolBtn && toolGroupType != 'scale') {
         oldToolBtn.classList.remove('active');
       }
 
-      target.classList.add('active');
-      parent.classList.add('active');
+      if(toolGroupType == 'scale') {
+        var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
+        if(scaleSecActiveBtns.length > 0) {
+          parent.classList.add('active');
+        } else {
+          parent.classList.remove('active');
+        }
+      } else {
+        target.classList.add('active');
+        parent.classList.add('active');
+      }
       parent.classList.remove('show-child');
+
 
       switch (toolGroupType) {
         case "opacity": initDraw.strokeOpacity = parseFloat(target.dataset.value);
@@ -301,8 +307,8 @@ var initDraw = (function () {
   var strokeOpacity = parseFloat(strokeOpacityEl.dataset.value);
 
   var strokeWidthEl = document.querySelector('[data-tool-group-type="stroke"].secondary.active');
-  // var strokeWidth = parseFloat(strokeWidthEl.dataset.value);
-  var strokeWidth = 20;
+  var strokeWidth = parseFloat(strokeWidthEl.dataset.value);
+  // var strokeWidth = 50;
 
   var strokeColorEl = document.querySelector('[data-tool-type2="pastel"].primary.active');
   var strokeColor = strokeColorEl.dataset.value;
@@ -408,6 +414,7 @@ var initDraw = (function () {
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
 
+    console.log(currSetType)
     if(currSetType) {
       pointsObj = math.getSetPoints(initTools.currSetType);
   
@@ -580,6 +587,11 @@ var initMove = (function () {
         dragParent.style.zIndex = ++initMove.dragParentzIndex;
       }
       initMove.oldDragParent = initMove.dragParent;
+
+      // update current geometry set type
+      if (dragParent.dataset.panelSet) {
+        initTools.currSetType = dragParent.dataset.panel;
+      }
 
       // get coordinates of nearby draggable cubes
       if (dragParent.classList.contains('draggable-cubes')) {
@@ -836,19 +848,18 @@ var fetchSeals = (function () {
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
   var panel = oldPanel = panelType = panelBtn = panelPosObj =
-    panelCloseBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
+      panelCloseBtn = panelScaleFlipBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
 
   var toggle = function (target) {
     panelType = target.dataset.panelBtn;
 
     // open panel
     if (!target.classList.contains('active')) {
-      console.log('open panel');
-
-      console.log(panelType)
+      // console.log('open panel');
 
       panel = document.querySelector('[data-panel="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
+      panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
       panelScaleBtn = panel.querySelector('.scale-btn');
       rotateBtns = panel.querySelectorAll('.rotate-btn');
       draggableSeals = panel.getElementsByClassName('draggable-seal');
@@ -872,6 +883,9 @@ var initPanel = (function (e) {
       if (panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
       }
+      if (panelScaleFlipBtn) {
+        panelScaleFlipBtn.addEventListener('click', flip, false);
+      }
       if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
         for (var i = 0; i < buttons.length; i++) {
@@ -885,7 +899,7 @@ var initPanel = (function (e) {
 
       // update current geometry set type
       if (panel.dataset.panelSet) {
-        initTools.currSetType = panel.dataset.panelSet;
+        initTools.currSetType = panel.dataset.panel;
       }
     } else { // close panel if already open
       close(panelType);
@@ -904,6 +918,7 @@ var initPanel = (function (e) {
     }
     panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
     panelCloseBtn = panel.querySelector('.close-btn');
+    panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
     panelScaleBtn = panel.querySelector('.scale-btn');
 
     draggableSeals = panel.getElementsByClassName('draggable-seal');
@@ -923,6 +938,9 @@ var initPanel = (function (e) {
     if (panelScaleBtn) {
       panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
     }
+    if (panelScaleFlipBtn) {
+      panelScaleFlipBtn.removeEventListener('click', flip, false);
+    }
     if (panelType == "calculator") {
       var buttons = panel.querySelectorAll('[data-button-type]');
       for (var i = 0; i < buttons.length; i++) {
@@ -930,7 +948,14 @@ var initPanel = (function (e) {
       }
     }
     if (panel.classList.contains('draggable-seal')) {
-      panel.addEventListener('click', bringInFront, false);
+      panel.removeEventListener('click', bringInFront, false);
+    }
+    if(panelType.substr(0,5) == "scale") {
+      var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
+      var panelGroupBtn = document.querySelector('[data-tool-group-type="scale"]');
+      if(scaleSecActiveBtns.length < 1) {
+        panelGroupBtn.classList.remove('active');
+      }      
     }
 
     // update current geometry set type to null
@@ -943,7 +968,12 @@ var initPanel = (function (e) {
 
     if (oldPanel != panel) {
       panel.style.zIndex = ++initMove.dragParentzIndex;
+      // update current geometry set type to the front one
+      if (panel.dataset.panelSet) {
+        initTools.currSetType = panel.dataset.panel;
+      }      
     }
+    console.log('changing')
     oldPanel = panel;
   }
   var trashPanel = function (e, mode, sealType) {
@@ -984,6 +1014,9 @@ var initPanel = (function (e) {
         return false;
       }
     }
+  }
+  var flip = function(e) {
+    console.log('fliping');
   }
 
   return {
@@ -1658,11 +1691,14 @@ var initCubes = (function (e) {
 // rotate behaviour of tools/widgets/seals
 var initRotate = (function () {
   var startAngle = null;
+  var panelRotation = null;
   var rotation = null;
+  var rotateBtn = null;
   var rotatable = null;
   var panel;
   var oldPanel = null;
   var panelType = null;
+  var d, x, y;
   var refPoint = {
     x: 0,
     y: 0
@@ -1673,11 +1709,11 @@ var initRotate = (function () {
     // console.log('start');
     e.preventDefault();
 
-    var rotateBtn = e.target;
+    var height, left, top, width, refEl;
+    rotateBtn = e.target;
     panel = rotateBtn.closest('.draggable');
     panelType = panel.dataset.panel;
     rotatable = rotateBtn.closest('.rotatable');
-    // startAngle = panel.dataset.startAngle;
 
     // reset 'startAngle' if panel is different each time
     if (oldPanel != panel) {
@@ -1687,20 +1723,23 @@ var initRotate = (function () {
 
     cvOuter.classList.add('rotating');
 
-    var height, left, top, width, x, y, _ref;
+    refEl = rotatable;
 
-
-    if (panelType == 'clock') {
-      _ref = rotateBtn.closest('.draggable').getBoundingClientRect();
-    } else {
-      _ref = rotatable.getBoundingClientRect();
+    if(panelType == "compass") {
+      if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
+        refEl = panel.querySelector('.rotate-hand-ref');
+      } else if(rotateBtn.classList.contains('rotate-compass')) {
+        refEl = panel.querySelector('.rotate-compass-ref');
+      }
     }
 
-    top = _ref.top,
-      left = _ref.left,
-      height = _ref.height,
-      width = _ref.width;
-
+    refObj = refEl.getBoundingClientRect();
+    
+    top = refObj.top,
+    left = refObj.left,
+    height = refObj.height,
+    width = refObj.width;
+    
     refPoint = {
       x: left + (width / 2),
       y: top + (height / 2)
@@ -1709,8 +1748,38 @@ var initRotate = (function () {
     x = e.clientX - refPoint.x;
     y = e.clientY - refPoint.y;
 
-    if (startAngle == null) {
-      startAngle = Math.floor(R2D * Math.atan2(y, x));
+
+    if(panelType == 'compass') {
+      if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
+        if (panel.dataset.angleHand == undefined) {
+          startAngle = Math.floor(R2D * Math.atan2(y, x));
+          panel.setAttribute('data-angle-hand', startAngle);
+        } else {
+          startAngle = panel.dataset.angleHand;
+        }
+      } else if(rotateBtn.classList.contains('btn') || rotateBtn.classList.contains('rotate-compass')) {
+        if (panel.dataset.angle == undefined) {
+          startAngle = Math.floor(R2D * Math.atan2(y, x));
+          panel.setAttribute('data-angle', startAngle);
+        } else {
+          startAngle = panel.dataset.angle;
+        }          
+      } else if(rotateBtn.classList.contains('rotate-compass')) {
+        if (panel.dataset.angleCompass == undefined) {
+          startAngle = Math.floor(R2D * Math.atan2(y, x));
+          panel.setAttribute('data-angle-compass', startAngle);
+        } else {
+          startAngle = panel.dataset.angleCompass;
+        }     
+        panel.classList.add('point-ref');        
+      }
+    } else {
+      if (panel.dataset.angle == undefined) {
+        startAngle = Math.floor(R2D * Math.atan2(y, x));
+        panel.setAttribute('data-angle', startAngle);
+      } else {
+        startAngle = panel.dataset.angle;
+      }
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
@@ -1720,19 +1789,32 @@ var initRotate = (function () {
   var rotate = function (e) {
     // console.log('rotate');
 
-    var d, x, y;
     e.preventDefault();
 
     x = e.clientX - refPoint.x;
     y = e.clientY - refPoint.y;
-    var d = Math.floor(R2D * Math.atan2(y, x));
+    d = Math.floor(R2D * Math.atan2(y, x));
 
     rotation = d - startAngle;
-
+    // console.log(d, startAngle, rotation)
+    
     if (panelType == 'clock') {
       rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-    } else if (panelType == 'compass') {
-      rotatable.style.transform = "translateX(-50%) rotate(" + d + "deg)";
+    } else if(panelType == "compass") {
+      if(rotateBtn.classList.contains('rotate-point')) {
+        // if(d > 85) d = 85; else
+        // if(d < 50) d = 50;
+        // d = d + panelRotation;
+        rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+      } else if(rotateBtn.classList.contains('rotate-pencil')) {
+        // if(d > 130) d = 130; else
+        // if(d < 95) d = 95;
+        rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+      } else if(rotateBtn.classList.contains('rotate-compass')){
+        rotatable.style.transform = "rotate(" + rotation + "deg)";
+      } else {
+        rotatable.style.transform = "rotate(" + rotation + "deg)";
+      }
     } else {
       rotatable.style.transform = "rotate(" + rotation + "deg)";
     }
@@ -1741,10 +1823,8 @@ var initRotate = (function () {
   var end = function (e) {
     // console.log('end');
 
-    if (rotation < 0) {
-      panel.dataset.angle = (rotation + 360);
-    } else {
-      panel.dataset.angle = rotation;
+    if(rotateBtn.classList.contains('rotate-compass')){
+      panel.classList.add('point-ref');
     }
 
     cvOuter.classList.remove('rotating');
@@ -1931,7 +2011,7 @@ var math = (function(e) {
   // get points coordinates with in the set
   var getSetPoints = function(currSetType) {
     var pointsObj = {};
-    var set = document.querySelector('[data-panel-set="'+currSetType+'"]');
+    var set = document.querySelector('[data-panel="'+currSetType+'"]');
     var pointsEl = set.querySelectorAll('.point');
     var canvasPosition = getElPosition(cv);
     for (let i = 0; i < pointsEl.length; i++) {
