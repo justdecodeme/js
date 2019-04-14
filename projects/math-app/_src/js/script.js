@@ -414,7 +414,6 @@ var initDraw = (function () {
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
 
-    console.log(currSetType)
     if(currSetType) {
       pointsObj = math.getSetPoints(initTools.currSetType);
   
