@@ -228,7 +228,7 @@ var initTools = (function () {
 
   // handling of satellite buttons which has childrens
   var updateToolsGroup = function (toolGroupType, target, isPrimary, isSecondary) {
-    // console.log('updateToolsGroup');
+    console.log('updateToolsGroup');
 
     if (isPrimary) {
       // console.log('isPrimary')
@@ -253,6 +253,10 @@ var initTools = (function () {
         document.querySelector('[data-tool-type2].primary.active').classList.remove('active');
         parent.setAttribute('data-tool-type2', 'pastel');
         toolGroupType = "pastel";
+      }
+
+      if(toolGroupType == 'scale') {
+        initPanel.toggle(target);
       }
 
       // remove 'active' class from old child having 'active' class
@@ -297,8 +301,8 @@ var initDraw = (function () {
   var strokeOpacity = parseFloat(strokeOpacityEl.dataset.value);
 
   var strokeWidthEl = document.querySelector('[data-tool-group-type="stroke"].secondary.active');
-  var strokeWidth = parseFloat(strokeWidthEl.dataset.value);
-  // var strokeWidth = 50;
+  // var strokeWidth = parseFloat(strokeWidthEl.dataset.value);
+  var strokeWidth = 20;
 
   var strokeColorEl = document.querySelector('[data-tool-type2="pastel"].primary.active');
   var strokeColor = strokeColorEl.dataset.value;
@@ -839,7 +843,9 @@ var initPanel = (function (e) {
 
     // open panel
     if (!target.classList.contains('active')) {
-      // console.log('open panel');
+      console.log('open panel');
+
+      console.log(panelType)
 
       panel = document.querySelector('[data-panel="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
