@@ -843,10 +843,14 @@ body {
 }
 [data-panel=protractor] {
   background: lightyellow;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   transform-origin: center bottom;
-
+  
   .protractor {
     height: 250px;
+    // height: 100%;
+    // width: 100%;
+    width: auto;
     display: block;
   }
 
@@ -871,6 +875,7 @@ body {
   }
 }
 [data-panel^=set-square] {
+  border: 1px solid rgba(0, 0, 0, 0.1);
   background: lightyellow;
   .close-btn {
     right: 100%;

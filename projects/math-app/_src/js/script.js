@@ -1845,18 +1845,43 @@ var initRotate = (function () {
 var initScale = (function (e) {
   // console.log('scaling');
 
+  var startPoint, currPoint;
+  var panel = document.querySelector('[data-panel="protractor"]');
+  var w = null;
+  var h = null;
+  var d = null;
+  var ratio = null;
+  
   var start = function (e) {
-    console.log('start');
+    // console.log('start');
+
+    w = panel.getBoundingClientRect().width;
+    h = panel.getBoundingClientRect().height;
+    ratio = w/h;
+    startPoint = math.getMousePosition(e, cv);
+    // console.log('startPoint: ', startPoint.x)
 
     cvOuter.addEventListener('mousemove', scale, false);
     cvOuter.addEventListener('mouseup', end, false);
   }
   var scale = function (e) {
-    console.log('scale');
+    // console.log('scale');
     e.preventDefault();
+
+    currPoint = math.getMousePosition(e, cv);
+    d = currPoint.x - startPoint.x;
+    // console.log(startPoint.x, currPoint.x, d)
+
+    console.log(w, d, ratio, w+d, w*ratio)
+    if(ratio > 1) { // width is more
+      panel.style.width = w + d + 'px';
+      panel.style.height = h + (d*ratio) + 'px';
+    } else { // height is more
+
+    }
   }
   var end = function (e) {
-    console.log('end');
+    // console.log('end');
 
     cvOuter.removeEventListener('mousemove', scale, false);
     cvOuter.removeEventListener('mouseup', end, false);
