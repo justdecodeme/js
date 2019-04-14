@@ -34,21 +34,6 @@ function whichTransitionEvent() {
   }
 }
 
-// returns 'left' and 'right' position of given element
-function getElPosition(el) {
-  var pos = { left: el.getBoundingClientRect().left, right: el.getBoundingClientRect().top };
-  return pos;
-}
-
-// returns the mouse position w.r.t given element
-function getMousePosition(e, el) {
-  var pos = getElPosition(el);
-  var point = { x: 0, y: 0 };
-  point.x = parseFloat((((e.type == 'touchstart' || e.type == 'touchmove') ? e.touches[0].clientX : e.clientX) - pos.left).toFixed(2));
-  point.y = parseFloat((((e.type == 'touchstart' || e.type == 'touchmove') ? e.touches[0].clientY : e.clientY) - pos.right).toFixed(2));
-  return point;
-}
-
 /*******************************/
 //     functions - specific
 /*******************************/
@@ -108,6 +93,8 @@ var initTools = (function () {
             case "opacity": n = i + 5.2;
               break;
             case "scale": n = i - 4.5;
+              break;
+            case "set-square": n = i - 2.2;
               break;
           }
 
@@ -229,10 +216,10 @@ var initTools = (function () {
   // handling of satellite buttons which has childrens
   var updateToolsGroup = function (toolGroupType, target, isPrimary, isSecondary) {
     // console.log('updateToolsGroup');
-
+    
     if (isPrimary) {
       // console.log('isPrimary')
-
+      
       // remove 'show-child' class if present
       if (target.classList.contains('show-child')) {
         target.classList.remove('show-child')
@@ -255,13 +242,21 @@ var initTools = (function () {
         toolGroupType = "pastel";
       }
 
+      if (toolGroupType == "scale" || toolGroupType == "set-square") {
+        oldToolBtn = null;
+      }
+
       // remove 'active' class from old child having 'active' class
-      if (oldToolBtn && toolGroupType != 'scale') {
+      if (oldToolBtn) {
         oldToolBtn.classList.remove('active');
       }
 
-      if(toolGroupType == 'scale') {
-        var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
+      if (toolGroupType == 'scale' || toolGroupType == 'set-square') {
+        if(toolGroupType == 'scale') {
+          var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
+        } else if (toolGroupType == "set-square") {
+          var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="set-square"].secondary.active');
+        }
         if(scaleSecActiveBtns.length > 0) {
           parent.classList.add('active');
         } else {
@@ -409,7 +404,7 @@ var initDraw = (function () {
 
     var polylineTag;
     
-    currPoint = getMousePosition(e, cv);
+    currPoint = math.getMousePosition(e, cv);
     currId = 'shape' + index;
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
@@ -454,7 +449,7 @@ var initDraw = (function () {
     // console.log('draw')
     e.preventDefault();
     
-    currPoint = getMousePosition(e, cv);
+    currPoint = math.getMousePosition(e, cv);
 
     if (currToolType == "pen" || currToolType == "marker") {
       polyline = document.getElementById(currId);
@@ -568,7 +563,7 @@ var initMove = (function () {
   var start = function (e) {
     // console.log('moveStart');
 
-    var currPoint = getMousePosition(e, cv);
+    var currPoint = math.getMousePosition(e, cv);
     initMove.dragParent = e.target.closest('.draggable');
     var dragParent = initMove.dragParent;
     // var oldDragParent = initMove.oldDragParent;
@@ -612,7 +607,7 @@ var initMove = (function () {
     // console.log('move')
     e.preventDefault();
 
-    var currPoint = getMousePosition(e, cv);
+    var currPoint = math.getMousePosition(e, cv);
     var dragParent = initMove.dragParent;
 
     // calculate the new cursor position:
@@ -950,9 +945,15 @@ var initPanel = (function (e) {
       panel.removeEventListener('click', bringInFront, false);
     }
     if(panelType.substr(0,5) == "scale") {
-      var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
+      var secActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
       var panelGroupBtn = document.querySelector('[data-tool-group-type="scale"]');
-      if(scaleSecActiveBtns.length < 1) {
+      if(secActiveBtns.length < 1) {
+        panelGroupBtn.classList.remove('active');
+      }      
+    } else if(panelType.substr(0,10) == "set-square") {
+      var secActiveBtns = document.querySelectorAll('[data-tool-group-type="set-square"].secondary.active');
+      var panelGroupBtn = document.querySelector('[data-tool-group-type="set-square"]');
+      if(secActiveBtns.length < 1) {
         panelGroupBtn.classList.remove('active');
       }      
     }
@@ -976,7 +977,7 @@ var initPanel = (function (e) {
     oldPanel = panel;
   }
   var trashPanel = function (e, mode, sealType) {
-    var mousePosObj = getMousePosition(e, cv);
+    var mousePosObj = math.getMousePosition(e, cv);
 
     // bring trash can on top if draggin cubes
     if (mode == "start") {
@@ -1901,7 +1902,6 @@ var initCalc = (function (e) {
       }
       result.innerHTML = num;
     }
-
   }
 
   return {
@@ -1996,6 +1996,27 @@ var math = (function(e) {
 
   var parseToFloat = function(number, decimal) {
     return parseFloat(number.toFixed(decimal));
+  }
+
+  // returns 'left' and 'right' position of given element
+  var getElPosition = function(el) {
+    var pos = {
+      left: el.getBoundingClientRect().left,
+      right: el.getBoundingClientRect().top
+    };
+    return pos;
+  }
+
+  // returns the mouse position w.r.t given element
+  var getMousePosition = function(e, el) {
+    var pos = getElPosition(el);
+    var point = {
+      x: 0,
+      y: 0
+    };
+    point.x = parseFloat((((e.type == 'touchstart' || e.type == 'touchmove') ? e.touches[0].clientX : e.clientX) - pos.left).toFixed(2));
+    point.y = parseFloat((((e.type == 'touchstart' || e.type == 'touchmove') ? e.touches[0].clientY : e.clientY) - pos.right).toFixed(2));
+    return point;
   }
 
   // not useing for now
@@ -2197,6 +2218,7 @@ var math = (function(e) {
   }  
 
   return {
+    getMousePosition: getMousePosition,
     sideAndRange: sideAndRange,
     getSetPoints: getSetPoints,
     getCoords: getCoords

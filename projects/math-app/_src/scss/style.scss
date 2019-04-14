@@ -245,6 +245,11 @@ body {
         display: block;
       }
     }
+    &[data-tool-group-type="set-square"].show-child {
+      &~[data-tool-group-type="set-square"] {
+        display: block;
+      }
+    }
 
     &.secondary {
       display: none;
@@ -834,6 +839,26 @@ body {
   }
   &.point-ref {
     transform-origin: 93.3% 85%;
+  }
+}
+
+[data-panel^=set-square] {
+  background: lightyellow;
+  .close-btn {
+    right: 100%;
+    top: 0;
+  }
+  .flip-btn {
+    left: 100%;
+    top: 0;
+  }
+  .scale-btn {
+    left: 100%;
+    bottom: 0;
+  }
+  .rotate-btn {
+    right: 100%;
+    bottom: 0;
   }
 }
 
