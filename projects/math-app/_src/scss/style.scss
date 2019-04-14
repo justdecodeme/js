@@ -841,7 +841,35 @@ body {
     transform-origin: 93.3% 85%;
   }
 }
+[data-panel=protractor] {
+  background: lightyellow;
+  transform-origin: center bottom;
 
+  .protractor {
+    height: 250px;
+    display: block;
+  }
+
+  .close-btn {
+    right: 100%;
+    top: 0;
+  }
+
+  .flip-btn {
+    left: 100%;
+    top: 0;
+  }
+
+  .scale-btn {
+    left: 100%;
+    bottom: 0;
+  }
+
+  .rotate-btn {
+    right: 100%;
+    bottom: 0;
+  }
+}
 [data-panel^=set-square] {
   background: lightyellow;
   .close-btn {
