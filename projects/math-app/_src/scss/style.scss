@@ -278,7 +278,7 @@ body {
   &.draggable-widget {
     display: none;
     left: 430px;
-    top: 160px;
+    top: 340px;
 
     &.active {
       display: block;
@@ -748,8 +748,8 @@ body {
   background: rgba(144, 238, 144, 0.288);
   height: 340px;
   width: 240px;
-  left: 500px;
-  top: 300px;
+  // left: 500px;
+  // top: 340px;
   // display: block!important;
   /* transform: rotate(45deg); */
   // transform-origin: 67.4% 96.6%;

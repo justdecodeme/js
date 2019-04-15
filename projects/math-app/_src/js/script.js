@@ -1775,11 +1775,13 @@ var initRotate = (function () {
   var panelRotation = null;
   var rotation = null;
   var rotateBtn = null;
+  var oldRotateBtn = null;
+  var reset = false;
   var rotatable = null;
   var panel;
   var oldPanel = null;
   var panelType = null;
-  var d, x, y;
+  var currAngle = 0, x, y;
   var oldToolType = null;
   var refPoint = {
     x: 0,
@@ -1839,42 +1841,72 @@ var initRotate = (function () {
 
 
     if(panelType == 'compass') {
+      if(oldRotateBtn == rotateBtn) {
+        reset = false;
+      } else {
+        reset = true;
+      }
+      if(oldRotateBtn || oldRotateBtn != rotateBtn) {
+        oldRotateBtn = rotateBtn;
+      }
       if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
         if (panel.dataset.angleHand == undefined) {
           startAngle = Math.floor(R2D * Math.atan2(y, x));
+          if(startAngle < 0) {
+            startAngle = 360 - Math.abs(startAngle);
+          }          
           panel.setAttribute('data-angle-hand', startAngle);
         } else {
           startAngle = panel.dataset.angleHand;
         }
       } else if(rotateBtn.classList.contains('btn')) {
-        if (panel.dataset.angle == undefined) {
+        if (panel.dataset.angle == undefined || reset) {
           startAngle = Math.floor(R2D * Math.atan2(y, x));
+          if(startAngle < 0) {
+            startAngle = 360 - Math.abs(startAngle);
+          }          
           panel.setAttribute('data-angle', startAngle);
         } else {
           startAngle = panel.dataset.angle;
         }          
       } else if(rotateBtn.classList.contains('rotate-compass')) {
-        if (panel.dataset.angleCompass == undefined) {
+        if (panel.dataset.angleCompass == undefined || reset) {
           // console.log(1)
           startAngle = Math.floor(R2D * Math.atan2(y, x));
+          if(startAngle < 0) {
+            startAngle = 360 - Math.abs(startAngle);
+          }          
           panel.setAttribute('data-angle-compass', startAngle);
         } else {
-          // console.log(2)
           startAngle = panel.dataset.angleCompass;
         }     
-        if(panel.dataset.angle) {
-          // console.log(3)
-          // console.log(startAngle)
-          // startAngle += panel.dataset.angle;
-        }
+        // if(panel.dataset.angle) {
+        //   console.log(3)
+        //   console.log(startAngle)
+        //   // startAngle += panel.dataset.angle;
+        // }
       }
     } else {
       if (panel.dataset.angle == undefined) {
         startAngle = Math.floor(R2D * Math.atan2(y, x));
+          if(startAngle < 0) {
+            startAngle = 360 - Math.abs(startAngle);
+          }        
         panel.setAttribute('data-angle', startAngle);
       } else {
         startAngle = panel.dataset.angle;
       }
+    }
+
+    startAngle = parseFloat(startAngle);
+
+    var currAngle = panel.style.transform.substr(7);
+    currAngle = currAngle.substring(0, currAngle.length - 4);
+    currAngle = parseFloat(currAngle);
+    if (!isNaN(currAngle) && reset) {
+      startAngle -= currAngle;
+      startAngle %= 360;
+      panel.setAttribute('data-angle', startAngle);
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
@@ -1905,25 +1937,33 @@ var initRotate = (function () {
   
       x = e.clientX - refPoint.x;
       y = e.clientY - refPoint.y;
-      d = Math.floor(R2D * Math.atan2(y, x));
-  
-      rotation = d - startAngle;
-      // console.log(d, startAngle, rotation)
+      currAngle = Math.floor(R2D * Math.atan2(y, x));
+
+      // console.log('1-------------- ', currAngle, startAngle, rotation)
+      if(currAngle < 0) {
+        currAngle = 360 - Math.abs(currAngle);
+      }
+      rotation = currAngle - startAngle;
+      // console.log('----------', currAngle, startAngle, rotation)
+      if (rotation < 0) {
+        rotation = 360 + currAngle - Math.abs(startAngle);
+        // console.log(' ', currAngle, startAngle, rotation)
+      }
       
       if (panelType == 'clock') {
         rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
       } else if(panelType == "compass") {
         if(rotateBtn.classList.contains('rotate-point')) {
-          // if(d > 85) d = 85; else
-          // if(d < 50) d = 50;
-          // d = d + panelRotation;
-          rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+          // if(CurrAngle > 85) CurrAngle = 85; else
+          // if(CurrAngle < 50) CurrAngle = 50;
+          // CurrAngle = CurrAngle + panelRotation;
+          rotatable.style.transform = "translateY(-50%) rotate(" + CurrAngle + "deg)";
         } else if(rotateBtn.classList.contains('rotate-pencil')) {
-          if(d > 130) d = 130; else
-          if(d < 95) d = 95;
-          rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-        } else if(rotateBtn.classList.contains('rotate-compass')){
-          rotatable.style.transform = "rotate(" + rotation + "deg)";
+          if(CurrAngle > 130) CurrAngle = 130; else
+          if(CurrAngle < 95) CurrAngle = 95;
+          rotatable.style.transform = "translateY(-50%) rotate(" + CurrAngle + "deg)";
+        // } else if(rotateBtn.classList.contains('rotate-compass')){
+        //   rotatable.style.transform = "rotate(" + rotation + "deg)";
         } else {
           rotatable.style.transform = "rotate(" + rotation + "deg)";
         }
