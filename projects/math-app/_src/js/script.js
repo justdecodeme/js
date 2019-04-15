@@ -404,9 +404,11 @@ var initDraw = (function () {
 
   // start drawing or erasing
   var start = function (e) {
-    mousedown = true;
     console.group('Drawing')
     console.log('start-draw')
+
+    mousedown = true;
+
     e.preventDefault();
 
     var strokeOpacity = initDraw.strokeOpacity;
@@ -478,9 +480,10 @@ var initDraw = (function () {
 
  // stop drawing or erasing
   var end = function () {
-    mousedown = mousemove = false;
     console.log('end-draw')
     console.groupEnd();
+
+    mousedown = mousemove = false;
 
     if (currId !== null && document.getElementById(currId) != null) {
       undoStack.push({
@@ -499,71 +502,72 @@ var initDraw = (function () {
   var draw = function(e) {
     if(mousedown && mousemove) {
       console.log('draw');
-    }
-    mousemove = true;
-    e.preventDefault();
-    
-    currPoint = math.getMousePosition(e, cv);
-
-    if (currToolType == "pen" || currToolType == "marker") {
-      polylineTag = document.getElementById(currId);
-      points = polylineTag.getAttribute('points');
-
-      if (currToolType == "marker") {
-        points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
-      } else if (currToolType == "pen") {
-        if (inStartedInRange) { // if set is in range
-
-          // to check if cursor went outside of range
-          inRangeObj = math.sideAndRange(currPoint);
-          
-          if(inRangeObj.inRange) { // if drawing on some side 
-            targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-
-            currPoint.x = targetPoint.x;
-            currPoint.y = targetPoint.y;
+      
+      e.preventDefault();
+      
+      currPoint = math.getMousePosition(e, cv);
+  
+      if (currToolType == "pen" || currToolType == "marker") {
+        polylineTag = document.getElementById(currId);
+        points = polylineTag.getAttribute('points');
+  
+        if (currToolType == "marker") {
+          points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
+        } else if (currToolType == "pen") {
+          if (inStartedInRange) { // if set is in range
+  
+            // to check if cursor went outside of range
+            inRangeObj = math.sideAndRange(currPoint);
             
+            if(inRangeObj.inRange) { // if drawing on some side 
+              targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
+  
+              currPoint.x = targetPoint.x;
+              currPoint.y = targetPoint.y;
+              
+              points += ' ' + currPoint.x + ',' + currPoint.y;
+            } else { // else stop drawing
+              cv.removeEventListener('mousemove', draw, false);
+              cv.removeEventListener('mouseup', end, false);            
+            }
+          } else { // simple drawing
             points += ' ' + currPoint.x + ',' + currPoint.y;
-          } else { // else stop drawing
-            cv.removeEventListener('mousemove', draw, false);
-            cv.removeEventListener('mouseup', end, false);            
           }
-        } else { // simple drawing
-          points += ' ' + currPoint.x + ',' + currPoint.y;
+        }
+        polylineTag.setAttribute('points', points);
+      } else if (currToolType == "eraser") {
+        var target = e.target;
+        if (target.classList.contains('drawing')) {
+          redoStack = [];
+          undoStack.push({
+            Elements: [target],
+            Id: target.id,
+            Action: 'erase'
+          });
+          target.remove();
         }
       }
-      polylineTag.setAttribute('points', points);
-    } else if (currToolType == "eraser") {
-      var target = e.target;
-      if (target.classList.contains('drawing')) {
-        redoStack = [];
-        undoStack.push({
-          Elements: [target],
-          Id: target.id,
-          Action: 'erase'
-        });
-        target.remove();
-      }
+  
+      if(currSetType == 'compass' && currToolType == "arc") {
+        arcTag = document.getElementById(currId);
+        var polylineInArc = arcTag.querySelector('polyline'); 
+        points = polylineInArc.getAttribute('points');      
+        pointsObj = math.getSetPoints(initTools.currSetType);
+  
+        arc.point.x = pointsObj[2].x;
+        arc.point.y = pointsObj[2].y;
+  
+        // check if point is pointObj[2] is really lie on arc or not
+        // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+        // d = math.parseToFloat(d, 2);
+  
+        points += ' ' + arc.point.x + ',' + arc.point.y;
+        polylineInArc.setAttribute('points', points);
+      }    
+  
+      cv.addEventListener('mouseleave', end, false);
     }
-
-    if(currSetType == 'compass' && currToolType == "arc") {
-      arcTag = document.getElementById(currId);
-      var polylineInArc = arcTag.querySelector('polyline'); 
-      points = polylineInArc.getAttribute('points');      
-      pointsObj = math.getSetPoints(initTools.currSetType);
-
-      arc.point.x = pointsObj[2].x;
-      arc.point.y = pointsObj[2].y;
-
-      // check if point is pointObj[2] is really lie on arc or not
-      // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
-      // d = math.parseToFloat(d, 2);
-
-      points += ' ' + arc.point.x + ',' + arc.point.y;
-      polylineInArc.setAttribute('points', points);
-    }    
-
-    cv.addEventListener('mouseleave', end, false);
+    mousemove = true;
   }
 
   return {
@@ -927,9 +931,7 @@ var initPanel = (function (e) {
         draggableSeals[i].addEventListener('dragstart', initDrag.start, false);
       }
       for (var i = 0; i < rotateBtns.length; i++) {
-        rotateBtns[i].addEventListener('mousedown', function(e) {
-          rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
-        }, false);
+        rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
       }
       if (panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
@@ -1782,8 +1784,10 @@ var initRotate = (function () {
   var start = function (e) {
     console.group('Rotate')
     console.log('start-rotate');
+    
     e.preventDefault();
-    // mousedown = true;
+
+    mousedown = true;
 
     var height, left, top, width, refEl;
     rotateBtn = e.target;
@@ -1868,17 +1872,15 @@ var initRotate = (function () {
       }
     }
 
-    // cvOuter.addEventListener('mousemove', rotate, false);
-    cvOuter.onmousemove = function(e) {
-      rotate(e);
-    }
+    cvOuter.addEventListener('mousemove', rotate, false);
     cvOuter.addEventListener('mouseup', end, false);
   };
 
   var end = function (e) {
     console.log('end-rotate');
     console.groupEnd();
-    // mousedown = mousemove = false
+
+    mousedown = mousemove = false
     
     // cvOuter.classList.remove('rotating');
     
@@ -1890,45 +1892,47 @@ var initRotate = (function () {
     // }
     initTools.currToolType = oldToolType;
 
-    // cvOuter.removeEventListener('mousemove', rotate, false);
     // cv.removeEventListener('mousedown', initDraw.start, false);
+    cvOuter.removeEventListener('mousemove', rotate, false);
     cvOuter.removeEventListener('mouseup', end, false);
   };
 
   var rotate = function (e) {
-    // if(mousedown && mousemove)
-    console.log('rotate');
-    // mousemove = true;
+    if(mousedown && mousemove) {
+      console.log('rotate');
 
-    e.preventDefault();
-
-    x = e.clientX - refPoint.x;
-    y = e.clientY - refPoint.y;
-    d = Math.floor(R2D * Math.atan2(y, x));
-
-    rotation = d - startAngle;
-    // console.log(d, startAngle, rotation)
-    
-    if (panelType == 'clock') {
-      rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-    } else if(panelType == "compass") {
-      if(rotateBtn.classList.contains('rotate-point')) {
-        // if(d > 85) d = 85; else
-        // if(d < 50) d = 50;
-        // d = d + panelRotation;
+      e.preventDefault();
+  
+      x = e.clientX - refPoint.x;
+      y = e.clientY - refPoint.y;
+      d = Math.floor(R2D * Math.atan2(y, x));
+  
+      rotation = d - startAngle;
+      // console.log(d, startAngle, rotation)
+      
+      if (panelType == 'clock') {
         rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-      } else if(rotateBtn.classList.contains('rotate-pencil')) {
-        if(d > 130) d = 130; else
-        if(d < 95) d = 95;
-        rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-      } else if(rotateBtn.classList.contains('rotate-compass')){
-        rotatable.style.transform = "rotate(" + rotation + "deg)";
+      } else if(panelType == "compass") {
+        if(rotateBtn.classList.contains('rotate-point')) {
+          // if(d > 85) d = 85; else
+          // if(d < 50) d = 50;
+          // d = d + panelRotation;
+          rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+        } else if(rotateBtn.classList.contains('rotate-pencil')) {
+          if(d > 130) d = 130; else
+          if(d < 95) d = 95;
+          rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+        } else if(rotateBtn.classList.contains('rotate-compass')){
+          rotatable.style.transform = "rotate(" + rotation + "deg)";
+        } else {
+          rotatable.style.transform = "rotate(" + rotation + "deg)";
+        }
       } else {
         rotatable.style.transform = "rotate(" + rotation + "deg)";
       }
-    } else {
-      rotatable.style.transform = "rotate(" + rotation + "deg)";
     }
+
+    mousemove = true;
   };
 
   // Explicitly reveal public pointers to the private functions 
