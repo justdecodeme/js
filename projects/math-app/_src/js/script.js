@@ -3,6 +3,7 @@
 /*******************************/
 var cv = document.getElementById('cv');
 var cvOuter = document.getElementById('cvOuter');
+var mousedown = mousemove = false;
 
 /*******************************/
 //     functions - helping
@@ -188,14 +189,14 @@ var initTools = (function () {
     if (oldToolBtn) {
       oldToolBtn.classList.remove('active');
       initTools.currToolType = null;
-      cv.removeEventListener('mousedown', initDraw.drawStart, false);
+      cv.removeEventListener('mousedown', initDraw.start, false);
     }
     // add 'active' class to current 'clicked' button if it is not the 'active' button already
     // and update 'currToolType' value
     if (oldToolBtn != target) {
       target.classList.add('active');
       initTools.currToolType = target.dataset.toolType1;
-      cv.addEventListener('mousedown', initDraw.drawStart, false);
+      cv.addEventListener('mousedown', initDraw.start, false);
     }
   }
 
@@ -318,9 +319,21 @@ var initDraw = (function () {
   var inStartedInRange = false;
   var pointsObj = null;
   var currToolType, currSetType = null;
-  var polyline, points;
+  var polylineTag, arcTag, points;
   var m;
   var targetPoint = null;
+  var arc = {
+    'radius': 0,
+    'center': { // center point of arc
+      'x': 0,
+      'y': 0
+    },
+    'point': { // any x,y point on arc
+      'x': 0,
+      'y': 0
+    },
+    'dotRadius': 5
+  }
 
 
   // Undo last action
@@ -390,8 +403,10 @@ var initDraw = (function () {
   }
 
   // start drawing or erasing
-  var drawStart = function (e) {
-    // console.log('drawStart')
+  var start = function (e) {
+    mousedown = true;
+    console.group('Drawing')
+    console.log('start-draw')
     e.preventDefault();
 
     var strokeOpacity = initDraw.strokeOpacity;
@@ -402,29 +417,49 @@ var initDraw = (function () {
     var strokeColorMarker = 'rgba(0, 255, 0, .5)';
     var strokeWidthMarker = initDraw.strokeWidth + 10;
 
-    var polylineTag;
-    
     currPoint = math.getMousePosition(e, cv);
     currId = 'shape' + index;
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
+    startPoint = currPoint;
 
+    // if some set is present on canvas
     if(currSetType) {
-      pointsObj = math.getSetPoints(initTools.currSetType);
+      if(currSetType.substr(0,5) == "scale") {
+        pointsObj = math.getSetPoints(initTools.currSetType);
+    
+        // check if drawing point is inRange with currentSetType
+        inRangeObj = math.sideAndRange(currPoint);
+        inStartedInRange = inRangeObj.inRange;
+        m = inRangeObj.slope;
+        console.log(inRangeObj)
   
-      // check if drawing point is inRange with currentSetType
-      inRangeObj = math.sideAndRange(currPoint);
-      inStartedInRange = inRangeObj.inRange;
-      m = inRangeObj.slope
-
-      // update starting coordinates of drawing if set is in range
-      if(inStartedInRange) {
-        targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-        currPoint.x = targetPoint.x;
-        currPoint.y = targetPoint.y;
+        // update starting coordinates of drawing if set is in range
+        if(inStartedInRange) {
+          targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
+          currPoint.x = targetPoint.x;
+          currPoint.y = targetPoint.y;
+        }
+      }
+  
+      if(currSetType == 'compass' && currToolType == "arc") {
+        pointsObj = math.getSetPoints(initTools.currSetType);
+    
+        arc.center.x = pointsObj[1].x;
+        arc.center.y = pointsObj[1].y;
+        arc.point.x = pointsObj[2].x;
+        arc.point.y = pointsObj[2].y;
+  
+        arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+        arc.radius = math.parseToFloat(arc.radius, 2);
+  
+        arcTag = `<g id="${currId}">
+          <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
+          <polyline class="drawing" style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
+        </g>`;
+        cv.innerHTML += arcTag;
       }
     }
-
 
     if (currToolType == "pen" || currToolType == "marker") {
       if (currToolType == "pen") {
@@ -434,26 +469,45 @@ var initDraw = (function () {
       }
       cv.innerHTML += polylineTag;
     }
-
     
     cv.addEventListener('mousemove', draw, false);
-    cv.addEventListener('mouseup', drawEnd, false);
+    cv.addEventListener('mouseup', end, false);
     
     index++;
-    startPoint = currPoint;
+  }
 
+ // stop drawing or erasing
+  var end = function () {
+    mousedown = mousemove = false;
+    console.log('end-draw')
+    console.groupEnd();
+
+    if (currId !== null && document.getElementById(currId) != null) {
+      undoStack.push({
+        Elements: [],
+        Id: currId,
+        Action: 'draw'
+      });
+    }
+
+    cv.removeEventListener('mousemove', draw, false);
+    cv.removeEventListener('mouseup', end, false);
+    cv.removeEventListener('mouseleave', end, false);
   }
 
   // keep drawing or erasing
-  var draw = function (e) {
-    // console.log('draw')
+  var draw = function(e) {
+    if(mousedown && mousemove) {
+      console.log('draw');
+    }
+    mousemove = true;
     e.preventDefault();
     
     currPoint = math.getMousePosition(e, cv);
 
     if (currToolType == "pen" || currToolType == "marker") {
-      polyline = document.getElementById(currId);
-      points = polyline.getAttribute('points');
+      polylineTag = document.getElementById(currId);
+      points = polylineTag.getAttribute('points');
 
       if (currToolType == "marker") {
         points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
@@ -472,13 +526,13 @@ var initDraw = (function () {
             points += ' ' + currPoint.x + ',' + currPoint.y;
           } else { // else stop drawing
             cv.removeEventListener('mousemove', draw, false);
-            cv.removeEventListener('mouseup', drawEnd, false);            
+            cv.removeEventListener('mouseup', end, false);            
           }
         } else { // simple drawing
           points += ' ' + currPoint.x + ',' + currPoint.y;
         }
       }
-      polyline.setAttribute('points', points);
+      polylineTag.setAttribute('points', points);
     } else if (currToolType == "eraser") {
       var target = e.target;
       if (target.classList.contains('drawing')) {
@@ -492,24 +546,24 @@ var initDraw = (function () {
       }
     }
 
-    cv.addEventListener('mouseleave', drawEnd, false);
-  }
+    if(currSetType == 'compass' && currToolType == "arc") {
+      arcTag = document.getElementById(currId);
+      var polylineInArc = arcTag.querySelector('polyline'); 
+      points = polylineInArc.getAttribute('points');      
+      pointsObj = math.getSetPoints(initTools.currSetType);
 
-  // stop drawing or erasing
-  var drawEnd = function () {
-    // console.log('drawEnd')
+      arc.point.x = pointsObj[2].x;
+      arc.point.y = pointsObj[2].y;
 
-    if (currId !== null && document.getElementById(currId) != null) {
-      undoStack.push({
-        Elements: [],
-        Id: currId,
-        Action: 'draw'
-      });
-    }
+      // check if point is pointObj[2] is really lie on arc or not
+      // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+      // d = math.parseToFloat(d, 2);
 
-    cv.removeEventListener('mousemove', draw, false);
-    cv.removeEventListener('mouseup', drawEnd, false);
-    cv.removeEventListener('mouseleave', drawEnd, false);
+      points += ' ' + arc.point.x + ',' + arc.point.y;
+      polylineInArc.setAttribute('points', points);
+    }    
+
+    cv.addEventListener('mouseleave', end, false);
   }
 
   return {
@@ -519,7 +573,7 @@ var initDraw = (function () {
     strokeOpacity: strokeOpacity,
     strokeWidth: strokeWidth,
     strokeColor: strokeColor,
-    drawStart: drawStart
+    start: start
   }
 })();
 
@@ -853,9 +907,10 @@ var initPanel = (function (e) {
 
       panel = document.querySelector('[data-panel="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
-      panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
       panelScaleBtn = panel.querySelector('.scale-btn');
+      panelFlipBtn = panel.querySelector('.flip-btn');
       rotateBtns = panel.querySelectorAll('.rotate-btn');
+      panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
       draggableSeals = panel.getElementsByClassName('draggable-seal');
 
       target.classList.add('active');
@@ -872,13 +927,18 @@ var initPanel = (function (e) {
         draggableSeals[i].addEventListener('dragstart', initDrag.start, false);
       }
       for (var i = 0; i < rotateBtns.length; i++) {
-        rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
+        rotateBtns[i].addEventListener('mousedown', function(e) {
+          rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
+        }, false);
       }
       if (panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
       }
+      if (panelFlipBtn) {
+        panelFlipBtn.addEventListener('click', flip, false);
+      }
       if (panelScaleFlipBtn) {
-        panelScaleFlipBtn.addEventListener('click', flip, false);
+        panelScaleFlipBtn.addEventListener('click', scaleFlip, false);
       }
       if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
@@ -912,8 +972,9 @@ var initPanel = (function (e) {
     }
     panelBtn = document.querySelector('[data-panel-btn="' + panelType + '"]');
     panelCloseBtn = panel.querySelector('.close-btn');
-    panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
+    panelFlipBtn = panel.querySelector('.flip-btn');
     panelScaleBtn = panel.querySelector('.scale-btn');
+    panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
 
     draggableSeals = panel.getElementsByClassName('draggable-seal');
     panel.classList.remove('active');
@@ -927,13 +988,16 @@ var initPanel = (function (e) {
       draggableSeals[i].removeEventListener('dragstart', initDrag.start, false);
     }
     for (var i = 0; i < rotateBtns.length; i++) {
-      rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
+      rotateBtns[i].removeEventListener('mousedown', initRotate.start, false);
     }
     if (panelScaleBtn) {
       panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
     }
+    if (panelFlipBtn) {
+      panelFlipBtn.removeEventListener('click', flip, false);
+    }    
     if (panelScaleFlipBtn) {
-      panelScaleFlipBtn.removeEventListener('click', flip, false);
+      panelScaleFlipBtn.removeEventListener('click', scaleFlip, false);
     }
     if (panelType == "calculator") {
       var buttons = panel.querySelectorAll('[data-button-type]');
@@ -1016,7 +1080,16 @@ var initPanel = (function (e) {
     }
   }
   var flip = function(e) {
-    console.log('fliping');
+    // console.log('panel fliping');
+
+    if(panel.classList.contains('flipped')) {
+      panel.classList.remove('flipped');
+    } else {
+      panel.classList.add('flipped');
+    }
+  }
+  var scaleFlip = function(e) {
+    console.log('scale flipping');
   }
 
   return {
@@ -1699,6 +1772,7 @@ var initRotate = (function () {
   var oldPanel = null;
   var panelType = null;
   var d, x, y;
+  var oldToolType = null;
   var refPoint = {
     x: 0,
     y: 0
@@ -1706,8 +1780,10 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var start = function (e) {
-    // console.log('start');
+    console.group('Rotate')
+    console.log('start-rotate');
     e.preventDefault();
+    // mousedown = true;
 
     var height, left, top, width, refEl;
     rotateBtn = e.target;
@@ -1721,15 +1797,19 @@ var initRotate = (function () {
     }
     oldPanel = panel;
 
-    cvOuter.classList.add('rotating');
+    // cvOuter.classList.add('rotating');
 
     refEl = rotatable;
 
+    // ADD EVENT LISTENER
     if(panelType == "compass") {
-      if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
+      if(rotateBtn.classList.contains('rotate-compass')) {
+        // calling draw function to make an arc
+        oldToolType = initTools.currToolType;
+        initTools.currToolType = 'arc';
+        // cv.addEventListener('mousedown', initDraw.start, false);
+      } else if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
         refEl = panel.querySelector('.rotate-hand-ref');
-      } else if(rotateBtn.classList.contains('rotate-compass')) {
-        refEl = panel.querySelector('.rotate-compass-ref');
       }
     }
 
@@ -1757,7 +1837,7 @@ var initRotate = (function () {
         } else {
           startAngle = panel.dataset.angleHand;
         }
-      } else if(rotateBtn.classList.contains('btn') || rotateBtn.classList.contains('rotate-compass')) {
+      } else if(rotateBtn.classList.contains('btn')) {
         if (panel.dataset.angle == undefined) {
           startAngle = Math.floor(R2D * Math.atan2(y, x));
           panel.setAttribute('data-angle', startAngle);
@@ -1766,12 +1846,18 @@ var initRotate = (function () {
         }          
       } else if(rotateBtn.classList.contains('rotate-compass')) {
         if (panel.dataset.angleCompass == undefined) {
+          // console.log(1)
           startAngle = Math.floor(R2D * Math.atan2(y, x));
           panel.setAttribute('data-angle-compass', startAngle);
         } else {
+          // console.log(2)
           startAngle = panel.dataset.angleCompass;
         }     
-        panel.classList.add('point-ref');        
+        if(panel.dataset.angle) {
+          // console.log(3)
+          // console.log(startAngle)
+          // startAngle += panel.dataset.angle;
+        }
       }
     } else {
       if (panel.dataset.angle == undefined) {
@@ -1782,12 +1868,37 @@ var initRotate = (function () {
       }
     }
 
-    cvOuter.addEventListener('mousemove', rotate, false);
+    // cvOuter.addEventListener('mousemove', rotate, false);
+    cvOuter.onmousemove = function(e) {
+      rotate(e);
+    }
     cvOuter.addEventListener('mouseup', end, false);
   };
 
+  var end = function (e) {
+    console.log('end-rotate');
+    console.groupEnd();
+    // mousedown = mousemove = false
+    
+    // cvOuter.classList.remove('rotating');
+    
+    // ADD EVENT LISTENER
+    // if(panelType == "compass") {
+    //   if(rotateBtn.classList.contains('rotate-compass')) {
+    //     cv.removeEventListener('mousedown', initDraw.start, false);
+    //   }
+    // }
+    initTools.currToolType = oldToolType;
+
+    // cvOuter.removeEventListener('mousemove', rotate, false);
+    // cv.removeEventListener('mousedown', initDraw.start, false);
+    cvOuter.removeEventListener('mouseup', end, false);
+  };
+
   var rotate = function (e) {
-    // console.log('rotate');
+    // if(mousedown && mousemove)
+    console.log('rotate');
+    // mousemove = true;
 
     e.preventDefault();
 
@@ -1807,8 +1918,8 @@ var initRotate = (function () {
         // d = d + panelRotation;
         rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
       } else if(rotateBtn.classList.contains('rotate-pencil')) {
-        // if(d > 130) d = 130; else
-        // if(d < 95) d = 95;
+        if(d > 130) d = 130; else
+        if(d < 95) d = 95;
         rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
       } else if(rotateBtn.classList.contains('rotate-compass')){
         rotatable.style.transform = "rotate(" + rotation + "deg)";
@@ -1818,19 +1929,6 @@ var initRotate = (function () {
     } else {
       rotatable.style.transform = "rotate(" + rotation + "deg)";
     }
-  };
-
-  var end = function (e) {
-    // console.log('end');
-
-    if(rotateBtn.classList.contains('rotate-compass')){
-      panel.classList.add('point-ref');
-    }
-
-    cvOuter.classList.remove('rotating');
-
-    cvOuter.removeEventListener('mousemove', rotate, false);
-    cvOuter.removeEventListener('mouseup', end, false);
   };
 
   // Explicitly reveal public pointers to the private functions 
@@ -2098,7 +2196,7 @@ var math = (function(e) {
   var getSlope = function(line) {
     // m = (y2 - y1) / (x2 - x1)
     var m = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x);
-    return parseToFloat(m, 2);
+    return math.parseToFloat(m, 2);
   }
   
   var calculatePerpendicularDistFromLine = function(line, point, m) {
@@ -2243,6 +2341,7 @@ var math = (function(e) {
   }  
 
   return {
+    parseToFloat: parseToFloat,
     getMousePosition: getMousePosition,
     sideAndRange: sideAndRange,
     getSetPoints: getSetPoints,
@@ -2250,4 +2349,4 @@ var math = (function(e) {
   }
 })();
 
-document.querySelector('[data-tool-type1="pen"]').click();
+// document.querySelector('[data-tool-type1="pen"]').click();

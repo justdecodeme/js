@@ -277,8 +277,8 @@ body {
   &.draggable-tool,
   &.draggable-widget {
     display: none;
-    left: 120px;
-    top: 130px;
+    left: 430px;
+    top: 160px;
 
     &.active {
       display: block;
@@ -752,6 +752,7 @@ body {
   top: 300px;
   // display: block!important;
   /* transform: rotate(45deg); */
+  // transform-origin: 67.4% 96.6%;
   .outer {
     width: 70px;
     height: 70px;
@@ -793,14 +794,15 @@ body {
         height: 4px;
         width: 4px;
         background: red;
-        right: 0;
+        right: 0.5px;
         top: 50%;
         transform: translateY(-50%);
         border-radius: 10px;        
       }
     }
     .rotate-point {
-      transform: translateY(-50%) rotate(70deg);
+      transform: translateY(-50%) rotate(80deg);
+      background: #3FB6CE;
     }
     .rotate-pencil {
       transform: translateY(-50%) rotate(110deg);
@@ -816,6 +818,18 @@ body {
       opacity: .5;    
     }
   }  
+  .ref {
+    position: absolute;
+    height: 4px;
+    width: 4px;
+    background: white;
+    border-radius: 10px;         
+    // left: 50%;
+    // top: 24%;
+    // transform: translateX(-50%);
+    left: 67%;
+    top: 96.3%;
+  }
   .close-btn {
     left: 0;
     top: 0;
@@ -837,8 +851,15 @@ body {
     bottom: 0;
     transform: translate(-50%, 50%);
   }
-  &.point-ref {
-    transform-origin: 93.3% 85%;
+  // &.point-ref {
+  //   transform-origin: 93.3% 85%;
+  // }
+  &.flipped {
+    background: lightcoral;
+    transform-origin: 32.6% 3.4%;
+    .outer {
+      transform: translateX(-50%) rotateY(180deg);
+    }
   }
 }
 [data-panel=protractor] {
