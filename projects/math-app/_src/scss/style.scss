@@ -861,6 +861,9 @@ body {
       transform: translateX(-50%) rotateY(180deg);
     }
   }
+  &.pe-none {
+    pointer-events: none;
+  }
 }
 [data-panel=protractor] {
   background: lightyellow;

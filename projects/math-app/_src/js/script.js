@@ -3,7 +3,6 @@
 /*******************************/
 var cv = document.getElementById('cv');
 var cvOuter = document.getElementById('cvOuter');
-var mousedown = mousemove = false;
 
 /*******************************/
 //     functions - helping
@@ -309,6 +308,7 @@ var initDraw = (function () {
   var strokeColorEl = document.querySelector('[data-tool-type2="pastel"].primary.active');
   var strokeColor = strokeColorEl.dataset.value;
 
+  var mousedown = mousemove = false;
   var currId = null;
   var index = 0;
   var startPoint;
@@ -502,7 +502,7 @@ var initDraw = (function () {
   var draw = function(e) {
     if(mousedown && mousemove) {
       console.log('draw');
-      
+
       e.preventDefault();
       
       currPoint = math.getMousePosition(e, cv);
@@ -932,6 +932,9 @@ var initPanel = (function (e) {
       }
       for (var i = 0; i < rotateBtns.length; i++) {
         rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
+        if(rotateBtns[i].classList.contains('rotate-compass')) {
+          rotateBtns[i].addEventListener('mousedown', initDraw.start, false);
+        }
       }
       if (panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
@@ -991,6 +994,9 @@ var initPanel = (function (e) {
     }
     for (var i = 0; i < rotateBtns.length; i++) {
       rotateBtns[i].removeEventListener('mousedown', initRotate.start, false);
+      if (rotateBtns[i].classList.contains('rotate-compass')) {
+        rotateBtns[i].removeEventListener('mousedown', initDraw.start, false);
+      }
     }
     if (panelScaleBtn) {
       panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
@@ -1765,6 +1771,7 @@ var initCubes = (function (e) {
 
 // rotate behaviour of tools/widgets/seals
 var initRotate = (function () {
+  var mousedown = mousemove = false;
   var startAngle = null;
   var panelRotation = null;
   var rotation = null;
@@ -1811,7 +1818,8 @@ var initRotate = (function () {
         // calling draw function to make an arc
         oldToolType = initTools.currToolType;
         initTools.currToolType = 'arc';
-        // cv.addEventListener('mousedown', initDraw.start, false);
+        panel.classList.add('pe-none');
+        // panel.addEventListener('mousemove', initDraw.start, false);
       } else if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
         refEl = panel.querySelector('.rotate-hand-ref');
       }
@@ -1882,6 +1890,7 @@ var initRotate = (function () {
 
     mousedown = mousemove = false
     
+    panel.classList.remove('pe-none');
     // cvOuter.classList.remove('rotating');
     
     // ADD EVENT LISTENER
@@ -1899,7 +1908,7 @@ var initRotate = (function () {
 
   var rotate = function (e) {
     if(mousedown && mousemove) {
-      console.log('rotate');
+      // console.log('rotate');
 
       e.preventDefault();
   
