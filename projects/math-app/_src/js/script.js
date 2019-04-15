@@ -308,7 +308,7 @@ var initDraw = (function () {
   var strokeColorEl = document.querySelector('[data-tool-type2="pastel"].primary.active');
   var strokeColor = strokeColorEl.dataset.value;
 
-  var mousedown = mousemove = false;
+  var mousedownDraw = mousemoveDraw = false;
   var currId = null;
   var index = 0;
   var startPoint;
@@ -335,6 +335,173 @@ var initDraw = (function () {
     'dotRadius': 5
   }
 
+  // start drawing or erasing
+  var start = function (e) {
+    // console.group('Drawing')
+    // console.log('start-draw')
+
+    mousedownDraw = true;
+
+    e.preventDefault();
+
+    var strokeOpacity = initDraw.strokeOpacity;
+
+    var strokeColorPen = initDraw.strokeColor;
+    var strokeWidthPen = initDraw.strokeWidth;
+
+    var strokeColorMarker = 'rgba(0, 255, 0, .5)';
+    var strokeWidthMarker = initDraw.strokeWidth + 10;
+
+    currPoint = math.getMousePosition(e, cv);
+    currId = 'shape' + index;
+    currToolType = initTools.currToolType;
+    currSetType = initTools.currSetType;
+    startPoint = currPoint;
+
+    // if some set is present on canvas
+    if (currSetType) {
+      if (currSetType.substr(0, 5) == "scale") {
+        pointsObj = math.getSetPoints(initTools.currSetType);
+
+        // check if drawing point is inRange with currentSetType
+        inRangeObj = math.sideAndRange(currPoint);
+        inStartedInRange = inRangeObj.inRange;
+        m = inRangeObj.slope;
+        console.log(inRangeObj)
+
+        // update starting coordinates of drawing if set is in range
+        if (inStartedInRange) {
+          targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
+          currPoint.x = targetPoint.x;
+          currPoint.y = targetPoint.y;
+        }
+      }
+
+      if (currSetType == 'compass' && currToolType == "arc") {
+        pointsObj = math.getSetPoints(initTools.currSetType);
+
+        arc.center.x = pointsObj[1].x;
+        arc.center.y = pointsObj[1].y;
+        arc.point.x = pointsObj[2].x;
+        arc.point.y = pointsObj[2].y;
+
+        arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+        arc.radius = math.parseToFloat(arc.radius, 2);
+
+        arcTag = `<g id="${currId}">
+            <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
+            <polyline class="drawing" style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
+          </g>`;
+        cv.innerHTML += arcTag;
+      }
+    }
+
+    if (currToolType == "pen" || currToolType == "marker") {
+      if (currToolType == "pen") {
+        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
+      } else if (currToolType == "marker") {
+        polylineTag = '<polyline class="drawing" id="' + currId + '" style="fill:none;stroke-linecap:round;stroke:' + strokeColorMarker + ';stroke-width:' + strokeWidthMarker + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
+      }
+      cv.innerHTML += polylineTag;
+    }
+
+    cv.addEventListener('mousemove', draw, false);
+    cv.addEventListener('mouseup', end, false);
+
+    index++;
+  }
+
+  // stop drawing or erasing
+  var end = function () {
+    // console.log('end-draw')
+    // console.groupEnd();
+
+    mousedownDraw = mousemoveDraw = false;
+
+    if (currId !== null && document.getElementById(currId) != null) {
+      undoStack.push({
+        Elements: [],
+        Id: currId,
+        Action: 'draw'
+      });
+    }
+
+    cv.removeEventListener('mousemove', draw, false);
+    cv.removeEventListener('mouseup', end, false);
+    cv.removeEventListener('mouseleave', end, false);
+  }
+
+  // keep drawing or erasing
+  var draw = function (e) {
+    if (mousedownDraw && mousemoveDraw) {
+      // console.log('draw');
+
+      e.preventDefault();
+
+      currPoint = math.getMousePosition(e, cv);
+
+      if (currToolType == "pen" || currToolType == "marker") {
+        polylineTag = document.getElementById(currId);
+        points = polylineTag.getAttribute('points');
+
+        if (currToolType == "marker") {
+          points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
+        } else if (currToolType == "pen") {
+          if (inStartedInRange) { // if set is in range
+
+            // to check if cursor went outside of range
+            inRangeObj = math.sideAndRange(currPoint);
+
+            if (inRangeObj.inRange) { // if drawing on some side 
+              targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
+
+              currPoint.x = targetPoint.x;
+              currPoint.y = targetPoint.y;
+
+              points += ' ' + currPoint.x + ',' + currPoint.y;
+            } else { // else stop drawing
+              cv.removeEventListener('mousemove', draw, false);
+              cv.removeEventListener('mouseup', end, false);
+            }
+          } else { // simple drawing
+            points += ' ' + currPoint.x + ',' + currPoint.y;
+          }
+        }
+        polylineTag.setAttribute('points', points);
+      } else if (currToolType == "eraser") {
+        var target = e.target;
+        if (target.classList.contains('drawing')) {
+          redoStack = [];
+          undoStack.push({
+            Elements: [target],
+            Id: target.id,
+            Action: 'erase'
+          });
+          target.remove();
+        }
+      }
+
+      if (currSetType == 'compass' && currToolType == "arc") {
+        arcTag = document.getElementById(currId);
+        var polylineInArc = arcTag.querySelector('polyline');
+        points = polylineInArc.getAttribute('points');
+        pointsObj = math.getSetPoints(initTools.currSetType);
+
+        arc.point.x = pointsObj[2].x;
+        arc.point.y = pointsObj[2].y;
+
+        // check if point is pointObj[2] is really lie on arc or not
+        // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+        // d = math.parseToFloat(d, 2);
+
+        points += ' ' + arc.point.x + ',' + arc.point.y;
+        polylineInArc.setAttribute('points', points);
+      }
+
+      cv.addEventListener('mouseleave', end, false);
+    }
+    mousemoveDraw = true;
+  }
 
   // Undo last action
   var Undo = function () {
@@ -402,182 +569,14 @@ var initDraw = (function () {
     cv.innerHTML = "";
   }
 
-  // start drawing or erasing
-  var start = function (e) {
-    console.group('Drawing')
-    console.log('start-draw')
-
-    mousedown = true;
-
-    e.preventDefault();
-
-    var strokeOpacity = initDraw.strokeOpacity;
-
-    var strokeColorPen = initDraw.strokeColor;
-    var strokeWidthPen = initDraw.strokeWidth;
-
-    var strokeColorMarker = 'rgba(0, 255, 0, .5)';
-    var strokeWidthMarker = initDraw.strokeWidth + 10;
-
-    currPoint = math.getMousePosition(e, cv);
-    currId = 'shape' + index;
-    currToolType = initTools.currToolType;
-    currSetType = initTools.currSetType;
-    startPoint = currPoint;
-
-    // if some set is present on canvas
-    if(currSetType) {
-      if(currSetType.substr(0,5) == "scale") {
-        pointsObj = math.getSetPoints(initTools.currSetType);
-    
-        // check if drawing point is inRange with currentSetType
-        inRangeObj = math.sideAndRange(currPoint);
-        inStartedInRange = inRangeObj.inRange;
-        m = inRangeObj.slope;
-        console.log(inRangeObj)
-  
-        // update starting coordinates of drawing if set is in range
-        if(inStartedInRange) {
-          targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-          currPoint.x = targetPoint.x;
-          currPoint.y = targetPoint.y;
-        }
-      }
-  
-      if(currSetType == 'compass' && currToolType == "arc") {
-        pointsObj = math.getSetPoints(initTools.currSetType);
-    
-        arc.center.x = pointsObj[1].x;
-        arc.center.y = pointsObj[1].y;
-        arc.point.x = pointsObj[2].x;
-        arc.point.y = pointsObj[2].y;
-  
-        arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
-        arc.radius = math.parseToFloat(arc.radius, 2);
-  
-        arcTag = `<g id="${currId}">
-          <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
-          <polyline class="drawing" style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
-        </g>`;
-        cv.innerHTML += arcTag;
-      }
-    }
-
-    if (currToolType == "pen" || currToolType == "marker") {
-      if (currToolType == "pen") {
-        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
-      } else if (currToolType == "marker") {
-        polylineTag = '<polyline class="drawing" id="' + currId + '" style="fill:none;stroke-linecap:round;stroke:' + strokeColorMarker + ';stroke-width:' + strokeWidthMarker + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
-      }
-      cv.innerHTML += polylineTag;
-    }
-    
-    cv.addEventListener('mousemove', draw, false);
-    cv.addEventListener('mouseup', end, false);
-    
-    index++;
-  }
-
- // stop drawing or erasing
-  var end = function () {
-    console.log('end-draw')
-    console.groupEnd();
-
-    mousedown = mousemove = false;
-
-    if (currId !== null && document.getElementById(currId) != null) {
-      undoStack.push({
-        Elements: [],
-        Id: currId,
-        Action: 'draw'
-      });
-    }
-
-    cv.removeEventListener('mousemove', draw, false);
-    cv.removeEventListener('mouseup', end, false);
-    cv.removeEventListener('mouseleave', end, false);
-  }
-
-  // keep drawing or erasing
-  var draw = function(e) {
-    if(mousedown && mousemove) {
-      console.log('draw');
-
-      e.preventDefault();
-      
-      currPoint = math.getMousePosition(e, cv);
-  
-      if (currToolType == "pen" || currToolType == "marker") {
-        polylineTag = document.getElementById(currId);
-        points = polylineTag.getAttribute('points');
-  
-        if (currToolType == "marker") {
-          points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
-        } else if (currToolType == "pen") {
-          if (inStartedInRange) { // if set is in range
-  
-            // to check if cursor went outside of range
-            inRangeObj = math.sideAndRange(currPoint);
-            
-            if(inRangeObj.inRange) { // if drawing on some side 
-              targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-  
-              currPoint.x = targetPoint.x;
-              currPoint.y = targetPoint.y;
-              
-              points += ' ' + currPoint.x + ',' + currPoint.y;
-            } else { // else stop drawing
-              cv.removeEventListener('mousemove', draw, false);
-              cv.removeEventListener('mouseup', end, false);            
-            }
-          } else { // simple drawing
-            points += ' ' + currPoint.x + ',' + currPoint.y;
-          }
-        }
-        polylineTag.setAttribute('points', points);
-      } else if (currToolType == "eraser") {
-        var target = e.target;
-        if (target.classList.contains('drawing')) {
-          redoStack = [];
-          undoStack.push({
-            Elements: [target],
-            Id: target.id,
-            Action: 'erase'
-          });
-          target.remove();
-        }
-      }
-  
-      if(currSetType == 'compass' && currToolType == "arc") {
-        arcTag = document.getElementById(currId);
-        var polylineInArc = arcTag.querySelector('polyline'); 
-        points = polylineInArc.getAttribute('points');      
-        pointsObj = math.getSetPoints(initTools.currSetType);
-  
-        arc.point.x = pointsObj[2].x;
-        arc.point.y = pointsObj[2].y;
-  
-        // check if point is pointObj[2] is really lie on arc or not
-        // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
-        // d = math.parseToFloat(d, 2);
-  
-        points += ' ' + arc.point.x + ',' + arc.point.y;
-        polylineInArc.setAttribute('points', points);
-      }    
-  
-      cv.addEventListener('mouseleave', end, false);
-    }
-    mousemove = true;
-  }
-
   return {
+    start: start,
     undo: Undo,
     redo: Redo,
     clear: Clear,
     strokeOpacity: strokeOpacity,
     strokeWidth: strokeWidth,
-    strokeColor: strokeColor,
-    start: start
+    strokeColor: strokeColor
   }
 })();
 
@@ -1771,7 +1770,7 @@ var initCubes = (function (e) {
 
 // rotate behaviour of tools/widgets/seals
 var initRotate = (function () {
-  var mousedown = mousemove = false;
+  var mousedownRotate = mousemoveRotate = false;
   var startAngle = null;
   var panelRotation = null;
   var rotation = null;
@@ -1789,12 +1788,12 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var start = function (e) {
-    console.group('Rotate')
-    console.log('start-rotate');
+    // console.group('Rotate')
+    // console.log('start-rotate');
     
     e.preventDefault();
 
-    mousedown = true;
+    mousedownRotate = true;
 
     var height, left, top, width, refEl;
     rotateBtn = e.target;
@@ -1883,10 +1882,10 @@ var initRotate = (function () {
   };
 
   var end = function (e) {
-    console.log('end-rotate');
-    console.groupEnd();
-
-    mousedown = mousemove = false
+    // console.log('end-rotate');
+    // console.groupEnd();
+    
+    mousedownRotate = mousemoveRotate = false
     
     panel.classList.remove('pe-none');
     // cvOuter.classList.remove('rotating');
@@ -1898,7 +1897,8 @@ var initRotate = (function () {
   };
 
   var rotate = function (e) {
-    if(mousedown && mousemove) {
+    
+    if (mousedownRotate && mousemoveRotate) {
       // console.log('rotate');
 
       e.preventDefault();
@@ -1932,7 +1932,7 @@ var initRotate = (function () {
       }
     }
 
-    mousemove = true;
+    mousemoveRotate = true;
   };
 
   return {
