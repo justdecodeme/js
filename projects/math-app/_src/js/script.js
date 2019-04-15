@@ -1812,14 +1812,12 @@ var initRotate = (function () {
 
     refEl = rotatable;
 
-    // ADD EVENT LISTENER
     if(panelType == "compass") {
       if(rotateBtn.classList.contains('rotate-compass')) {
         // calling draw function to make an arc
         oldToolType = initTools.currToolType;
         initTools.currToolType = 'arc';
         panel.classList.add('pe-none');
-        // panel.addEventListener('mousemove', initDraw.start, false);
       } else if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
         refEl = panel.querySelector('.rotate-hand-ref');
       }
@@ -1892,16 +1890,9 @@ var initRotate = (function () {
     
     panel.classList.remove('pe-none');
     // cvOuter.classList.remove('rotating');
-    
-    // ADD EVENT LISTENER
-    // if(panelType == "compass") {
-    //   if(rotateBtn.classList.contains('rotate-compass')) {
-    //     cv.removeEventListener('mousedown', initDraw.start, false);
-    //   }
-    // }
+
     initTools.currToolType = oldToolType;
 
-    // cv.removeEventListener('mousedown', initDraw.start, false);
     cvOuter.removeEventListener('mousemove', rotate, false);
     cvOuter.removeEventListener('mouseup', end, false);
   };
@@ -1943,9 +1934,6 @@ var initRotate = (function () {
 
     mousemove = true;
   };
-
-  // Explicitly reveal public pointers to the private functions 
-  // that we want to reveal publicly
 
   return {
     start: start
