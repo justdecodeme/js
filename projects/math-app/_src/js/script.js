@@ -216,10 +216,10 @@ var initTools = (function () {
   // handling of satellite buttons which has childrens
   var updateToolsGroup = function (toolGroupType, target, isPrimary, isSecondary) {
     // console.log('updateToolsGroup');
-    
+
     if (isPrimary) {
       // console.log('isPrimary')
-      
+
       // remove 'show-child' class if present
       if (target.classList.contains('show-child')) {
         target.classList.remove('show-child')
@@ -252,12 +252,12 @@ var initTools = (function () {
       }
 
       if (toolGroupType == 'scale' || toolGroupType == 'set-square') {
-        if(toolGroupType == 'scale') {
+        if (toolGroupType == 'scale') {
           var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
         } else if (toolGroupType == "set-square") {
           var scaleSecActiveBtns = document.querySelectorAll('[data-tool-group-type="set-square"].secondary.active');
         }
-        if(scaleSecActiveBtns.length > 0) {
+        if (scaleSecActiveBtns.length > 0) {
           parent.classList.add('active');
         } else {
           parent.classList.remove('active');
@@ -388,9 +388,9 @@ var initDraw = (function () {
         arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
         arc.radius = math.parseToFloat(arc.radius, 2);
 
-        arcTag = `<g id="${currId}">
+        arcTag = `<g class="drawing" id="${currId}">
             <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
-            <polyline class="drawing" style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
+            <polyline style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
           </g>`;
         cv.innerHTML += arcTag;
       }
@@ -426,7 +426,7 @@ var initDraw = (function () {
       });
     }
 
-    cv.removeEventListener('mousemove', draw, false);
+    // cv.removeEventListener('mousemove', draw, false);
     cv.removeEventListener('mouseup', end, false);
     cv.removeEventListener('mouseleave', end, false);
   }
@@ -899,7 +899,7 @@ var fetchSeals = (function () {
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
   var panel = oldPanel = panelType = panelBtn = panelPosObj =
-      panelCloseBtn = panelScaleFlipBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
+    panelCloseBtn = panelScaleFlipBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
 
   var toggle = function (target) {
     panelType = target.dataset.panelBtn;
@@ -907,6 +907,7 @@ var initPanel = (function (e) {
     // open panel
     if (!target.classList.contains('active')) {
       // console.log('open panel');
+
 
       panel = document.querySelector('[data-panel="' + panelType + '"]');
       panelCloseBtn = panel.querySelector('.close-btn');
@@ -923,6 +924,7 @@ var initPanel = (function (e) {
       initMove.dragParent = panel;
       initMove.oldDragParent = panel;
 
+
       // ADD EVENT LISTENERS
       panelCloseBtn.addEventListener('click', close, false);
       initMove.init(panel, 'add');
@@ -931,7 +933,7 @@ var initPanel = (function (e) {
       }
       for (var i = 0; i < rotateBtns.length; i++) {
         rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
-        if(rotateBtns[i].classList.contains('rotate-compass')) {
+        if (rotateBtns[i].classList.contains('rotate-compass-draw')) {
           rotateBtns[i].addEventListener('mousedown', initDraw.start, false);
         }
       }
@@ -955,10 +957,16 @@ var initPanel = (function (e) {
       }
 
 
-      // update current geometry set type
+      // update current geometry set type and remove any highlighted panel if any
       if (panel.dataset.panelSet) {
+        var highlightPanel = document.querySelector('.draggable-set.highlight');
+        if(highlightPanel) {
+          highlightPanel.classList.remove('highlight');
+        }
         initTools.currSetType = panel.dataset.panel;
       }
+      panel.classList.add('highlight');
+
     } else { // close panel if already open
       close(panelType);
     }
@@ -993,7 +1001,7 @@ var initPanel = (function (e) {
     }
     for (var i = 0; i < rotateBtns.length; i++) {
       rotateBtns[i].removeEventListener('mousedown', initRotate.start, false);
-      if (rotateBtns[i].classList.contains('rotate-compass')) {
+      if (rotateBtns[i].classList.contains('rotate-compass-draw')) {
         rotateBtns[i].removeEventListener('mousedown', initDraw.start, false);
       }
     }
@@ -1002,7 +1010,7 @@ var initPanel = (function (e) {
     }
     if (panelFlipBtn) {
       panelFlipBtn.removeEventListener('click', flip, false);
-    }    
+    }
     if (panelScaleFlipBtn) {
       panelScaleFlipBtn.removeEventListener('click', scaleFlip, false);
     }
@@ -1015,18 +1023,18 @@ var initPanel = (function (e) {
     if (panel.classList.contains('draggable-seal')) {
       panel.removeEventListener('click', bringInFront, false);
     }
-    if(panelType.substr(0,5) == "scale") {
+    if (panelType.substr(0, 5) == "scale") {
       var secActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
       var panelGroupBtn = document.querySelector('[data-tool-group-type="scale"]');
-      if(secActiveBtns.length < 1) {
+      if (secActiveBtns.length < 1) {
         panelGroupBtn.classList.remove('active');
-      }      
-    } else if(panelType.substr(0,10) == "set-square") {
+      }
+    } else if (panelType.substr(0, 10) == "set-square") {
       var secActiveBtns = document.querySelectorAll('[data-tool-group-type="set-square"].secondary.active');
       var panelGroupBtn = document.querySelector('[data-tool-group-type="set-square"]');
-      if(secActiveBtns.length < 1) {
+      if (secActiveBtns.length < 1) {
         panelGroupBtn.classList.remove('active');
-      }      
+      }
     }
 
     // update current geometry set type to null
@@ -1035,16 +1043,17 @@ var initPanel = (function (e) {
     }
   }
   var bringInFront = function (e) {
+    console.log('bringInFront');
+
     panel = this.closest('.draggable');
 
+    // update current geometry set type to the front one
     if (oldPanel != panel) {
       panel.style.zIndex = ++initMove.dragParentzIndex;
-      // update current geometry set type to the front one
       if (panel.dataset.panelSet) {
         initTools.currSetType = panel.dataset.panel;
-      }      
+      }
     }
-    console.log('changing')
     oldPanel = panel;
   }
   var trashPanel = function (e, mode, sealType) {
@@ -1086,16 +1095,16 @@ var initPanel = (function (e) {
       }
     }
   }
-  var flip = function(e) {
+  var flip = function (e) {
     // console.log('panel fliping');
 
-    if(panel.classList.contains('flipped')) {
+    if (panel.classList.contains('flipped')) {
       panel.classList.remove('flipped');
     } else {
       panel.classList.add('flipped');
     }
   }
-  var scaleFlip = function(e) {
+  var scaleFlip = function (e) {
     console.log('scale flipping');
   }
 
@@ -1239,7 +1248,7 @@ var initCubes = (function (e) {
       }
     }
     // make 'shortestDist' null if dragParent and dropParent is not of same type
-    if(dropParent) {
+    if (dropParent) {
       if (dragParent.dataset.sealType == 'cubes') {
         if (dragParent.dataset.sealType != dropParent.dataset.sealType) {
           initCubes.shortestDist = null;
@@ -1250,7 +1259,7 @@ var initCubes = (function (e) {
           initCubes.shortestDist = null;
         }
       }
-      if(dragParent.dataset.numberValue == "10000") {
+      if (dragParent.dataset.numberValue == "10000") {
         initCubes.shortestDist = null;
       }
     }
@@ -1684,7 +1693,7 @@ var initCubes = (function (e) {
     var sealType = dragParent.dataset.sealType;
     var src = dragParent.querySelector('img').src;
     var width = dragParent.querySelector('img').width;
-    var height = dragParent.querySelector('img').height;    
+    var height = dragParent.querySelector('img').height;
 
     if (e.target.classList.contains('detach-btn')) { // detach all cubes
       // console.log('detaching All');
@@ -1711,7 +1720,7 @@ var initCubes = (function (e) {
           draggable.style.left = left + 'px';
           draggable.style.top = parseFloat(dragParentTop) + cubeHeight * i + 30 * i + 'px';
           draggable.style.zIndex = ++initMove.dragParentzIndex;
-          if(sealType == 'numbers') {
+          if (sealType == 'numbers') {
             draggable.setAttribute('data-number-design', dragParent.dataset.numberDesign);
             draggable.setAttribute('data-number-value', dragParent.dataset.numberValue);
           }
@@ -1772,16 +1781,15 @@ var initCubes = (function (e) {
 var initRotate = (function () {
   var mousedownRotate = mousemoveRotate = false;
   var startAngle = null;
-  var panelRotation = null;
   var rotation = null;
   var rotateBtn = null;
   var oldRotateBtn = null;
-  var reset = false;
+  var resetRotation = false;
   var rotatable = null;
   var panel;
   var oldPanel = null;
   var panelType = null;
-  var currAngle = 0, x, y;
+  var currAngle = 0, angle, x, y;
   var oldToolType = null;
   var refPoint = {
     x: 0,
@@ -1792,7 +1800,7 @@ var initRotate = (function () {
   var start = function (e) {
     // console.group('Rotate')
     // console.log('start-rotate');
-    
+
     e.preventDefault();
 
     mousedownRotate = true;
@@ -1813,24 +1821,29 @@ var initRotate = (function () {
 
     refEl = rotatable;
 
-    if(panelType == "compass") {
-      if(rotateBtn.classList.contains('rotate-compass')) {
-        // calling draw function to make an arc
-        oldToolType = initTools.currToolType;
-        initTools.currToolType = 'arc';
-        panel.classList.add('pe-none');
-      } else if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
+    // check to enable arc drawing or not
+    // also which element to take as ref for rotation
+    if (panelType == "compass") {
+      if (rotateBtn.classList.contains('rotate-compass')) {
+        if (rotateBtn.classList.contains('rotate-compass-draw')) {
+          // calling draw function to make an arc
+          oldToolType = initTools.currToolType;
+          initTools.currToolType = 'arc';
+          cvOuter.classList.add('pe-none');
+        }
+        refEl = panel.querySelector('.rotate-compass-ref');
+      } else if (rotateBtn.classList.contains('rotate-hand')) {
         refEl = panel.querySelector('.rotate-hand-ref');
       }
     }
 
     refObj = refEl.getBoundingClientRect();
-    
+
     top = refObj.top,
-    left = refObj.left,
-    height = refObj.height,
-    width = refObj.width;
-    
+      left = refObj.left,
+      height = refObj.height,
+      width = refObj.width;
+
     refPoint = {
       x: left + (width / 2),
       y: top + (height / 2)
@@ -1840,73 +1853,78 @@ var initRotate = (function () {
     y = e.clientY - refPoint.y;
 
 
-    if(panelType == 'compass') {
-      if(oldRotateBtn == rotateBtn) {
-        reset = false;
-      } else {
-        reset = true;
-      }
-      if(oldRotateBtn || oldRotateBtn != rotateBtn) {
+    if (panelType == 'compass') { // for compass
+      // update resetRotation variable
+      resetRotation = (oldRotateBtn == rotateBtn) ? false : true;
+      if (oldRotateBtn != rotateBtn) {
         oldRotateBtn = rotateBtn;
       }
-      if(rotateBtn.classList.contains('rotate-point') || rotateBtn.classList.contains('rotate-pencil')) {
-        if (panel.dataset.angleHand == undefined) {
-          startAngle = Math.floor(R2D * Math.atan2(y, x));
-          if(startAngle < 0) {
-            startAngle = 360 - Math.abs(startAngle);
-          }          
-          panel.setAttribute('data-angle-hand', startAngle);
-        } else {
-          startAngle = panel.dataset.angleHand;
-        }
-      } else if(rotateBtn.classList.contains('btn')) {
-        if (panel.dataset.angle == undefined || reset) {
-          startAngle = Math.floor(R2D * Math.atan2(y, x));
-          if(startAngle < 0) {
-            startAngle = 360 - Math.abs(startAngle);
-          }          
-          panel.setAttribute('data-angle', startAngle);
-        } else {
-          startAngle = panel.dataset.angle;
-        }          
-      } else if(rotateBtn.classList.contains('rotate-compass')) {
-        if (panel.dataset.angleCompass == undefined || reset) {
-          // console.log(1)
-          startAngle = Math.floor(R2D * Math.atan2(y, x));
-          if(startAngle < 0) {
-            startAngle = 360 - Math.abs(startAngle);
-          }          
-          panel.setAttribute('data-angle-compass', startAngle);
-        } else {
-          startAngle = panel.dataset.angleCompass;
-        }     
-        // if(panel.dataset.angle) {
-        //   console.log(3)
-        //   console.log(startAngle)
-        //   // startAngle += panel.dataset.angle;
+
+      if (rotateBtn.classList.contains('rotate-hand')) { // rotate hand (2 types)
+        // if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
+        //   if (panel.dataset.anglePencil == undefined) {
+        //     startAngle = Math.floor(R2D * Math.atan2(y, x));
+        //     if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+        //     panel.setAttribute('data-angle-pencil', startAngle);
+        //   } else {
+        //     startAngle = panel.dataset.anglePencil;
+        //   }
+        // } else if (rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
+        //   if (panel.dataset.anglePoint == undefined) {
+        //     startAngle = Math.floor(R2D * Math.atan2(y, x));
+        //     if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+        //     panel.setAttribute('data-angle-point', startAngle);
+        //   } else {
+        //     startAngle = panel.dataset.anglePoint;
+        //   }
         // }
+      } else if (rotateBtn.classList.contains('rotate-compass')) { // rotate compass (2 ways)
+        if (rotateBtn.classList.contains('rotate-compass-only')) { // rotate only 
+          if (panel.dataset.angleCompassOnly == undefined || resetRotation) {
+            startAngle = Math.floor(R2D * Math.atan2(y, x));
+            if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+            panel.setAttribute('data-angle-compass-only', startAngle);
+          } else {
+            startAngle = panel.dataset.angleCompassOnly;
+          }
+        } else if (rotateBtn.classList.contains('rotate-compass-draw')) { // rotate and draw
+          if (panel.dataset.angleCompassDraw == undefined || resetRotation) {
+            startAngle = Math.floor(R2D * Math.atan2(y, x));
+            if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+            panel.setAttribute('data-angle-compass-draw', startAngle);
+          } else {
+            startAngle = panel.dataset.angleCompassDraw;
+          }
+        }
       }
-    } else {
+
+      startAngle = parseFloat(startAngle);
+
+      // for adding previous rotation if current 'rotateBtn' is not same as previous 'rotateBtn'
+      // and if already some rotation is present
+      angle = panel.style.transform.substr(7);
+      angle = angle.substring(0, angle.length - 4);
+      angle = parseFloat(angle);
+
+      if (resetRotation && !isNaN(angle)) {
+        startAngle -= angle;
+        startAngle %= 360;
+        if (rotateBtn.classList.contains('rotate-compass-only')) {
+          panel.setAttribute('data-angle-compass-only', startAngle);
+        } else if (rotateBtn.classList.contains('rotate-compass-draw')) {
+          panel.setAttribute('data-angle-compass-draw', startAngle);
+        }
+      }
+    } else { // for other set widgets
       if (panel.dataset.angle == undefined) {
         startAngle = Math.floor(R2D * Math.atan2(y, x));
-          if(startAngle < 0) {
-            startAngle = 360 - Math.abs(startAngle);
-          }        
+        if (startAngle < 0) {
+          startAngle = 360 - Math.abs(startAngle);
+        }
         panel.setAttribute('data-angle', startAngle);
       } else {
         startAngle = panel.dataset.angle;
       }
-    }
-
-    startAngle = parseFloat(startAngle);
-
-    var currAngle = panel.style.transform.substr(7);
-    currAngle = currAngle.substring(0, currAngle.length - 4);
-    currAngle = parseFloat(currAngle);
-    if (!isNaN(currAngle) && reset) {
-      startAngle -= currAngle;
-      startAngle %= 360;
-      panel.setAttribute('data-angle', startAngle);
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
@@ -1916,10 +1934,10 @@ var initRotate = (function () {
   var end = function (e) {
     // console.log('end-rotate');
     // console.groupEnd();
-    
+
     mousedownRotate = mousemoveRotate = false
-    
-    panel.classList.remove('pe-none');
+
+    cvOuter.classList.remove('pe-none');
     // cvOuter.classList.remove('rotating');
 
     initTools.currToolType = oldToolType;
@@ -1929,49 +1947,52 @@ var initRotate = (function () {
   };
 
   var rotate = function (e) {
-    
+
     if (mousedownRotate && mousemoveRotate) {
       // console.log('rotate');
 
       e.preventDefault();
-  
+
       x = e.clientX - refPoint.x;
       y = e.clientY - refPoint.y;
       currAngle = Math.floor(R2D * Math.atan2(y, x));
 
-      // console.log('1-------------- ', currAngle, startAngle, rotation)
-      if(currAngle < 0) {
+      if (currAngle < 0) {
         currAngle = 360 - Math.abs(currAngle);
       }
       rotation = currAngle - startAngle;
-      // console.log('----------', currAngle, startAngle, rotation)
       if (rotation < 0) {
         rotation = 360 + currAngle - Math.abs(startAngle);
         // console.log(' ', currAngle, startAngle, rotation)
       }
-      
+
       if (panelType == 'clock') {
         rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
-      } else if(panelType == "compass") {
-        if(rotateBtn.classList.contains('rotate-point')) {
-          // if(CurrAngle > 85) CurrAngle = 85; else
-          // if(CurrAngle < 50) CurrAngle = 50;
-          // CurrAngle = CurrAngle + panelRotation;
-          rotatable.style.transform = "translateY(-50%) rotate(" + CurrAngle + "deg)";
-        } else if(rotateBtn.classList.contains('rotate-pencil')) {
-          if(CurrAngle > 130) CurrAngle = 130; else
-          if(CurrAngle < 95) CurrAngle = 95;
-          rotatable.style.transform = "translateY(-50%) rotate(" + CurrAngle + "deg)";
-        // } else if(rotateBtn.classList.contains('rotate-compass')){
-        //   rotatable.style.transform = "rotate(" + rotation + "deg)";
-        } else {
+      } else if (panelType == "compass") { // rotate compass itself or its hands
+        if (rotateBtn.classList.contains('rotate-hand')) {
+          if (!isNaN(angle)) { currAngle = currAngle - angle; }
+          if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
+            if (currAngle > 130) currAngle = 130; else
+              if (currAngle < 95) currAngle = 95;
+          } else if(rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
+            // if(currAngle > 85) currAngle = 85; else
+            // if(currAngle < 50) currAngle = 50;
+          }
+          if(panel.classList.contains('flipped')) { // if compass is flipped
+            if(currAngle <= 180) {
+              currAngle = 180 - currAngle;
+            } else {
+              currAngle = 180 + (360 - currAngle);
+            }
+          }
+          rotatable.style.transform = "translateY(-50%) rotate(" + currAngle + "deg)";
+        } else { // rotate compass set
           rotatable.style.transform = "rotate(" + rotation + "deg)";
         }
-      } else {
+      } else { // rotate other set types
         rotatable.style.transform = "rotate(" + rotation + "deg)";
       }
-    }
-
+    } 
     mousemoveRotate = true;
   };
 
@@ -1990,13 +2011,13 @@ var initScale = (function (e) {
   var h = null;
   var d = null;
   var ratio = null;
-  
+
   var start = function (e) {
     // console.log('start');
 
     w = panel.getBoundingClientRect().width;
     h = panel.getBoundingClientRect().height;
-    ratio = w/h;
+    ratio = w / h;
     startPoint = math.getMousePosition(e, cv);
     // console.log('startPoint: ', startPoint.x)
 
@@ -2011,10 +2032,10 @@ var initScale = (function (e) {
     d = currPoint.x - startPoint.x;
     // console.log(startPoint.x, currPoint.x, d)
 
-    console.log(w, d, ratio, w+d, w*ratio)
-    if(ratio > 1) { // width is more
+    console.log(w, d, ratio, w + d, w * ratio)
+    if (ratio > 1) { // width is more
       panel.style.width = w + d + 'px';
-      panel.style.height = h + (d*ratio) + 'px';
+      panel.style.height = h + (d * ratio) + 'px';
     } else { // height is more
 
     }
@@ -2153,17 +2174,17 @@ var initAbacus = function () {
 // initAbacus();
 
 // math functions - mostly trigonometry
-var math = (function(e) {
+var math = (function (e) {
   var toolDrawingOffset = 50;
   var slope = 0;
   var inRange = false;
 
-  var parseToFloat = function(number, decimal) {
+  var parseToFloat = function (number, decimal) {
     return parseFloat(number.toFixed(decimal));
   }
 
   // returns 'left' and 'right' position of given element
-  var getElPosition = function(el) {
+  var getElPosition = function (el) {
     var pos = {
       left: el.getBoundingClientRect().left,
       right: el.getBoundingClientRect().top
@@ -2172,7 +2193,7 @@ var math = (function(e) {
   }
 
   // returns the mouse position w.r.t given element
-  var getMousePosition = function(e, el) {
+  var getMousePosition = function (e, el) {
     var pos = getElPosition(el);
     var point = {
       x: 0,
@@ -2184,7 +2205,7 @@ var math = (function(e) {
   }
 
   // not useing for now
-  var getLineEquation = function() {
+  var getLineEquation = function () {
     // var m = slope;
     // // y - y1 = m (x - x1) || mx - y + y1 - mx1 = 0
     // // return `y-${lines.l12.p1.y} = ${m} (x-${lines.l12.p1.x})`;
@@ -2193,9 +2214,9 @@ var math = (function(e) {
   }
 
   // get points coordinates with in the set
-  var getSetPoints = function(currSetType) {
+  var getSetPoints = function (currSetType) {
     var pointsObj = {};
-    var set = document.querySelector('[data-panel="'+currSetType+'"]');
+    var set = document.querySelector('[data-panel="' + currSetType + '"]');
     var pointsEl = set.querySelectorAll('.point');
     var canvasPosition = getElPosition(cv);
     for (let i = 0; i < pointsEl.length; i++) {
@@ -2209,7 +2230,7 @@ var math = (function(e) {
       var pointTop = pointsEl[i].getBoundingClientRect().top;
       var pointWidth = pointsEl[i].getBoundingClientRect().width;
       var pointHeight = pointsEl[i].getBoundingClientRect().height;
-  
+
       pointObj['x'] = parseFloat((pointLeft + (pointWidth / 2) - cvLeft).toFixed(2));
       pointObj['y'] = parseFloat((pointTop + (pointHeight / 2) - cvTop).toFixed(2));
       pointsObj[i + 1] = pointObj;
@@ -2217,12 +2238,12 @@ var math = (function(e) {
     return pointsObj;
   }
 
-  var getLines = function(e) {
+  var getLines = function (e) {
     var lines = {};
     var pointsObj = math.getSetPoints(initTools.currSetType);
 
     var pointsLength = Object.size(pointsObj);
-  
+
     for (let i = 1; i <= pointsLength; i++) {
       var j = (i == pointsLength) ? 1 : i + 1;
       var line = {
@@ -2234,18 +2255,18 @@ var math = (function(e) {
     return lines;
   }
 
-  var getSlope = function(line) {
+  var getSlope = function (line) {
     // m = (y2 - y1) / (x2 - x1)
     var m = (line.p2.y - line.p1.y) / (line.p2.x - line.p1.x);
     return math.parseToFloat(m, 2);
   }
-  
-  var calculatePerpendicularDistFromLine = function(line, point, m) {
+
+  var calculatePerpendicularDistFromLine = function (line, point, m) {
     if (m == Infinity || m == -Infinity) return Math.abs(line.p1.x - point.x);
     return Math.abs((m * point.x - point.y + line.p1.y - m * line.p1.x) / (Math.sqrt(1 + m * m)));
   }
 
-  var getCoords = function(pointsObj, side, point, m) {
+  var getCoords = function (pointsObj, side, point, m) {
     // console.log('getCoord');
 
     // y = m (x - x1) + y1
@@ -2257,10 +2278,10 @@ var math = (function(e) {
     // var x = (m * (y2 - y1) + m * m * x1 - x2) / ((m * m) + m)
 
     var x, y, _x;
-    var s = initDraw.strokeWidth/2;
-    
+    var s = initDraw.strokeWidth / 2;
+
     if (m == 0) {
-      if(side == 1) {
+      if (side == 1) {
         s = (pointsObj[1].x < pointsObj[3].x) ? -s : s;
       } else {
         s = (pointsObj[1].x < pointsObj[3].x) ? s : -s;
@@ -2268,7 +2289,7 @@ var math = (function(e) {
       x = point.x;
       y = pointsObj[side].y + s;
     } else if (m == Infinity || m == -Infinity) {
-      if(side == 1) {
+      if (side == 1) {
         s = (pointsObj[1].x < pointsObj[3].x) ? -s : s;
       } else {
         s = (pointsObj[1].x < pointsObj[3].x) ? s : -s;
@@ -2279,23 +2300,23 @@ var math = (function(e) {
       // points coords on scale
       x1 = ((point.x / m) + (m * pointsObj[side].x) + point.y - pointsObj[side].y) / (m + (1 / m));
       y1 = m * (x1 - pointsObj[side].x) + pointsObj[side].y;
-      
+
       // points coords modified as per stroke width
-      m = -1/m;
-      if(pointsObj[1].x > pointsObj[4].x) {
-        if(side == 1) {
-          x = x1 + Math.sqrt((s*s)/(1+m*m)); 
-        } else if(side == 3) {
-          x = x1 - Math.sqrt((s*s)/(1+m*m)); 
+      m = -1 / m;
+      if (pointsObj[1].x > pointsObj[4].x) {
+        if (side == 1) {
+          x = x1 + Math.sqrt((s * s) / (1 + m * m));
+        } else if (side == 3) {
+          x = x1 - Math.sqrt((s * s) / (1 + m * m));
         }
-        y = m*(x-x1)+y1
+        y = m * (x - x1) + y1
       } else {
-        if(side == 1) {
-          x = x1 - Math.sqrt((s*s)/(1+m*m)); 
-        } else if(side == 3) {
-          x = x1 + Math.sqrt((s*s)/(1+m*m)); 
+        if (side == 1) {
+          x = x1 - Math.sqrt((s * s) / (1 + m * m));
+        } else if (side == 3) {
+          x = x1 + Math.sqrt((s * s) / (1 + m * m));
         }
-        y = m*(x-x1)+y1
+        y = m * (x - x1) + y1
       }
     }
     // console.log(`side: ${side} m: ${m}`)
@@ -2306,19 +2327,19 @@ var math = (function(e) {
     }
   }
 
-  var sideAndRange = function(currPoint) {
+  var sideAndRange = function (currPoint) {
     var lines = getLines();
 
     // to check if point is between parallel lines
     // d = (x−x1)(y2−y1)−(y−y1)(x2−x1)
     var check12 = (currPoint.x - (lines.l12.p1.x)) * (lines.l12.p2.y - lines.l12.p1.y) - (currPoint.y - lines.l12.p1.y) * (lines.l12.p2.x - lines.l12.p1.x);
     var check34 = (currPoint.x - (lines.l34.p1.x)) * (lines.l34.p2.y - lines.l34.p1.y) - (currPoint.y - lines.l34.p1.y) * (lines.l34.p2.x - lines.l34.p1.x);
-  
+
     var check23 = (currPoint.x - (lines.l23.p1.x)) * (lines.l23.p2.y - lines.l23.p1.y) - (currPoint.y - lines.l23.p1.y) * (lines.l23.p2.x - lines.l23.p1.x);
     var check41 = (currPoint.x - (lines.l41.p1.x)) * (lines.l41.p2.y - lines.l41.p1.y) - (currPoint.y - lines.l41.p1.y) * (lines.l41.p2.x - lines.l41.p1.x);
-  
+
     var isInBtwParallelLines = ((check12 < 0 && check34 < 0) || (check12 > 0 && check34 > 0) || (check23 < 0 && check41 < 0) || (check23 > 0 && check41 > 0)) ? true : false;
-  
+
     var line;
     var perpendicularDist;
     var side = '';
@@ -2355,7 +2376,7 @@ var math = (function(e) {
         }
       }
       if (toolDrawingOffset >= perpendicularDist) {
-        if(side == 1 || side == 3) {
+        if (side == 1 || side == 3) {
           inRange = true;
         } else {
           inRange = false;
@@ -2379,7 +2400,7 @@ var math = (function(e) {
       side: side,
       slope, slope
     }
-  }  
+  }
 
   return {
     parseToFloat: parseToFloat,

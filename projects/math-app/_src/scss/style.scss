@@ -67,6 +67,12 @@ body {
       pointer-events: none;
     }
   }
+
+  &.pe-none {
+    .draggable {
+      pointer-events: none;
+    }
+  }  
 }
 
 /***********************************/
@@ -286,6 +292,7 @@ body {
         display: flex;
       }      
     }
+
   }
 
   &.draggable-widget,
@@ -380,11 +387,18 @@ body {
 
   &.draggable-set {
     .btn {
+      display: none;
       position: absolute;
       width: 20px;
       cursor: pointer;
       &:hover {
         opacity: .8;
+      }
+    }    
+    &.highlight {
+      border: 1px solid rgba(0,0,0,0.1);
+      .btn {
+        display: block;
       }
     }    
   }
@@ -752,7 +766,7 @@ body {
   // top: 340px;
   // display: block!important;
   /* transform: rotate(45deg); */
-  // transform-origin: 67.4% 96.6%;
+  transform-origin: 67.4% 96.6%;
   .outer {
     width: 70px;
     height: 70px;
@@ -855,19 +869,16 @@ body {
   //   transform-origin: 93.3% 85%;
   // }
   &.flipped {
-    background: lightcoral;
-    transform-origin: 32.6% 3.4%;
+    // background: lightcoral;
+    transform-origin: 32.6% 96.6%;
     .outer {
       transform: translateX(-50%) rotateY(180deg);
     }
   }
-  &.pe-none {
-    pointer-events: none;
-  }
 }
 [data-panel=protractor] {
   background: lightyellow;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  // border: 1px solid rgba(0, 0, 0, 0.1);
   transform-origin: center bottom;
   
   .protractor {
@@ -899,7 +910,7 @@ body {
   }
 }
 [data-panel^=set-square] {
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  // border: 1px solid rgba(0, 0, 0, 0.1);
   background: lightyellow;
   .close-btn {
     right: 100%;
