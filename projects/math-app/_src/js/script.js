@@ -697,6 +697,7 @@ var initMove = (function () {
 
     // highligh if 'draggable-cube' is in range
     if (dragParent.classList.contains('draggable-cubes')) {
+      dragParent.classList.remove('detach');
       // initCubes.isSnapping = true;
       initCubes.getShortestDist();
       // highlight groups accordingly
@@ -1278,6 +1279,10 @@ var initCubes = (function (e) {
   var highlight = function (flag) {
     if (flag) {
       // console.log('highlighting')
+      var oldHighlight = document.querySelector('.draggable-cubes.highlight');
+      if(oldHighlight) {
+        oldHighlight.classList.remove('highlight');
+      }
       dragParent.classList.add('highlight');
       dropParent.classList.add('highlight');
     } else {
@@ -1297,7 +1302,7 @@ var initCubes = (function (e) {
 
     // update 'row' and 'col' for numbers sealTypes
     if (sealType == 'numbers') {
-      row = 4;
+      row = 10;
       col = 0;
     }
     cubeLimit = (snapType == "vertical") ? row : col;
@@ -1310,6 +1315,8 @@ var initCubes = (function (e) {
       var dragParentCubeCount = dragParent.querySelectorAll('.cube-outer').length;
     }
     var totalCubes = dropParentCubeCount + dragParentCubeCount;
+    // console.log(cubeLimit, totalCubes)
+
 
     // console.log('snapType: ', snapType);
     // console.log('dropParentCubeCount: ', dropParentCubeCount);
@@ -1413,8 +1420,9 @@ var initCubes = (function (e) {
 
       var canBeAddedCubes = cubeLimit - dropParentCubeCount;
       var remainingCubes = dragParentCubeCount - canBeAddedCubes;
+      // console.log(canBeAddedCubes, remainingCubes)
 
-      if (snapType == "complete") {
+      if (snapType == "vertical") {
         // make vertical complete group (layout needs to update)
         cubeOuter = `<div class="cube-outer">`;
         for (var r = 0; r < row; r++) {
