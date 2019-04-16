@@ -283,7 +283,7 @@ body {
   &.draggable-tool,
   &.draggable-widget {
     display: none;
-    left: 230px;
+    left: 130px;
     top: 340px;
 
     &.active {
@@ -513,11 +513,14 @@ body {
 
   &.horizontal {
     flex-flow: row;
-    box-shadow: 0 0 5px 5px rgba(0, 153, 255, 0.555);
   }
-
-  &.horizontal.vertical {
-    box-shadow: 0 0 5px 5PX rgba(255, 0, 0, 0.479);
+  
+  &.horizontal {
+    box-shadow: 0 0 5px 5PX rgba(0, 0, 0, 0.151);
+  }
+  
+  &.complete {
+    box-shadow: 0 0 5px 5px rgba(0, 153, 255, 0.555);
   }
 
   &.highlight {

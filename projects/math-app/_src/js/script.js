@@ -1126,7 +1126,7 @@ var initCubes = (function (e) {
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
   var snapDist = 40;
   var snapInfo = { i: 0, j: 0, id: '' };
-  var row = 4;
+  var row = 3;
   var col = 3;
   var dragParentLeft = dragParentTop = shortestDist = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
   var detachType = null;
@@ -1393,6 +1393,7 @@ var initCubes = (function (e) {
             dropParent.classList.add('vertical');
           } else if (snapType == "horizontal") {
             dropParent = initMove.dropParent;
+            dropParent.classList.add('complete');
           }
         }
 
@@ -1407,7 +1408,7 @@ var initCubes = (function (e) {
       var canBeAddedCubes = cubeLimit - dropParentCubeCount;
       var remainingCubes = dragParentCubeCount - canBeAddedCubes;
 
-      if (snapType == "vertical") {
+      if (snapType == "complete") {
         // make vertical complete group (layout needs to update)
         cubeOuter = `<div class="cube-outer">`;
         for (var r = 0; r < row; r++) {
@@ -1704,7 +1705,7 @@ var initCubes = (function (e) {
     if (e.target.classList.contains('detach-btn')) { // detach all cubes
       // console.log('detaching All');
 
-      if (detachType == 'vertical') {
+      if (detachType == 'vertical') { // vertical detaching all
         console.log('vertical detaching all')
 
         var cubesToDetach = dragParent.querySelectorAll('.drag-area').length;
@@ -1766,7 +1767,7 @@ var initCubes = (function (e) {
           draggable.addEventListener('click', detachUI, false);
         }
 
-      } else {
+      } else { // horizontal detaching all
         console.log('horizontal detaching all')
 
       }
