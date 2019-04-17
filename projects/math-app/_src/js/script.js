@@ -1134,6 +1134,8 @@ var initCubes = (function (e) {
   var snapInfo = { i: 0, j: 0, id: '' };
   var row = 2;
   var col = 3;
+  var rowNumber = 10;
+  var colNumber = 0;
   var dragParentLeft = dragParentTop = shortestDist = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
   var detachType = null;
 
@@ -1302,8 +1304,8 @@ var initCubes = (function (e) {
 
     // update 'row' and 'col' for numbers sealTypes
     if (sealType == 'numbers') {
-      row = 10;
-      col = 0;
+      row = rowNumber;
+      col = colNumber;
     }
     cubeLimit = (snapType == "vertical") ? row : col;
 
