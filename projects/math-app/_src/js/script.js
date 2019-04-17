@@ -961,8 +961,10 @@ var initPanel = (function (e) {
       if (panelType == "abacus") {
         var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
         for (var i = 0; i < beads.length; i++) {
-          beads[i].addEventListener('click', initAbacus2.changePos, false);
+          beads[i].addEventListener('click', initAbacus.changePos, false);
         }
+        var leftCol = document.getElementById('leftCol');
+        leftCol.addEventListener('mousedown', initAbacus.resetStart, false);
       }
       if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
@@ -1040,9 +1042,11 @@ var initPanel = (function (e) {
     }
     if (panelType == "abacus") {
       var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
+      var leftCol = document.getElementById('leftCol');
       for (var i = 0; i < beads.length; i++) {
-        beads[i].removeEventListener('click', initAbacus2.changePos, false);
+        beads[i].removeEventListener('click', initAbacus.changePos, false);
       }
+      leftCol.removeEventListener('mousedown', initAbacus.resetStart, false);
     }
     if (panel.classList.contains('draggable-seal')) {
       panel.removeEventListener('click', bringInFront, false);
@@ -2209,48 +2213,9 @@ var initCalc = (function (e) {
 })();
 
 // abacus logic
-var initAbacus = function () {
-    mousedown = 0;
-    body = document.querySelector('body');
-    body.addEventListener('mousedown', function () {
-      mousedown = 1;
-    });
-    body.addEventListener('mouseup', function () {
-      mousedown = 0;
-    });
-    upper_part = document.querySelectorAll('.upper_layer');
-    upper_part.forEach(function (x) {
-      // x.addEventListener('mousemove', reset_upper_boxes.bind(null, event, x));
-    });
+var initAbacus = (function () {
+  var panel = document.querySelector('[data-panel="abacus"]');
 
-    // lower_part = document.querySelectorAll('.bottom_boxes');
-    // lower_part.forEach(function (x) {
-    //   x.addEventListener('mousemove', reset_lower_boxes.bind(null, event, x));
-    // });
-
-  function reset_lower_boxes(a, evt, c) {
-    column_id = evt.parentNode.getAttribute('id');
-    boxes = document.querySelectorAll('#' + column_id + ' .bottom_boxes');
-    if (mousedown) {
-      if (evt.dataset.state == "up") {
-        for (i = 0; i <= 3; ++i) {
-          boxes[i].setAttribute('transform', 'translate(0,0)');
-          boxes[i].dataset.state = "down";
-        }
-      }
-    }
-  }
-
-  function reset_upper_boxes(a, evt, c) {
-    if (mousedown) {
-      evt.setAttribute('transform', 'translate(0,0)');
-    }
-  }
-}
-initAbacus();
-
-var initAbacus2 = (function () {
-  
   var changePos = function() {
     // console.log('changing position');
 
@@ -2283,8 +2248,44 @@ var initAbacus2 = (function () {
     }
   }
   
+  var resetStart = function(e) {
+    // console.log('resetStart');
+    
+    panel.addEventListener('mousemove', reset, false);
+    cvOuter.addEventListener('mouseup', resetEnd, false);
+    cvOuter.addEventListener('mouseleave', resetEnd, false);
+  }
+  var reset = function(e) {
+    // console.log('reset');
+    var t = e.target.closest('.bead');
+    
+    if (t) {
+      var layer = t.dataset.layer;
+      if(layer == "up") {
+        t.setAttribute('transform', 'translate(0, 0)');
+        t.dataset.state = 'down';
+      } else {
+        var beads = t.parentNode.querySelectorAll('.bead');
+        var totalBeads = beads.length;
+        var count = t.dataset.pos;
+        for (var i = 0; i < totalBeads; i++) {
+          beads[i].setAttribute('transform', 'translate(0, 0)');
+          beads[i].dataset.state = 'down';
+        }
+      }
+    }
+  }
+  var resetEnd = function(e) {
+    // console.log('resetEnd');
+
+    panel.removeEventListener('mousemove', reset, false);
+    cvOuter.removeEventListener('mouseup', resetEnd, false);
+    cvOuter.removeEventListener('mouseleave', resetEnd, false);
+  }
+  
   return {
-    changePos: changePos
+    changePos: changePos,
+    resetStart: resetStart
   }
 })();
 
