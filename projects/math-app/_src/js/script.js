@@ -958,6 +958,12 @@ var initPanel = (function (e) {
       if (panelScaleFlipBtn) {
         panelScaleFlipBtn.addEventListener('click', scaleFlip, false);
       }
+      if (panelType == "abacus") {
+        var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
+        for (var i = 0; i < beads.length; i++) {
+          beads[i].addEventListener('click', initAbacus2.changePos, false);
+        }
+      }
       if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
         for (var i = 0; i < buttons.length; i++) {
@@ -1030,6 +1036,12 @@ var initPanel = (function (e) {
       var buttons = panel.querySelectorAll('[data-button-type]');
       for (var i = 0; i < buttons.length; i++) {
         buttons[i].removeEventListener('click', initCalc.calculate, false);
+      }
+    }
+    if (panelType == "abacus") {
+      var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
+      for (var i = 0; i < beads.length; i++) {
+        beads[i].removeEventListener('click', initAbacus2.changePos, false);
       }
     }
     if (panel.classList.contains('draggable-seal')) {
@@ -2198,8 +2210,6 @@ var initCalc = (function (e) {
 
 // abacus logic
 var initAbacus = function () {
-  window.onload = init
-  function init() {
     mousedown = 0;
     body = document.querySelector('body');
     body.addEventListener('mousedown', function () {
@@ -2210,18 +2220,13 @@ var initAbacus = function () {
     });
     upper_part = document.querySelectorAll('.upper_layer');
     upper_part.forEach(function (x) {
-      x.addEventListener('click', change_pos.bind(null, event, x));
-      x.addEventListener('mousemove', reset_upper_boxes.bind(null, event, x));
+      // x.addEventListener('mousemove', reset_upper_boxes.bind(null, event, x));
     });
-    // check = document.querySelector("#Group_389");
-    // check.setAttribute('transform','translate(0,-43)');
 
-    lower_part = document.querySelectorAll('.bottom_boxes');
-    lower_part.forEach(function (x) {
-      x.addEventListener('click', change_pos_lower.bind(null, event, x));
-      x.addEventListener('mousemove', reset_lower_boxes.bind(null, event, x));
-    });
-  }
+    // lower_part = document.querySelectorAll('.bottom_boxes');
+    // lower_part.forEach(function (x) {
+    //   x.addEventListener('mousemove', reset_lower_boxes.bind(null, event, x));
+    // });
 
   function reset_lower_boxes(a, evt, c) {
     column_id = evt.parentNode.getAttribute('id');
@@ -2241,39 +2246,47 @@ var initAbacus = function () {
       evt.setAttribute('transform', 'translate(0,0)');
     }
   }
-
-  function change_pos_lower(a, evt, c) {
-    column_id = evt.parentNode.getAttribute('id');
-    boxes = document.querySelectorAll('#' + column_id + ' .bottom_boxes');
-    till = evt.dataset.pos;
-    if (evt.dataset.state == "down") {
-      for (i = 0; i <= till; ++i) {
-        boxes[i].setAttribute('transform', 'translate(0,-43)');
-        boxes[i].dataset.state = "up";
-      }
-    }
-    else {
-      for (i = till; i <= 3; ++i) {
-        boxes[i].setAttribute('transform', 'translate(0,0)');
-        boxes[i].dataset.state = "down";
-      }
-    }
-  }
-
-  function change_pos(a, evt, c) {
-    evt.style.background = 'red';
-    if (evt.dataset.pos == "down") {
-      evt.setAttribute('transform', 'translate(0,-20)');
-      evt.dataset.pos = "up";
-    }
-    else {
-      evt.setAttribute('transform', 'translate(0,0)');
-      evt.dataset.pos = "down";
-    }
-  }
-
 }
-// initAbacus();
+initAbacus();
+
+var initAbacus2 = (function () {
+  
+  var changePos = function() {
+    // console.log('changing position');
+
+    var layer = this.dataset.layer;
+    var state = this.dataset.state;
+    
+    if(layer == 'up') { // up layer
+      if(state == 'down') {
+        this.setAttribute('transform', 'translate(0, -20)');
+        this.dataset.state = 'up';
+      } else {
+        this.setAttribute('transform', 'translate(0, 0)');
+        this.dataset.state = 'down';
+      }
+    } else { // down layer
+      var beads = this.parentNode.querySelectorAll('.bead'); 
+      var count = this.dataset.pos;
+      if (state == 'down') {
+        for (var i = 0; i <= count; i++) {
+          beads[i].setAttribute('transform', 'translate(0,-43)');
+          beads[i].dataset.state = 'up';
+        }
+      } else {
+        var totalBeads = beads.length;
+        for (var i = count; i < totalBeads; i++) {
+          beads[i].setAttribute('transform', 'translate(0, 0)');
+          beads[i].dataset.state = 'down';
+        }
+      }
+    }
+  }
+  
+  return {
+    changePos: changePos
+  }
+})();
 
 // math functions - mostly trigonometry
 var math = (function (e) {
