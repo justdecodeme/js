@@ -334,6 +334,7 @@ var initDraw = (function () {
     },
     'dotRadius': 5
   }
+  var currSet = null;
 
   // start drawing or erasing
   var start = function (e) {
@@ -360,14 +361,15 @@ var initDraw = (function () {
 
     // if some set is present on canvas
     if (currSetType) {
+      currSet = document.querySelector('[data-panel="' + currSetType + '"]');
       if (currSetType.substr(0, 5) == "scale") {
+
         pointsObj = math.getSetPoints(initTools.currSetType);
 
         // check if drawing point is inRange with currentSetType
         inRangeObj = math.sideAndRange(currPoint);
         inStartedInRange = inRangeObj.inRange;
         m = inRangeObj.slope;
-        console.log(inRangeObj)
 
         // update starting coordinates of drawing if set is in range
         if (inStartedInRange) {
@@ -376,7 +378,6 @@ var initDraw = (function () {
           currPoint.y = targetPoint.y;
         }
       }
-
       if (currSetType == 'compass' && currToolType == "arc") {
         pointsObj = math.getSetPoints(initTools.currSetType);
 
@@ -417,6 +418,7 @@ var initDraw = (function () {
     // console.groupEnd();
 
     mousedownDraw = mousemoveDraw = false;
+    inStartedInRange = false;
 
     if (currId !== null && document.getElementById(currId) != null) {
       undoStack.push({
@@ -911,7 +913,7 @@ var fetchSeals = (function () {
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
   var panel = oldPanel = panelType = panelBtn = panelPosObj =
-    panelCloseBtn = panelScaleFlipBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
+    panelCloseBtn = scaleFlipBtn = scalePenBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
 
   var toggle = function (target) {
     panelType = target.dataset.panelBtn;
@@ -926,7 +928,8 @@ var initPanel = (function (e) {
       panelScaleBtn = panel.querySelector('.scale-btn');
       panelFlipBtn = panel.querySelector('.flip-btn');
       rotateBtns = panel.querySelectorAll('.rotate-btn');
-      panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
+      scaleFlipBtn = panel.querySelector('.scale-flip-btn');
+      scalePenBtn = panel.querySelector('.scale-pen-btn');
       draggableSeals = panel.getElementsByClassName('draggable-seal');
 
       target.classList.add('active');
@@ -955,8 +958,11 @@ var initPanel = (function (e) {
       if (panelFlipBtn) {
         panelFlipBtn.addEventListener('click', flip, false);
       }
-      if (panelScaleFlipBtn) {
-        panelScaleFlipBtn.addEventListener('click', scaleFlip, false);
+      if (scaleFlipBtn) {
+        scaleFlipBtn.addEventListener('click', scaleFlip, false);
+      }
+      if (scalePenBtn) {
+        scalePenBtn.addEventListener('click', scaleDraw, false);
       }
       if (panelType == "abacus") {
         var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
@@ -980,7 +986,7 @@ var initPanel = (function (e) {
       // update current geometry set type and remove any highlighted panel if any
       if (panel.dataset.panelSet) {
         var highlightPanel = document.querySelector('.draggable-set.highlight');
-        if(highlightPanel) {
+        if (highlightPanel) {
           highlightPanel.classList.remove('highlight');
         }
         initTools.currSetType = panel.dataset.panel;
@@ -1006,7 +1012,8 @@ var initPanel = (function (e) {
     panelCloseBtn = panel.querySelector('.close-btn');
     panelFlipBtn = panel.querySelector('.flip-btn');
     panelScaleBtn = panel.querySelector('.scale-btn');
-    panelScaleFlipBtn = panel.querySelector('.scale-flip-btn');
+    scaleFlipBtn = panel.querySelector('.scale-flip-btn');
+    scalePenBtn = panel.querySelector('.scale-pen-btn');
 
     draggableSeals = panel.getElementsByClassName('draggable-seal');
     panel.classList.remove('active');
@@ -1031,8 +1038,12 @@ var initPanel = (function (e) {
     if (panelFlipBtn) {
       panelFlipBtn.removeEventListener('click', flip, false);
     }
-    if (panelScaleFlipBtn) {
-      panelScaleFlipBtn.removeEventListener('click', scaleFlip, false);
+    if (scaleFlipBtn) {
+      scaleFlipBtn.removeEventListener('click', scaleFlip, false);
+    }
+    if (scalePenBtn) {
+      scalePenBtn.classList.remove('active');
+      scalePenBtn.removeEventListener('click', scaleDraw, false);
     }
     if (panelType == "calculator") {
       var buttons = panel.querySelectorAll('[data-button-type]');
@@ -1135,6 +1146,15 @@ var initPanel = (function (e) {
   var scaleFlip = function (e) {
     console.log('scale flipping');
   }
+  var scaleDraw = function (e) {
+    console.log('scale drawing');
+
+    if(this.classList.contains('active')) {
+      this.classList.remove('active');
+    } else {
+      this.classList.add('active');
+    }
+  }
 
   return {
     toggle: toggle,
@@ -1148,8 +1168,8 @@ var initCubes = (function (e) {
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
   var snapDist = 40;
   var snapInfo = { i: 0, j: 0, id: '' };
-  var row = 2;
-  var col = 3;
+  var row = 10;
+  var col = 10;
   var rowNumber = 10;
   var colNumber = 0;
   var dragParentLeft = dragParentTop = shortestDist = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
@@ -1205,7 +1225,6 @@ var initCubes = (function (e) {
     // console.log('geting shortest dist');
 
     var shortestDist = null;
-    // console.log(dragParent, dropParent)
 
     snapInfo = { i: 0, j: 0, id: '' };
 
@@ -1262,10 +1281,12 @@ var initCubes = (function (e) {
             initCubes.shortestDist = shortestDist;
             dropParent = initMove.dropParent = document.querySelector('[data-id="' + dropCoord + '"');
 
+            // console.log(snapType, dragParent, dropParent)
+
             // no highlighting if element has already enought cubes in column
             if (snapType == 'vertical') {
-              if (dropParent.classList.contains('vertical')) {
-                // initCubes.shortestDist = null
+              if (dropParent.classList.contains('horizontal')) {
+                initCubes.shortestDist = null
               }
             }
             if (snapType == 'horizontal') {
@@ -1298,7 +1319,7 @@ var initCubes = (function (e) {
     if (flag) {
       // console.log('highlighting')
       var oldHighlight = document.querySelector('.draggable-cubes.highlight');
-      if(oldHighlight) {
+      if (oldHighlight) {
         oldHighlight.classList.remove('highlight');
       }
       dragParent.classList.add('highlight');
@@ -1722,6 +1743,7 @@ var initCubes = (function (e) {
   var detachUI = function (e) {
     // console.log('detachUI');
 
+    var dragParent = e.target.closest('.draggable-cubes');
     var dragParentLeft = dragParent.style.left;
     var dragParentTop = dragParent.style.top;
     var left = parseFloat(dragParentLeft);
@@ -1808,7 +1830,7 @@ var initCubes = (function (e) {
         // dragParent.querySelector('.detach-btn').remove();
 
         // left one
-        for(var c = 0; c < cubesToDetach; c++) {
+        for (var c = 0; c < cubesToDetach; c++) {
           dragParent.querySelector('[data-index="' + c + '"]').remove();
         }
         dragParent.classList.remove('detach')
@@ -1839,9 +1861,9 @@ var initCubes = (function (e) {
           draggable.style.left = parseFloat(dragParentLeft) + cubeWidth * i + 30 * i + 'px';
           draggable.style.top = top + 'px';
           draggable.style.zIndex = ++initMove.dragParentzIndex;
-          
+
           cubeOuter = `<div class="cube-outer">`;
-          
+
           for (var r = 0; r < row; r++) {
             cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
           }
@@ -1853,7 +1875,7 @@ var initCubes = (function (e) {
           <div class="dot dot-right"></div>     
           <div class="detach-btn"></div>     
           `;
-          
+
           draggable.innerHTML = cubeOuter;
           cvOuter.appendChild(draggable);
           draggable.classList.add('vertical');
@@ -1869,6 +1891,11 @@ var initCubes = (function (e) {
           if (dragParent.classList.contains('detach')) {
             dragParent.classList.remove('detach');
           } else {
+            // remove and old detach if any
+            var oldDetachEl = document.querySelector('.draggable-cubes.detach');
+            if (oldDetachEl) {
+              oldDetachEl.classList.remove('detach');
+            }
             dragParent.classList.add('detach');
           }
         }
@@ -2058,7 +2085,9 @@ var initRotate = (function () {
     cvOuter.classList.remove('pe-none');
     // cvOuter.classList.remove('rotating');
 
-    initTools.currToolType = oldToolType;
+    if (panelType == "compass") {
+      initTools.currToolType = oldToolType;
+    }
 
     cvOuter.removeEventListener('mousemove', rotate, false);
     cvOuter.removeEventListener('mouseup', end, false);
@@ -2092,12 +2121,12 @@ var initRotate = (function () {
           if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
             if (currAngle > 130) currAngle = 130; else
               if (currAngle < 95) currAngle = 95;
-          } else if(rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
+          } else if (rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
             // if(currAngle > 85) currAngle = 85; else
             // if(currAngle < 50) currAngle = 50;
           }
-          if(panel.classList.contains('flipped')) { // if compass is flipped
-            if(currAngle <= 180) {
+          if (panel.classList.contains('flipped')) { // if compass is flipped
+            if (currAngle <= 180) {
               currAngle = 180 - currAngle;
             } else {
               currAngle = 180 + (360 - currAngle);
@@ -2110,7 +2139,7 @@ var initRotate = (function () {
       } else { // rotate other set types
         rotatable.style.transform = "rotate(" + rotation + "deg)";
       }
-    } 
+    }
     mousemoveRotate = true;
   };
 
@@ -2216,14 +2245,14 @@ var initCalc = (function (e) {
 var initAbacus = (function () {
   var panel = document.querySelector('[data-panel="abacus"]');
 
-  var changePos = function() {
+  var changePos = function () {
     // console.log('changing position');
 
     var layer = this.dataset.layer;
     var state = this.dataset.state;
-    
-    if(layer == 'up') { // up layer
-      if(state == 'down') {
+
+    if (layer == 'up') { // up layer
+      if (state == 'down') {
         this.setAttribute('transform', 'translate(0, -20)');
         this.dataset.state = 'up';
       } else {
@@ -2231,7 +2260,7 @@ var initAbacus = (function () {
         this.dataset.state = 'down';
       }
     } else { // down layer
-      var beads = this.parentNode.querySelectorAll('.bead'); 
+      var beads = this.parentNode.querySelectorAll('.bead');
       var count = this.dataset.pos;
       if (state == 'down') {
         for (var i = 0; i <= count; i++) {
@@ -2247,21 +2276,21 @@ var initAbacus = (function () {
       }
     }
   }
-  
-  var resetStart = function(e) {
+
+  var resetStart = function (e) {
     // console.log('resetStart');
-    
+
     panel.addEventListener('mousemove', reset, false);
     cvOuter.addEventListener('mouseup', resetEnd, false);
     cvOuter.addEventListener('mouseleave', resetEnd, false);
   }
-  var reset = function(e) {
+  var reset = function (e) {
     // console.log('reset');
     var t = e.target.closest('.bead');
-    
+
     if (t) {
       var layer = t.dataset.layer;
-      if(layer == "up") {
+      if (layer == "up") {
         t.setAttribute('transform', 'translate(0, 0)');
         t.dataset.state = 'down';
       } else {
@@ -2275,14 +2304,14 @@ var initAbacus = (function () {
       }
     }
   }
-  var resetEnd = function(e) {
+  var resetEnd = function (e) {
     // console.log('resetEnd');
 
     panel.removeEventListener('mousemove', reset, false);
     cvOuter.removeEventListener('mouseup', resetEnd, false);
     cvOuter.removeEventListener('mouseleave', resetEnd, false);
   }
-  
+
   return {
     changePos: changePos,
     resetStart: resetStart
