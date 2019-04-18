@@ -1053,8 +1053,8 @@ var initPanel = (function (e) {
         for (var i = 0; i < beads.length; i++) {
           beads[i].addEventListener('click', initAbacus.changePos, false);
         }
-        var leftCol = document.getElementById('leftCol');
-        leftCol.addEventListener('mousedown', initAbacus.resetStart, false);
+        var topCol = document.getElementById('topCol');
+        topCol.addEventListener('mousedown', initAbacus.resetStart, false);
       }
       if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
@@ -1137,11 +1137,11 @@ var initPanel = (function (e) {
     }
     if (panelType == "abacus") {
       var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
-      var leftCol = document.getElementById('leftCol');
+      var topCol = document.getElementById('topCol');
       for (var i = 0; i < beads.length; i++) {
         beads[i].removeEventListener('click', initAbacus.changePos, false);
       }
-      leftCol.removeEventListener('mousedown', initAbacus.resetStart, false);
+      topCol.removeEventListener('mousedown', initAbacus.resetStart, false);
     }
     if (panel.classList.contains('draggable-seal')) {
       panel.removeEventListener('click', bringInFront, false);
@@ -2331,6 +2331,8 @@ var initCalc = (function (e) {
 // abacus logic
 var initAbacus = (function () {
   var panel = document.querySelector('[data-panel="abacus"]');
+  var totalCol = startX = endX = startCol = posX = panelX = col = colX = null;
+  var totalColToResetArr = [];
 
   var changePos = function () {
     // console.log('changing position');
@@ -2365,7 +2367,36 @@ var initAbacus = (function () {
   }
 
   var resetStart = function (e) {
+    // console.group('Reset Start');
     // console.log('resetStart');
+    
+    // total cols in panel
+    totalCol = panel.querySelectorAll('[data-layer="up"]').length;
+
+    // total cols to reset
+    totalColToResetArr = [];
+    for(var c = 1; c <= totalCol; c++) {
+      if (panel.querySelector('[data-col="' + c + '"][data-state="up"]')) {
+        totalColToResetArr.push(c);
+      }
+    }
+
+    panelX = panel.getBoundingClientRect().x;
+    posX = math.getMousePosition(e, cvOuter).x;
+    startX = posX - panelX;
+
+    // find starting col to consider for reset
+    for (var c = 0; c < totalColToResetArr.length; c++) {
+      col = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"]').getBoundingClientRect();
+      colX = col.x + col.width/2;
+      colX = parseInt(colX - panelX);
+
+      if (colX > startX) {
+        startCol = totalColToResetArr[c];
+        // console.log(': ', totalColToResetArr[c], totalColToResetArr)
+        break;
+      }
+    }
 
     panel.addEventListener('mousemove', reset, false);
     cvOuter.addEventListener('mouseup', resetEnd, false);
@@ -2373,26 +2404,46 @@ var initAbacus = (function () {
   }
   var reset = function (e) {
     // console.log('reset');
-    var t = e.target.closest('.bead');
 
-    if (t) {
-      var layer = t.dataset.layer;
-      if (layer == "up") {
-        t.setAttribute('transform', 'translate(0, 0)');
-        t.dataset.state = 'down';
-      } else {
-        var beads = t.parentNode.querySelectorAll('.bead');
-        var totalBeads = beads.length;
-        var count = t.dataset.pos;
-        for (var i = 0; i < totalBeads; i++) {
-          beads[i].setAttribute('transform', 'translate(0, 0)');
-          beads[i].dataset.state = 'down';
-        }
+    posX = math.getMousePosition(e, cvOuter).x;
+    endX = posX - panelX;
+
+    // detect range and reset cols
+    for (var c = 0; c < totalColToResetArr.length; c++) {
+      col = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"]').getBoundingClientRect();
+      colX = col.x + col.width / 2;
+      colX = parseInt(colX - panelX);
+
+      if (colX < endX) {
+        var beads = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-state="up"]');
+        beads.forEach(bead => {
+          bead.setAttribute('transform', 'translate(0, 0)');
+          bead.dataset.state = 'down';          
+        });
       }
     }
+
+    // var t = e.target.closest('.bead');
+
+    // if (t) {
+    //   var layer = t.dataset.layer;
+    //   if (layer == "up") {
+    //     t.setAttribute('transform', 'translate(0, 0)');
+    //     t.dataset.state = 'down';
+    //   } else {
+    //     var beads = t.parentNode.querySelectorAll('.bead');
+    //     var totalBeads = beads.length;
+    //     var count = t.dataset.pos;
+    //     for (var i = 0; i < totalBeads; i++) {
+    //       beads[i].setAttribute('transform', 'translate(0, 0)');
+    //       beads[i].dataset.state = 'down';
+    //     }
+    //   }
+    // }
   }
   var resetEnd = function (e) {
     // console.log('resetEnd');
+    // console.groupEnd();
 
     panel.removeEventListener('mousemove', reset, false);
     cvOuter.removeEventListener('mouseup', resetEnd, false);
@@ -2411,7 +2462,7 @@ var math = (function (e) {
   var slope = 0;
   var inRange = false;
 
-  var parseToFloat = function (number, decimal) {
+  var ParseToFloat = function (number, decimal) {
     return parseFloat(number.toFixed(decimal));
   }
 
@@ -2635,7 +2686,7 @@ var math = (function (e) {
   }
 
   return {
-    parseToFloat: parseToFloat,
+    parseToFloat: ParseToFloat,
     getMousePosition: getMousePosition,
     sideAndRange: sideAndRange,
     getSetPoints: getSetPoints,
