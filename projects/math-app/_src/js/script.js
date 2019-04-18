@@ -34,6 +34,20 @@ function whichTransitionEvent() {
   }
 }
 
+// Returns Y coordinate by putting x coordinate in circle 
+// with radius r & center (cX, cY) with given position of pencil nib
+function getYCoordinateCircle(x, curY, cX, cY, r) {
+  var expr;
+  if (r * r < (x - cX) * (x - cX)) expr = 0;
+  else expr = Math.sqrt(r * r - (x - cX) * (x - cX));
+  if (curY > cY) {
+    return cY + expr;
+  }
+  else {
+    return cY - expr;
+  }
+}
+
 /*******************************/
 //     functions - specific
 /*******************************/
@@ -332,7 +346,7 @@ var initDraw = (function () {
       'x': 0,
       'y': 0
     },
-    'dotRadius': 5
+    'dotRadius': 2
   }
   var currSet = null;
 
@@ -353,11 +367,10 @@ var initDraw = (function () {
     var strokeColorMarker = 'rgba(0, 255, 0, .5)';
     var strokeWidthMarker = initDraw.strokeWidth + 10;
 
-    currPoint = math.getMousePosition(e, cv);
+    startPoint = math.getMousePosition(e, cv);
     currId = 'shape' + index;
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
-    startPoint = currPoint;
 
     // if some set is present on canvas
     if (currSetType) {
@@ -367,15 +380,15 @@ var initDraw = (function () {
         pointsObj = math.getSetPoints(initTools.currSetType);
 
         // check if drawing point is inRange with currentSetType
-        inRangeObj = math.sideAndRange(currPoint);
+        inRangeObj = math.sideAndRange(startPoint);
         inStartedInRange = inRangeObj.inRange;
         m = inRangeObj.slope;
 
         // update starting coordinates of drawing if set is in range
         if (inStartedInRange) {
-          targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-          currPoint.x = targetPoint.x;
-          currPoint.y = targetPoint.y;
+          targetPoint = math.getCoords(pointsObj, inRangeObj.side, startPoint, m);
+          startPoint.x = targetPoint.x;
+          startPoint.y = targetPoint.y;
         }
       }
       if (currSetType == 'compass' && currToolType == "arc") {
@@ -383,15 +396,15 @@ var initDraw = (function () {
 
         arc.center.x = pointsObj[1].x;
         arc.center.y = pointsObj[1].y;
-        arc.point.x = pointsObj[2].x;
-        arc.point.y = pointsObj[2].y;
+        startPoint.x = pointsObj[2].x;
+        startPoint.y = pointsObj[2].y;
 
         arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
         arc.radius = math.parseToFloat(arc.radius, 2);
 
         arcTag = `<g class="drawing" id="${currId}">
             <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
-            <polyline style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${arc.point.x},${arc.point.y} "></polyline>
+            <polyline style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${startPoint.x},${startPoint.y} "></polyline>
           </g>`;
         cv.innerHTML += arcTag;
       }
@@ -399,9 +412,9 @@ var initDraw = (function () {
 
     if (currToolType == "pen" || currToolType == "marker") {
       if (currToolType == "pen") {
-        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
+        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + startPoint.x + ',' + startPoint.y + '" />';;
       } else if (currToolType == "marker") {
-        polylineTag = '<polyline class="drawing" id="' + currId + '" style="fill:none;stroke-linecap:round;stroke:' + strokeColorMarker + ';stroke-width:' + strokeWidthMarker + '" points="' + currPoint.x + ',' + currPoint.y + '" />';;
+        polylineTag = '<polyline class="drawing" id="' + currId + '" style="fill:none;stroke-linecap:round;stroke:' + strokeColorMarker + ';stroke-width:' + strokeWidthMarker + '" points="' + startPoint.x + ',' + startPoint.y + '" />';;
       }
       cv.innerHTML += polylineTag;
     }
@@ -489,14 +502,77 @@ var initDraw = (function () {
         points = polylineInArc.getAttribute('points');
         pointsObj = math.getSetPoints(initTools.currSetType);
 
-        arc.point.x = pointsObj[2].x;
-        arc.point.y = pointsObj[2].y;
+        // draw a perfect circle
+        var p1x = startPoint.x;
+        var p1y = startPoint.y;
+        var p2x = pointsObj[2].x;
+        var p2y = pointsObj[2].y;
+        var cx = arc.center.x;
+        var cy = arc.center.y;
+        var r = arc.radius;
 
-        // check if point is pointObj[2] is really lie on arc or not
-        // var d = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
-        // d = math.parseToFloat(d, 2);
+        if ((p2y - cy) * (p1y - cy) > 0) {
+          if (p2x >= p1x) {
+            for (let i = p1x; i <= p2x; i += 0.5) {
+              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+          }
+          else {
+            for (let i = p1x; i >= p2x; i -= 0.5) {
+              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+          }
+        }
+        else {
+          if (p1x >= cx && p2x >= cx) {
+            for (let i = p1x; i <= cx + r; i += 0.5) {
+              var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+            for (let i = cx + r; i >= p2x; i -= 0.5) {
+              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+          }
+          else if (p1x < cx && p2x < cx) {
+            for (let i = p1x; i >= cx - r; i -= 0.5) {
+              var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+            for (let i = cx - r; i <= p2x; i += 0.5) {
+              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+              points += ' ' + i + ',' + yCoor;
+            }
+          }
+          else {
+            if (p1y <= cy) {
+              for (let i = p1x; i <= cx + r; i += 0.5) {
+                var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
+              for (let i = cx + r; i >= p2x; i -= 0.5) {
+                var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
+            }
+            else {
+              for (let i = p1x; i >= cx - r; i -= 0.5) {
+                var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
+              for (let i = cx - r; i <= p2x; i += 0.5) {
+                var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
+            }
+          }
+        }
 
-        points += ' ' + arc.point.x + ',' + arc.point.y;
+        startPoint.x = p2x;
+        startPoint.y = p2y;
+
         polylineInArc.setAttribute('points', points);
       }
 
@@ -585,6 +661,7 @@ var initDraw = (function () {
 // move behaviour of elements - tools/panels/sets
 var initMove = (function () {
   var mousemove = false;
+  var target = null;
   var startX = 0, startY = 0, endX = 0, endY = 0;
   var dragParentzIndex = 0; // update only if drag parent is different each dragging time
   var dragParent = dropParent = oldDragParent = null;
@@ -625,12 +702,19 @@ var initMove = (function () {
     // console.log('moveStart');
 
     var currPoint = math.getMousePosition(e, cv);
-    initMove.dragParent = e.target.closest('.draggable');
+    target = e.target;
+    initMove.dragParent = target.closest('.draggable');
     var dragParent = initMove.dragParent;
     // var oldDragParent = initMove.oldDragParent;
 
+
+    // for moving from any inner area of 'drag-area' element
+    if (dragParent.dataset.panel == "compass") {
+      target = this;
+    }
+
     // drag only if current element has class 'drag-area'
-    if (e.target.classList.contains('drag-area')) {
+    if (target.classList.contains('drag-area')) {
       // if(e.target.closest('.drag-area')) {
 
       cvOuter.classList.add('dragging');
@@ -1149,7 +1233,7 @@ var initPanel = (function (e) {
   var scaleDraw = function (e) {
     console.log('scale drawing');
 
-    if(this.classList.contains('active')) {
+    if (this.classList.contains('active')) {
       this.classList.remove('active');
     } else {
       this.classList.add('active');
@@ -1943,8 +2027,8 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var start = function (e) {
-    // console.group('Rotate')
-    // console.log('start-rotate');
+    console.group('Rotate')
+    console.log('start-rotate');
 
     e.preventDefault();
 
@@ -1969,6 +2053,7 @@ var initRotate = (function () {
     // check to enable arc drawing or not
     // also which element to take as ref for rotation
     if (panelType == "compass") {
+      rotateBtn = this;
       if (rotateBtn.classList.contains('rotate-compass')) {
         if (rotateBtn.classList.contains('rotate-compass-draw')) {
           // calling draw function to make an arc
@@ -1976,7 +2061,7 @@ var initRotate = (function () {
           initTools.currToolType = 'arc';
           cvOuter.classList.add('pe-none');
         }
-        refEl = panel.querySelector('.rotate-compass-ref');
+        refEl = panel.querySelector('.rotate-point-ref');
       } else if (rotateBtn.classList.contains('rotate-hand')) {
         refEl = panel.querySelector('.rotate-hand-ref');
       }
@@ -2006,23 +2091,23 @@ var initRotate = (function () {
       }
 
       if (rotateBtn.classList.contains('rotate-hand')) { // rotate hand (2 types)
-        // if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
-        //   if (panel.dataset.anglePencil == undefined) {
-        //     startAngle = Math.floor(R2D * Math.atan2(y, x));
-        //     if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
-        //     panel.setAttribute('data-angle-pencil', startAngle);
-        //   } else {
-        //     startAngle = panel.dataset.anglePencil;
-        //   }
-        // } else if (rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
-        //   if (panel.dataset.anglePoint == undefined) {
-        //     startAngle = Math.floor(R2D * Math.atan2(y, x));
-        //     if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
-        //     panel.setAttribute('data-angle-point', startAngle);
-        //   } else {
-        //     startAngle = panel.dataset.anglePoint;
-        //   }
-        // }
+        if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
+          if (panel.dataset.anglePencil == undefined) {
+            startAngle = Math.floor(R2D * Math.atan2(y, x));
+            if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+            panel.setAttribute('data-angle-pencil', startAngle);
+          } else {
+            startAngle = panel.dataset.anglePencil;
+          }
+        } else if (rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
+          // if (panel.dataset.anglePoint == undefined) {
+          //   startAngle = Math.floor(R2D * Math.atan2(y, x));
+          //   if (startAngle < 0) { startAngle = 360 - Math.abs(startAngle); }
+          //   panel.setAttribute('data-angle-point', startAngle);
+          // } else {
+          //   startAngle = panel.dataset.anglePoint;
+          // }
+        }
       } else if (rotateBtn.classList.contains('rotate-compass')) { // rotate compass (2 ways)
         if (rotateBtn.classList.contains('rotate-compass-only')) { // rotate only 
           if (panel.dataset.angleCompassOnly == undefined || resetRotation) {
@@ -2074,6 +2159,7 @@ var initRotate = (function () {
 
     cvOuter.addEventListener('mousemove', rotate, false);
     cvOuter.addEventListener('mouseup', end, false);
+    cvOuter.addEventListener('mouseleave', end, false);
   };
 
   var end = function (e) {
@@ -2091,6 +2177,7 @@ var initRotate = (function () {
 
     cvOuter.removeEventListener('mousemove', rotate, false);
     cvOuter.removeEventListener('mouseup', end, false);
+    cvOuter.removeEventListener('mouseleave', end, false);
   };
 
   var rotate = function (e) {
@@ -2107,10 +2194,10 @@ var initRotate = (function () {
       if (currAngle < 0) {
         currAngle = 360 - Math.abs(currAngle);
       }
+
       rotation = currAngle - startAngle;
       if (rotation < 0) {
         rotation = 360 + currAngle - Math.abs(startAngle);
-        // console.log(' ', currAngle, startAngle, rotation)
       }
 
       if (panelType == 'clock') {
@@ -2119,8 +2206,8 @@ var initRotate = (function () {
         if (rotateBtn.classList.contains('rotate-hand')) {
           if (!isNaN(angle)) { currAngle = currAngle - angle; }
           if (rotateBtn.classList.contains('rotate-pencil')) { // rotate hand - pencil
-            if (currAngle > 130) currAngle = 130; else
-              if (currAngle < 95) currAngle = 95;
+            if (rotation > 20 && rotation < 200) rotation = 20; else
+              if (rotation < 340 && rotation > 200) rotation = 340;
           } else if (rotateBtn.classList.contains('rotate-point')) { // rotate hand - point
             // if(currAngle > 85) currAngle = 85; else
             // if(currAngle < 50) currAngle = 50;
@@ -2132,7 +2219,7 @@ var initRotate = (function () {
               currAngle = 180 + (360 - currAngle);
             }
           }
-          rotatable.style.transform = "translateY(-50%) rotate(" + currAngle + "deg)";
+          rotatable.style.transform = "rotate(" + rotation + "deg)";
         } else { // rotate compass set
           rotatable.style.transform = "rotate(" + rotation + "deg)";
         }
