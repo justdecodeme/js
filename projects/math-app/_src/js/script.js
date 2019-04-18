@@ -2381,6 +2381,10 @@ var initAbacus = (function () {
       }
     }
 
+    panelX = panel.getBoundingClientRect().x;
+    posX = math.getMousePosition(e, cvOuter).x;
+    startX = posX - panelX;
+
     panel.addEventListener('mousemove', reset, false);
     cvOuter.addEventListener('mouseup', resetEnd, false);
     cvOuter.addEventListener('mouseleave', resetEnd, false);
@@ -2391,13 +2395,25 @@ var initAbacus = (function () {
     posX = math.getMousePosition(e, cvOuter).x;
     endX = posX - panelX;
 
+    if(startX < endX) {
+    } else {
+    }
+    
     // detect range and reset cols
     for (var c = 0; c < totalColToResetArr.length; c++) {
       col = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"]').getBoundingClientRect();
       colX = col.x + col.width / 2;
       colX = parseInt(colX - panelX);
-
-      if (colX < endX) {
+      
+      if (colX < endX && startX < endX && colX > startX) {
+        // console.log('reset L to R')
+        var beads = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-state="up"]');
+        beads.forEach(bead => {
+          bead.setAttribute('transform', 'translate(0, 0)');
+          bead.dataset.state = 'down';          
+        });
+      } else if(colX > endX && startX > endX && colX < startX) {
+        // console.log('reset R to L')
         var beads = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-state="up"]');
         beads.forEach(bead => {
           bead.setAttribute('transform', 'translate(0, 0)');
@@ -2405,6 +2421,8 @@ var initAbacus = (function () {
         });
       }
     }
+
+    // startX = endX;
   }
   var resetEnd = function (e) {
     // console.log('resetEnd');
