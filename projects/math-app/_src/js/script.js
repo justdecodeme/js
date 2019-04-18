@@ -2381,23 +2381,6 @@ var initAbacus = (function () {
       }
     }
 
-    panelX = panel.getBoundingClientRect().x;
-    posX = math.getMousePosition(e, cvOuter).x;
-    startX = posX - panelX;
-
-    // find starting col to consider for reset
-    for (var c = 0; c < totalColToResetArr.length; c++) {
-      col = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"]').getBoundingClientRect();
-      colX = col.x + col.width/2;
-      colX = parseInt(colX - panelX);
-
-      if (colX > startX) {
-        startCol = totalColToResetArr[c];
-        // console.log(': ', totalColToResetArr[c], totalColToResetArr)
-        break;
-      }
-    }
-
     panel.addEventListener('mousemove', reset, false);
     cvOuter.addEventListener('mouseup', resetEnd, false);
     cvOuter.addEventListener('mouseleave', resetEnd, false);
@@ -2422,24 +2405,6 @@ var initAbacus = (function () {
         });
       }
     }
-
-    // var t = e.target.closest('.bead');
-
-    // if (t) {
-    //   var layer = t.dataset.layer;
-    //   if (layer == "up") {
-    //     t.setAttribute('transform', 'translate(0, 0)');
-    //     t.dataset.state = 'down';
-    //   } else {
-    //     var beads = t.parentNode.querySelectorAll('.bead');
-    //     var totalBeads = beads.length;
-    //     var count = t.dataset.pos;
-    //     for (var i = 0; i < totalBeads; i++) {
-    //       beads[i].setAttribute('transform', 'translate(0, 0)');
-    //       beads[i].dataset.state = 'down';
-    //     }
-    //   }
-    // }
   }
   var resetEnd = function (e) {
     // console.log('resetEnd');
