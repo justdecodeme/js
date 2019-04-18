@@ -315,8 +315,8 @@ body {
       background-image: url(../img/cancel-btn.svg);
       background-size: 150%;
       background-position: center -5px;
-      left: calc(100% - 8px);
-      top: -17px;
+      left: 100%;
+      bottom: 100%;
 
       img {
         // margin: 0;
@@ -967,14 +967,74 @@ body {
 }
 
 [data-panel=abacus] {
+  width: 400px;
   .reset {
+    position: absolute;
+    width: 100%;
+    height: 6%;
+    // background: blue;
     cursor: pointer;
   }
   .bead {
     cursor: pointer;
-    &[data-state=up] {
-      path {
-        fill: #b1d8ed;
+    &[data-layer=up] {
+      width: 16%;
+      position: absolute;
+      top: 5.4%;
+      &[data-col='1'] { left: 2.8%; }
+      &[data-col='2'] { left: 22.5%; }
+      &[data-col='3'] { left: 42%; }
+      &[data-col='4'] { left: 61.8%; }
+      &[data-col='5'] { left: 81.1%; }
+      &[data-state=down] {
+        path {
+          fill: #b1d8ed;
+        }
+      }
+    }
+    &[data-layer=down] {
+      width: 16%;
+      position: absolute;
+      top: 5.4%;
+      &[data-col='1'] { 
+        left: 2.8%; 
+        &[data-pos='0'] { top: 44%; }
+        &[data-pos='1'] { top: 56.2%; }
+        &[data-pos='2'] { top: 68.5%; }
+        &[data-pos='3'] { top: 80.9%; }
+      }
+      &[data-col='2'] { 
+        left: 22.5%; 
+        &[data-pos='0'] { top: 44%; }
+        &[data-pos='1'] { top: 56.2%; }
+        &[data-pos='2'] { top: 68.5%; }
+        &[data-pos='3'] { top: 80.9%; }
+      }
+      &[data-col='3'] { 
+        left: 42%; 
+        &[data-pos='0'] { top: 44%; }
+        &[data-pos='1'] { top: 56.2%; }
+        &[data-pos='2'] { top: 68.5%; }
+        &[data-pos='3'] { top: 80.9%; }
+      }
+      &[data-col='4'] { 
+        left: 61.8%; 
+        &[data-pos='0'] { top: 44%; }
+        &[data-pos='1'] { top: 56.2%; }
+        &[data-pos='2'] { top: 68.5%; }
+        &[data-pos='3'] { top: 80.9%; }
+      }
+      &[data-col='5'] { 
+        left: 81.1%; 
+        &[data-pos='0'] { top: 44%; }
+        &[data-pos='1'] { top: 56.2%; }
+        &[data-pos='2'] { top: 68.5%; }
+        &[data-pos='3'] { top: 80.9%; }
+      }
+      &[data-state=up] {
+        path {
+          fill: #b1d8ed;
+        }
       }
     }
   }

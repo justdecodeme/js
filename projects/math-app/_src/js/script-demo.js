@@ -2340,25 +2340,27 @@ var initAbacus = (function () {
     var layer = this.dataset.layer;
     var state = this.dataset.state;
 
+    
     if (layer == 'up') { // up layer
-      if (state == 'down') {
-        this.setAttribute('transform', 'translate(0, -20)');
-        this.dataset.state = 'up';
+      if (state == 'up') {
+        this.setAttribute('transform', 'translate(0, 29)');
+        this.dataset.state = 'down';
       } else {
         this.setAttribute('transform', 'translate(0, 0)');
-        this.dataset.state = 'down';
+        this.dataset.state = 'up';
       }
     } else { // down layer
-      var beads = this.parentNode.querySelectorAll('.bead');
-      var count = this.dataset.pos;
+      var col = this.dataset.col;
+      var beads = panel.querySelectorAll('[data-layer="down"][data-col="'+col+'"]');
+      var pos = this.dataset.pos;
       if (state == 'down') {
-        for (var i = 0; i <= count; i++) {
-          beads[i].setAttribute('transform', 'translate(0,-43)');
+        for (var i = 0; i <= pos; i++) {
+          beads[i].setAttribute('transform', 'translate(0,-34)');
           beads[i].dataset.state = 'up';
         }
       } else {
         var totalBeads = beads.length;
-        for (var i = count; i < totalBeads; i++) {
+        for (var i = pos; i < totalBeads; i++) {
           beads[i].setAttribute('transform', 'translate(0, 0)');
           beads[i].dataset.state = 'down';
         }
@@ -2376,7 +2378,9 @@ var initAbacus = (function () {
     // total cols to reset
     totalColToResetArr = [];
     for(var c = 1; c <= totalCol; c++) {
-      if (panel.querySelector('[data-col="' + c + '"][data-state="up"]')) {
+      if (panel.querySelector('[data-col="' + c + '"][data-layer="up"][data-state="down"]')) {
+        totalColToResetArr.push(c);
+      } else if (panel.querySelector('[data-col="' + c + '"][data-layer="down"][data-state="up"]')) {
         totalColToResetArr.push(c);
       }
     }
@@ -2407,17 +2411,27 @@ var initAbacus = (function () {
       
       if (colX < endX && startX < endX && colX > startX) {
         // console.log('reset L to R')
-        var beads = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-state="up"]');
-        beads.forEach(bead => {
-          bead.setAttribute('transform', 'translate(0, 0)');
-          bead.dataset.state = 'down';          
+        var beadUp = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"][data-layer="up"][data-state="down"]');
+        var beadsDown = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-layer="down"][data-state="up"]');
+        if(beadUp) {
+          beadUp.setAttribute('transform', 'translate(0, 0)');
+          beadUp.dataset.state = 'up';          
+        }
+        beadsDown.forEach(beadDown => {
+          beadDown.setAttribute('transform', 'translate(0, 0)');
+          beadDown.dataset.state = 'down';          
         });
       } else if(colX > endX && startX > endX && colX < startX) {
         // console.log('reset R to L')
-        var beads = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-state="up"]');
-        beads.forEach(bead => {
-          bead.setAttribute('transform', 'translate(0, 0)');
-          bead.dataset.state = 'down';          
+        var beadUp = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"][data-layer="up"][data-state="down"]');
+        var beadsDown = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-layer="down"][data-state="up"]');
+        if (beadUp) {
+          beadUp.setAttribute('transform', 'translate(0, 0)');
+          beadUp.dataset.state = 'up';
+        }
+        beadsDown.forEach(beadDown => {
+          beadDown.setAttribute('transform', 'translate(0, 0)');
+          beadDown.dataset.state = 'down';
         });
       }
     }
