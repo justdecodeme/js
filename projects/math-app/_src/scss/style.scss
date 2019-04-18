@@ -972,11 +972,10 @@ body {
   }
 
   .bead {
-    // &[data-layer=up] {
-    //   fill: red;
-    //   [data-position=1] {
-    //     transform: translateY('-20');
-    //   }
-    // }
+    &[data-state=up] {
+      path {
+        fill: #b1d8ed;
+      }
+    }
   }
 }
