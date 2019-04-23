@@ -2,8 +2,8 @@ var sealTypes = {
   "flowers": {
     "max": 50,
     "values": [
-      "flower-pink.svg",
-      "flower-aqua.svg",
+      "red-flower.png",
+      "blue-flower.png",
       "stack-blue.svg",
       "stack-orange.svg"
     ],
@@ -39,22 +39,22 @@ var sealTypes = {
   "shapes": {
     "max": 50,
     "values": [
-      "square-1.svg",
-      "square-2.svg",
-      "square-3.svg",
-      "square-4.svg",
-      "triangle-iso-1.svg",
-      "triangle-iso-2.svg",
-      "triangle-iso-3.svg",
-      "triangle-iso-4.svg",
-      "triangle-sca-1.svg",
-      "triangle-sca-2.svg",
-      "triangle-sca-3.svg",
-      "triangle-sca-4.svg",
-      "circle-1.svg",
-      "circle-2.svg",
-      "circle-3.svg",
-      "circle-4.svg"
+      "square-demo-1.svg",
+      "square-demo-2.svg",
+      "square-demo-3.svg",
+      "square-demo-4.svg",
+      "triangle-iso-demo-1.svg",
+      "triangle-iso-demo-2.svg",
+      "triangle-iso-demo-3.svg",
+      "triangle-iso-demo-4.svg",
+      "triangle-sca-demo-1.svg",
+      "triangle-sca-demo-2.svg",
+      "triangle-sca-demo-3.svg",
+      "triangle-sca-demo-4.svg",
+      "circle-demo-1.svg",
+      "circle-demo-2.svg",
+      "circle-demo-3.svg",
+      "circle-demo-4.svg"
     ],
   },
   "cubes": {

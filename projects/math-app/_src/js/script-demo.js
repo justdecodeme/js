@@ -106,7 +106,7 @@ var initTools = (function () {
               break;
             case "opacity": n = i + 5.2;
               break;
-            case "scale": n = i - 4.5;
+            case "scale": n = i - 3;
               break;
             case "set-square": n = i - 2.2;
               break;
@@ -203,6 +203,7 @@ var initTools = (function () {
       oldToolBtn.classList.remove('active');
       initTools.currToolType = null;
       cv.removeEventListener('mousedown', initDraw.start, false);
+      cv.removeEventListener('touchstart', initDraw.start, false);
     }
     // add 'active' class to current 'clicked' button if it is not the 'active' button already
     // and update 'currToolType' value
@@ -210,6 +211,7 @@ var initTools = (function () {
       target.classList.add('active');
       initTools.currToolType = target.dataset.toolType1;
       cv.addEventListener('mousedown', initDraw.start, false);
+      cv.addEventListener('touchstart', initDraw.start, false);
     }
   }
 
@@ -307,6 +309,57 @@ var initTools = (function () {
   }
 })();
 
+// fetch seals from 'settings.json' file
+var fetchSeals = (function () {
+  // console.log('fetching seals');
+
+  for (var sealType in sealTypes) {
+    var sealPanelContent = document.querySelector('[data-panel="' + sealType + '"] .content');
+    if (sealTypes.hasOwnProperty(sealType)) {
+      var values = sealTypes[sealType].values;
+      if (sealType == "numbers") { // numbers
+        for (var type in values) {
+          // console.log(values[type])
+          for (var i = 0; i < values[type].length; i++) {
+            // console.log(values[type][i][0], values[type][i][1])
+            var numType = values[type][i][0];
+            var numValue = values[type][i][1];
+            var el = document.createElement('img');
+            el.classList.add('draggable-seal');
+            el.setAttribute('data-seal-type', sealType);
+            el.setAttribute('data-number-design', type);
+            el.setAttribute('data-number-value', numValue);
+            el.src = './_assets/img/' + numType;
+            sealPanelContent.appendChild(el);
+          }
+        }
+      }
+      if (sealType == "cubes") { // cubes
+        for (var i = 0; i < values.length; i++) {
+          var cubeSide = values[i][1];
+          var cubeValue = values[i][2];
+          var el = document.createElement('img');
+          el.classList.add('draggable-seal');
+          el.setAttribute('data-seal-type', sealType);
+          el.setAttribute('data-cube-side', cubeSide);
+          el.setAttribute('data-cube-value', cubeValue);
+          el.src = './_assets/img/' + values[i][0];
+          sealPanelContent.appendChild(el);
+        }
+      } 
+      if(sealType != 'numbers' && sealType != "cubes") {
+        values.forEach(value => {
+          var el = document.createElement('img');
+          el.classList.add('draggable-seal');
+          el.setAttribute('data-seal-type', sealType);
+          el.src = './_assets/img/' + value;
+          sealPanelContent.appendChild(el);
+        });
+      }
+    }
+  }
+})();
+
 // draw, undo, redo, clear functions
 var initDraw = (function () {
   // console.log('initDraw');
@@ -336,6 +389,8 @@ var initDraw = (function () {
   var polylineTag, arcTag, points;
   var m;
   var targetPoint = null;
+  var protractorRange = 100;
+  var protractorDotRadius = 10;
   var arc = {
     'radius': 0,
     'center': { // center point of arc
@@ -349,6 +404,8 @@ var initDraw = (function () {
     'dotRadius': 2
   }
   var currSet = null;
+  var pointCount = 0;
+  var isSetActive = false;
 
   // start drawing or erasing
   var start = function (e) {
@@ -372,47 +429,140 @@ var initDraw = (function () {
     currToolType = initTools.currToolType;
     currSetType = initTools.currSetType;
 
-    // if some set is present on canvas
-    if (currSetType) {
-      currSet = document.querySelector('[data-panel="' + currSetType + '"]');
-      if (currSetType.substr(0, 5) == "scale") {
-
-        pointsObj = math.getSetPoints(initTools.currSetType);
-
-        // check if drawing point is inRange with currentSetType
-        inRangeObj = math.sideAndRange(startPoint);
-        inStartedInRange = inRangeObj.inRange;
-        m = inRangeObj.slope;
-
-        // update starting coordinates of drawing if set is in range
-        if (inStartedInRange) {
-          targetPoint = math.getCoords(pointsObj, inRangeObj.side, startPoint, m);
-          startPoint.x = targetPoint.x;
-          startPoint.y = targetPoint.y;
-        }
-      }
-      if (currSetType == 'compass' && currToolType == "arc") {
-        pointsObj = math.getSetPoints(initTools.currSetType);
-
-        arc.center.x = pointsObj[1].x;
-        arc.center.y = pointsObj[1].y;
-        startPoint.x = pointsObj[2].x;
-        startPoint.y = pointsObj[2].y;
-
-        arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
-        arc.radius = math.parseToFloat(arc.radius, 2);
-
-        arcTag = `<g class="drawing" id="${currId}">
-            <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
-            <polyline style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${startPoint.x},${startPoint.y} "></polyline>
-          </g>`;
-        cv.innerHTML += arcTag;
+    if(currSetType && currToolType == "pen") { // remove highlight if 'tool pen' is not active for normal draw
+      currSet = document.querySelector('[data-panel="'+currSetType+'"]');
+      if(!currSet.querySelector('.pen-btn').classList.contains('active')) {
+        currSet.classList.remove('highlight');
+        currSetType = initTools.currSetType = null;
       }
     }
 
-    if (currToolType == "pen" || currToolType == "marker") {
+    if (currSetType) { // if some set is present on canvas
+      currSet = document.querySelector('[data-panel="' + currSetType + '"]');
+      if(currSetType != "compass") {
+        isSetActive = currSet.querySelector('.pen-btn').classList.contains('active');
+      } else {
+        isSetActive = true;
+      }
+      if(isSetActive) {
+        if (currSetType.substr(0, 5) == "scale") {
+          pointsObj = math.getSetPoints(initTools.currSetType);
+  
+          // check if drawing point is inRange with currentSetType
+          inRangeObj = math.sideAndRange(startPoint);
+          inStartedInRange = inRangeObj.inRange;
+          m = inRangeObj.slope;
+  
+          // update starting coordinates of drawing if set is in range
+          if (inStartedInRange) {
+            var s = strokeWidth / 2;
+            targetPoint = math.getCoords(pointsObj, inRangeObj.side, startPoint, m);
+            startPoint.x = targetPoint.x;
+            startPoint.y = targetPoint.y;
+
+            // draw line if already two points are there
+            if(pointCount == 2) {
+              polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + startPoint.x + ',' + startPoint.y + '" />';
+              cv.innerHTML += polylineTag;
+              pointCount++;
+            } else if(pointCount < 2) { // mark 2 points for scale drawing
+              arcTag = `<ellipse 
+                class="drawing" 
+                id="${currId}" 
+                style="fill:${strokeColorPen};
+                stroke-width:0;
+                stroke:none;" 
+                cx="${startPoint.x}px" 
+                cy="${startPoint.y}px" 
+                rx="${s}px" 
+                ry="${s}px">
+                </ellipse>`;
+              cv.innerHTML += arcTag;  
+              pointCount++;
+              if(pointCount == 2) {
+                currSet.querySelector('.scale').style.transform = 'rotateZ(180deg)';
+              }
+            }
+          }
+        } else if (currSetType == 'compass' && currToolType == "arc") {
+          pointsObj = math.getSetPoints(currSetType);
+  
+          arc.center.x = pointsObj[1].x;
+          arc.center.y = pointsObj[1].y;
+          startPoint.x = pointsObj[2].x;
+          startPoint.y = pointsObj[2].y;
+  
+          arc.radius = Math.sqrt((pointsObj[2].x - pointsObj[1].x) * (pointsObj[2].x - pointsObj[1].x) + (pointsObj[2].y - pointsObj[1].y) * (pointsObj[2].y - pointsObj[1].y));
+          arc.radius = math.parseToFloat(arc.radius, 2);
+  
+          arcTag = `<g class="drawing" id="${currId}">
+              <ellipse style="fill:${strokeColorPen};stroke-width:0;stroke:none;" cx="${arc.center.x}px" cy="${arc.center.y}px" rx="${arc.dotRadius}px" ry="${arc.dotRadius}px"></ellipse>
+              <polyline style="fill:none;stroke-linecap:round;stroke:${strokeColorPen};stroke-width:3" points="${startPoint.x},${startPoint.y} "></polyline>
+            </g>`;
+          cv.innerHTML += arcTag;
+        } else if (currSetType == 'protractor') {
+          pointsObj = math.getSetPoints(currSetType);
+          m = Math.atan2(startPoint.y - pointsObj[1].y, startPoint.x - pointsObj[1].x);
+          var panel = document.querySelector('[data-panel="protractor"]');
+          var r = panel.offsetHeight;
+          var d = Math.sqrt((pointsObj[1].x - startPoint.x) * (pointsObj[1].x - startPoint.x) + (pointsObj[1].y - startPoint.y) * (pointsObj[1].y - startPoint.y));
+          var s = protractorDotRadius / 2;
+          var angleDeg = Math.atan2(startPoint.y - pointsObj[1].y, startPoint.x - pointsObj[1].x) * 180 / Math.PI;
+          var drawDot = false;
+  
+          if (angleDeg < 0) {
+            angleDeg = 360 - Math.abs(angleDeg);
+          }
+  
+          var angle = panel.style.transform.substr(7);
+          angle = angle.substring(0, angle.length - 4);
+          angle = parseFloat(angle);
+          if (isNaN(angle)) {
+            angle = 0;
+          }
+  
+          if(d > r && d < r + protractorRange) {
+            if (angle <= 180) {
+              if (angleDeg <= angle || angleDeg >= 180 + angle) {
+                drawDot = true;
+              } else {
+                drawDot = false;
+              }
+            } else {
+              angle -= 180;
+              if (angleDeg >= angle && angleDeg < 180 + angle) {
+                drawDot = true;
+              } else {
+                drawDot = false;
+              }
+            }
+          }
+  
+  
+          if (drawDot) {
+            var x = pointsObj[1].x + (r + s) * Math.cos(m);
+            var y = pointsObj[1].y + (r + s) * Math.sin(m);
+  
+            arcTag = `<ellipse 
+                  class="drawing" 
+                  style="fill:${strokeColorPen};
+                  stroke-width:0;
+                  stroke:none;" 
+                  cx="${x}px" 
+                  cy="${y}px" 
+                  rx="${s}px" 
+                  ry="${s}px">
+                </ellipse>`;
+            cv.innerHTML += arcTag;
+          } else {
+            console.log('out of range')
+          }
+  
+        }
+      }
+    } else if (currToolType == "pen" || currToolType == "marker") { // normal drawing
       if (currToolType == "pen") {
-        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + startPoint.x + ',' + startPoint.y + '" />';;
+        polylineTag = '<polyline class="drawing" id="' + currId + '" style="opacity:' + strokeOpacity + ';fill:none;stroke-linecap:round;stroke:' + strokeColorPen + ';stroke-width:' + strokeWidthPen + '" points="' + startPoint.x + ',' + startPoint.y + '" />';
       } else if (currToolType == "marker") {
         polylineTag = '<polyline class="drawing" id="' + currId + '" style="fill:none;stroke-linecap:round;stroke:' + strokeColorMarker + ';stroke-width:' + strokeWidthMarker + '" points="' + startPoint.x + ',' + startPoint.y + '" />';;
       }
@@ -420,7 +570,9 @@ var initDraw = (function () {
     }
 
     cv.addEventListener('mousemove', draw, false);
+    cv.addEventListener('touchmove', draw, false);
     cv.addEventListener('mouseup', end, false);
+    cv.addEventListener('touchend', end, false);
 
     index++;
   }
@@ -433,6 +585,13 @@ var initDraw = (function () {
     mousedownDraw = mousemoveDraw = false;
     inStartedInRange = false;
 
+    if(currSetType) {
+      if(currSetType.substr(0, 5) == "scale" && pointCount == 3) {
+        pointCount = 0;
+        currSet.querySelector('.scale').style.transform = 'none';
+      }
+    }
+
     if (currId !== null && document.getElementById(currId) != null) {
       undoStack.push({
         Elements: [],
@@ -441,9 +600,11 @@ var initDraw = (function () {
       });
     }
 
-    // cv.removeEventListener('mousemove', draw, false);
+    cv.removeEventListener('mousemove', draw, false);
+    cv.removeEventListener('touchmove', draw, false);
     cv.removeEventListener('mouseup', end, false);
-    cv.removeEventListener('mouseleave', end, false);
+    cv.removeEventListener('touchend', end, false);
+    // cv.removeEventListener('mouseleave', end, false);
   }
 
   // keep drawing or erasing
@@ -455,35 +616,7 @@ var initDraw = (function () {
 
       currPoint = math.getMousePosition(e, cv);
 
-      if (currToolType == "pen" || currToolType == "marker") {
-        polylineTag = document.getElementById(currId);
-        points = polylineTag.getAttribute('points');
-
-        if (currToolType == "marker") {
-          points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
-        } else if (currToolType == "pen") {
-          if (inStartedInRange) { // if set is in range
-
-            // to check if cursor went outside of range
-            inRangeObj = math.sideAndRange(currPoint);
-
-            if (inRangeObj.inRange) { // if drawing on some side 
-              targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
-
-              currPoint.x = targetPoint.x;
-              currPoint.y = targetPoint.y;
-
-              points += ' ' + currPoint.x + ',' + currPoint.y;
-            } else { // else stop drawing
-              cv.removeEventListener('mousemove', draw, false);
-              cv.removeEventListener('mouseup', end, false);
-            }
-          } else { // simple drawing
-            points += ' ' + currPoint.x + ',' + currPoint.y;
-          }
-        }
-        polylineTag.setAttribute('points', points);
-      } else if (currToolType == "eraser") {
+      if(currToolType == "eraser") {
         var target = e.target;
         if (target.classList.contains('drawing')) {
           redoStack = [];
@@ -494,60 +627,38 @@ var initDraw = (function () {
           });
           target.remove();
         }
-      }
+      } else if (currSetType && isSetActive) {
+        if (currSetType == 'compass' && currToolType == "arc") {
+          arcTag = document.getElementById(currId);
+          var polylineInArc = arcTag.querySelector('polyline');
+          points = polylineInArc.getAttribute('points');
+          pointsObj = math.getSetPoints(initTools.currSetType);
 
-      if (currSetType == 'compass' && currToolType == "arc") {
-        arcTag = document.getElementById(currId);
-        var polylineInArc = arcTag.querySelector('polyline');
-        points = polylineInArc.getAttribute('points');
-        pointsObj = math.getSetPoints(initTools.currSetType);
+          // draw a perfect circle
+          var p1x = startPoint.x;
+          var p1y = startPoint.y;
+          var p2x = pointsObj[2].x;
+          var p2y = pointsObj[2].y;
+          var cx = arc.center.x;
+          var cy = arc.center.y;
+          var r = arc.radius;
 
-        // draw a perfect circle
-        var p1x = startPoint.x;
-        var p1y = startPoint.y;
-        var p2x = pointsObj[2].x;
-        var p2y = pointsObj[2].y;
-        var cx = arc.center.x;
-        var cy = arc.center.y;
-        var r = arc.radius;
-
-        if ((p2y - cy) * (p1y - cy) > 0) {
-          if (p2x >= p1x) {
-            for (let i = p1x; i <= p2x; i += 0.5) {
-              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
+          if ((p2y - cy) * (p1y - cy) > 0) {
+            if (p2x >= p1x) {
+              for (let i = p1x; i <= p2x; i += 0.5) {
+                var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
+            }
+            else {
+              for (let i = p1x; i >= p2x; i -= 0.5) {
+                var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                points += ' ' + i + ',' + yCoor;
+              }
             }
           }
           else {
-            for (let i = p1x; i >= p2x; i -= 0.5) {
-              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
-            }
-          }
-        }
-        else {
-          if (p1x >= cx && p2x >= cx) {
-            for (let i = p1x; i <= cx + r; i += 0.5) {
-              var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
-            }
-            for (let i = cx + r; i >= p2x; i -= 0.5) {
-              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
-            }
-          }
-          else if (p1x < cx && p2x < cx) {
-            for (let i = p1x; i >= cx - r; i -= 0.5) {
-              var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
-            }
-            for (let i = cx - r; i <= p2x; i += 0.5) {
-              var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
-              points += ' ' + i + ',' + yCoor;
-            }
-          }
-          else {
-            if (p1y <= cy) {
+            if (p1x >= cx && p2x >= cx) {
               for (let i = p1x; i <= cx + r; i += 0.5) {
                 var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
                 points += ' ' + i + ',' + yCoor;
@@ -557,7 +668,7 @@ var initDraw = (function () {
                 points += ' ' + i + ',' + yCoor;
               }
             }
-            else {
+            else if (p1x < cx && p2x < cx) {
               for (let i = p1x; i >= cx - r; i -= 0.5) {
                 var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
                 points += ' ' + i + ',' + yCoor;
@@ -567,16 +678,68 @@ var initDraw = (function () {
                 points += ' ' + i + ',' + yCoor;
               }
             }
+            else {
+              if (p1y <= cy) {
+                for (let i = p1x; i <= cx + r; i += 0.5) {
+                  var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+                  points += ' ' + i + ',' + yCoor;
+                }
+                for (let i = cx + r; i >= p2x; i -= 0.5) {
+                  var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                  points += ' ' + i + ',' + yCoor;
+                }
+              }
+              else {
+                for (let i = p1x; i >= cx - r; i -= 0.5) {
+                  var yCoor = getYCoordinateCircle(i, p1y, cx, cy, r);
+                  points += ' ' + i + ',' + yCoor;
+                }
+                for (let i = cx - r; i <= p2x; i += 0.5) {
+                  var yCoor = getYCoordinateCircle(i, p2y, cx, cy, r);
+                  points += ' ' + i + ',' + yCoor;
+                }
+              }
+            }
+          }
+
+          startPoint.x = p2x;
+          startPoint.y = p2y;
+
+          polylineInArc.setAttribute('points', points);
+        } else if (currSetType.substr(0, 5) == "scale" && pointCount == 3) {
+          if (inStartedInRange) { // if set is in range
+            polylineTag = document.getElementById(currId);
+            points = polylineTag.getAttribute('points');
+            // to check if cursor went outside of range
+            inRangeObj = math.sideAndRange(currPoint);
+
+            if (inRangeObj.inRange) { // if drawing on same side 
+              targetPoint = math.getCoords(pointsObj, inRangeObj.side, currPoint, m);
+
+              currPoint.x = targetPoint.x;
+              currPoint.y = targetPoint.y;
+
+              points += ' ' + currPoint.x + ',' + currPoint.y;
+            } else { // else stop drawing
+              // cv.removeEventListener('mousemove', draw, false);
+              // cv.removeEventListener('mouseup', end, false);
+            }
+            polylineTag.setAttribute('points', points);
           }
         }
+      } else if (currToolType == "pen" || currToolType == "marker") {
+        polylineTag = document.getElementById(currId);
+        points = polylineTag.getAttribute('points');
 
-        startPoint.x = p2x;
-        startPoint.y = p2y;
-
-        polylineInArc.setAttribute('points', points);
+        if (currToolType == "marker") {
+          points = startPoint.x + ',' + startPoint.y + ' ' + currPoint.x + ',' + currPoint.y;
+        } else if (currToolType == "pen") {
+          points += ' ' + currPoint.x + ',' + currPoint.y;
+        }
+        polylineTag.setAttribute('points', points);
       }
 
-      cv.addEventListener('mouseleave', end, false);
+      // cv.addEventListener('mouseleave', end, false);
     }
     mousemoveDraw = true;
   }
@@ -660,6 +823,7 @@ var initDraw = (function () {
 
 // move behaviour of elements - tools/panels/sets
 var initMove = (function () {
+  var mousedownMove = mousemoveMove = false;
   var mousemove = false;
   var target = null;
   var startX = 0, startY = 0, endX = 0, endY = 0;
@@ -681,38 +845,44 @@ var initMove = (function () {
         // }
         dragAreas.forEach(function (dragArea) {
           dragArea.addEventListener('mousedown', start, false);
+          dragArea.addEventListener('touchstart', start, false);
         })
       } else { // otherwise move the element anywhere from with in element
         draggable.addEventListener('mousedown', start, false);
+        draggable.addEventListener('touchstart', start, false);
       }
     } else if (listener == "remove") { // REMOVE EVENT LISTENERS
       // console.log('removing')
       if (dragAreas.length > 0) {
         dragAreas.forEach(function (dragArea) {
           dragArea.removeEventListener('mousedown', start, false);
+          dragArea.removeEventListener('touchstart', start, false);
         })
       } else {
         draggable.removeEventListener('mousedown', start, false);
+        draggable.removeEventListener('touchstart', start, false);
       }
     }
   }
 
   var start = function (e) {
+    // console.group('Move');
+    // console.log('start-move');
+    
+    e.preventDefault();
+    
     initMove.mousemove = false
-    // console.log('moveStart');
+    mousedownMove = true;
 
     var currPoint = math.getMousePosition(e, cv);
     target = e.target;
     initMove.dragParent = target.closest('.draggable');
     var dragParent = initMove.dragParent;
-    // var oldDragParent = initMove.oldDragParent;
-
 
     // for moving from any inner area of 'drag-area' element
-    if (dragParent.dataset.panel == "compass") {
+    if (dragParent.dataset.panel == "compass" || dragParent.dataset.panel == "clock") {
       target = this;
     }
-
     // drag only if current element has class 'drag-area'
     if (target.classList.contains('drag-area')) {
       // if(e.target.closest('.drag-area')) {
@@ -729,10 +899,11 @@ var initMove = (function () {
       initMove.oldDragParent = initMove.dragParent;
 
       // update current geometry set type and remove any highlighted panel if any
-      if (dragParent.dataset.panelSet) {
+      if (dragParent.dataset.panelSet && dragParent.dataset.panelSet != "compass") {
         var highlightPanel = document.querySelector('.draggable-set.highlight');
         if (highlightPanel) {
           highlightPanel.classList.remove('highlight');
+          highlightPanel.querySelector('.pen-btn').classList.remove('active');
         }
         initTools.currSetType = dragParent.dataset.panel;
         dragParent.classList.add('highlight');
@@ -744,67 +915,22 @@ var initMove = (function () {
       }
 
       cvOuter.addEventListener('mousemove', move, false);
+      cvOuter.addEventListener('touchmove', move, false);
       cvOuter.addEventListener('mouseup', end, false);
-      dragParent.addEventListener('dragstart', initDrag.start, false);
+      cvOuter.addEventListener('touchend', end, false);
+      // dragParent.addEventListener('dragstart', initDrag.start, false);
+      // dragParent.addEventListener('touchstart', initDrag.start, false);
     }
-
     // bring TRASH can on top if sealType is present
     if (dragParent.dataset.sealType) {
       initPanel.trashPanel(e, 'start', dragParent.dataset.sealType);
     }
   }
-
-  var move = function (e) {
-    initMove.mousemove = true;
-
-    // console.log('move')
-    e.preventDefault();
-
-    var currPoint = math.getMousePosition(e, cv);
-    var dragParent = initMove.dragParent;
-
-    // calculate the new cursor position:
-    endX = startX - currPoint.x;
-    endY = startY - currPoint.y;
-    startX = currPoint.x;
-    startY = currPoint.y;
-
-    // set the element's new position:
-    dragParent.style.left = (dragParent.offsetLeft - endX) + "px";
-    if (dragParent == toolsUniverse) {
-      var H = cvOuter.getBoundingClientRect().height;
-      var h = dragParent.getBoundingClientRect().height;
-      var o = dragParent.offsetTop;
-      var offsetBottom = H - h - o;
-      dragParent.style.bottom = (offsetBottom + endY) + "px";
-    } else {
-      dragParent.style.top = (dragParent.offsetTop - endY) + "px";
-    }
-
-    // highligh if 'draggable-cube' is in range
-    if (dragParent.classList.contains('draggable-cubes')) {
-      dragParent.classList.remove('detach');
-      // initCubes.isSnapping = true;
-      initCubes.getShortestDist();
-      // highlight groups accordingly
-      if (initCubes.shortestDist != null) {
-        if (initCubes.shortestDist < initCubes.snapDist) {
-          initCubes.highlight(true);
-        } else {
-          initCubes.highlight(false);
-        }
-      }
-    }
-
-    // highlight TRASH cubes if mouse is in
-    if (dragParent.dataset.sealType) {
-      initPanel.trashPanel(e, 'move');
-    }
-  }
-
   var end = function (e) {
-    // console.log('moveEnd')
-    e.preventDefault();
+    // console.log('end-move')
+    // console.groupEnd();
+
+    mousedownMove = mousemoveMove = false
 
     var dragParent = initMove.dragParent;
 
@@ -829,8 +955,62 @@ var initMove = (function () {
     // dragParent.classList.remove('detach');
 
     cvOuter.removeEventListener('mousemove', move, false);
+    cvOuter.removeEventListener('touchmove', move, false);
     cvOuter.removeEventListener('mouseup', end, false);
-    dragParent.removeEventListener('dragstart', initDrag.start, false);
+    cvOuter.removeEventListener('touchend', end, false);
+    // dragParent.removeEventListener('dragstart', initDrag.start, false);
+    // dragParent.removeEventListener('touchstart', initDrag.start, false);
+  }
+  var move = function (e) {
+    if (mousedownMove && mousemoveMove) {
+      // console.log('move')
+
+      initMove.mousemove = true;
+      
+      e.preventDefault();
+  
+      var currPoint = math.getMousePosition(e, cv);
+      var dragParent = initMove.dragParent;
+  
+      // calculate the new cursor position:
+      endX = startX - currPoint.x;
+      endY = startY - currPoint.y;
+      startX = currPoint.x;
+      startY = currPoint.y;
+  
+      // set the element's new position:
+      dragParent.style.left = (dragParent.offsetLeft - endX) + "px";
+      if (dragParent == toolsUniverse) {
+        var H = cvOuter.getBoundingClientRect().height;
+        var h = dragParent.getBoundingClientRect().height;
+        var o = dragParent.offsetTop;
+        var offsetBottom = H - h - o;
+        dragParent.style.bottom = (offsetBottom + endY) + "px";
+      } else {
+        dragParent.style.top = (dragParent.offsetTop - endY) + "px";
+      }
+  
+      // highligh if 'draggable-cube' is in range
+      if (dragParent.classList.contains('draggable-cubes')) {
+        dragParent.classList.remove('detach');
+        // initCubes.isSnapping = true;
+        initCubes.getShortestDist();
+        // highlight groups accordingly
+        if (initCubes.shortestDist != null) {
+          if (initCubes.shortestDist < initCubes.snapDist) {
+            initCubes.highlight(true);
+          } else {
+            initCubes.highlight(false);
+          }
+        }
+      }
+  
+      // highlight TRASH cubes if mouse is in
+      if (dragParent.dataset.sealType) {
+        initPanel.trashPanel(e, 'move');
+      }
+    }    
+    mousemoveMove = true;
   }
 
   init(toolsUniverse, 'add');
@@ -851,6 +1031,7 @@ var initDrag = (function () {
   var draggablesId = 0;
   var dropElHeight = 0;
   var dragParent = null;
+  var cubeOuter = '';
 
   var start = function (e) {
     // console.log('dragStart');
@@ -861,15 +1042,22 @@ var initDrag = (function () {
     e.dataTransfer.setData("width", e.target.getBoundingClientRect().width);
     e.dataTransfer.setData("height", e.target.getBoundingClientRect().height);
     e.dataTransfer.setData("sealType", e.target.dataset.sealType);
-    if (e.target.dataset.numberDesign) {
-      e.dataTransfer.setData("sealDesign", e.target.dataset.numberDesign);
-      e.dataTransfer.setData("sealValue", e.target.dataset.numberValue);
+    if (e.target.dataset.numberDesign) { // for numbers
+      e.dataTransfer.setData("numberDesign", e.target.dataset.numberDesign);
+      e.dataTransfer.setData("numberValue", e.target.dataset.numberValue);
+    } else if(e.target.dataset.cubeSide) { // for cubes
+      e.dataTransfer.setData("cubeSide", e.target.dataset.cubeSide);
+      e.dataTransfer.setData("cubeValue", e.target.dataset.cubeValue);
     }
 
     cvOuter.addEventListener('dragenter', enter, false);
+    cvOuter.addEventListener('touchenter', enter, false);
     cvOuter.addEventListener('dragleave', leave, false);
+    cvOuter.addEventListener('touchend', leave, false);
     cvOuter.addEventListener('dragover', over, false);
+    cvOuter.addEventListener('touchover', over, false);
     cvOuter.addEventListener('drop', drop, false);
+    cvOuter.addEventListener('touchend', drop, false);
   }
   var enter = function (e) { e.preventDefault(); }
   var leave = function (e) { e.preventDefault(); }
@@ -885,8 +1073,10 @@ var initDrag = (function () {
     var src = e.dataTransfer.getData('src');
     var width = e.dataTransfer.getData('width');
     var height = e.dataTransfer.getData('height');
-    var numberDesign = e.dataTransfer.getData("sealDesign");
-    var numberValue = e.dataTransfer.getData("sealValue");
+    var numberDesign = e.dataTransfer.getData("numberDesign");
+    var numberValue = e.dataTransfer.getData("numberValue");
+    var cubeSide = e.dataTransfer.getData("cubeSide");
+    var cubeValue = e.dataTransfer.getData("cubeValue");
 
     cvOuter.classList.remove('dropping');
 
@@ -899,13 +1089,26 @@ var initDrag = (function () {
         draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.setAttribute('data-seal-type', sealType);
+
         if (sealType == 'numbers') {
           draggable.setAttribute('data-number-design', numberDesign);
           draggable.setAttribute('data-number-value', numberValue);
+        } else if(sealType == "cubes") {
+          draggable.setAttribute('data-cube-side', cubeSide);
+          draggable.setAttribute('data-cube-value', cubeValue);
+          if(cubeSide == "front") {
+            src = './_assets/img/cube-front-1.png';
+          } else {
+            src = './_assets/img/cube-back-1.png';
+          }
         }
-        draggable.innerHTML = `
-          <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
-            <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
+
+        if(cubeValue == 10) {
+          cubeOuter = `<div class="cube-outer">`;
+          for(var r = 0; r < 10; r++) {
+            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+          }
+          cubeOuter += `
           </div>
           <div class="dot dot-top"></div>
           <div class="dot dot-bottom"></div>
@@ -914,10 +1117,64 @@ var initDrag = (function () {
           <div class="detach-btn"></div>
           `;
 
+          draggable.innerHTML = cubeOuter;
+          draggable.classList.add('vertical');
+        } else if(cubeValue == 100) {
+          cubeOuter = '';
+          for(var c = 0; c < 10; c++) {
+            cubeOuter += `<div class="cube-outer drag-area" data-index="${c}">`;
+            for(var r = 0; r < 10; r++) {
+              cubeOuter += `<div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+            }
+            cubeOuter += `</div>`;
+          }
+          cubeOuter += `
+            <div class="dot dot-top"></div>
+            <div class="dot dot-bottom"></div>
+            <div class="dot dot-left"></div>
+            <div class="dot dot-right"></div>
+            <div class="detach-btn"></div>
+          `;          
+
+          draggable.innerHTML = cubeOuter;
+          draggable.classList.add('vertical');
+          draggable.classList.add('horizontal');
+          draggable.classList.add('complete');
+        } else {
+          draggable.innerHTML = `
+            <div class="cube-outer drag-area" data-index="0">
+              <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
+            </div>
+            <div class="dot dot-top"></div>
+            <div class="dot dot-bottom"></div>
+            <div class="dot dot-left"></div>
+            <div class="dot dot-right"></div>
+            <div class="detach-btn"></div>
+          `;
+        }
+
         draggable.addEventListener('dblclick', initCubes.remove, false);
         // draggable.addEventListener('click', initCubes.detach, false);
         draggable.addEventListener('click', initCubes.detachUI, false);
-      } else { // generate a seal
+      } else if (sealType == "shapes") { // generate shapes
+        draggable = document.createElement('div');
+        draggable.classList.add('draggable-shape');
+        draggable.classList.add('rotatable');
+        draggable.setAttribute('data-seal-type', sealType);
+        if (sealType == 'numbers') {
+          draggable.setAttribute('data-number-design', numberDesign);
+          draggable.setAttribute('data-number-value', numberValue);
+        }
+        draggable.innerHTML = `
+          <img class="drag-area" src="${src}" style="width: ${width}px; height: ${height}px;">
+          <button class="btn rotate-btn"></button>
+          `;
+
+        draggable.addEventListener('dblclick', (e) => { draggable.remove(); }, false);
+        draggable.querySelector('.rotate-btn').addEventListener('mousedown', initRotate.start, false);
+        draggable.querySelector('.rotate-btn').addEventListener('touchstart', initRotate.start, false);
+      } else { // generate a normal seals
+
         draggable = document.createElement('img');
         draggable.src = src;
         draggable.width = width;
@@ -942,9 +1199,13 @@ var initDrag = (function () {
       initMove.init(draggable, 'add');
 
       cvOuter.removeEventListener('dragenter', enter)
+      cvOuter.removeEventListener('touchenter', enter)
       cvOuter.removeEventListener('dragleave', leave)
+      cvOuter.removeEventListener('touchleave', leave)
       cvOuter.removeEventListener('dragover', over)
+      cvOuter.removeEventListener('touchover', over)
       cvOuter.removeEventListener('drop', drop)
+      cvOuter.removeEventListener('touchend', drop)
     } else {
       alert('You can only place max ' + totalSealsAllowed + ' of ' + sealType + ' seal type.');
     }
@@ -957,47 +1218,11 @@ var initDrag = (function () {
   }
 })();
 
-// fetch seals from 'settings.json' file
-var fetchSeals = (function () {
-  // console.log('fetching seals');
-
-  for (var sealType in sealTypes) {
-    var sealPanelContent = document.querySelector('[data-panel="' + sealType + '"] .content');
-    if (sealTypes.hasOwnProperty(sealType)) {
-      var values = sealTypes[sealType].values;
-      if (sealType == "numbers") {
-        for (var type in values) {
-          // console.log(values[type])
-          for (var i = 0; i < values[type].length; i++) {
-            // console.log(values[type][i][0], values[type][i][1])
-            var numType = values[type][i][0];
-            var numValue = values[type][i][1];
-            var el = document.createElement('img');
-            el.classList.add('draggable-seal');
-            el.setAttribute('data-seal-type', sealType);
-            el.setAttribute('data-number-design', type);
-            el.setAttribute('data-number-value', numValue);
-            el.src = './_assets/img/' + numType;
-            sealPanelContent.appendChild(el);
-          }
-        }
-      } else {
-        values.forEach(value => {
-          var el = document.createElement('img');
-          el.classList.add('draggable-seal');
-          el.setAttribute('data-seal-type', sealType);
-          el.src = './_assets/img/' + value;
-          sealPanelContent.appendChild(el);
-        });
-      }
-    }
-  }
-})();
-
 // init panel functions - open/close/drag-panel/drag-seals
 var initPanel = (function (e) {
   var panel = oldPanel = panelType = panelBtn = panelPosObj =
-    panelCloseBtn = scaleFlipBtn = scalePenBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
+    panelCloseBtn = scaleFlipBtn = setPenBtn = setEraserBtn = panelScaleBtn = draggableSeals = rotateBtns = null;
+  var eraser = document.querySelector('[data-tool-type1="eraser"]');
 
   var toggle = function (target) {
     panelType = target.dataset.panelBtn;
@@ -1013,7 +1238,8 @@ var initPanel = (function (e) {
       panelFlipBtn = panel.querySelector('.flip-btn');
       rotateBtns = panel.querySelectorAll('.rotate-btn');
       scaleFlipBtn = panel.querySelector('.scale-flip-btn');
-      scalePenBtn = panel.querySelector('.scale-pen-btn');
+      setPenBtn = panel.querySelector('.pen-btn');
+      setEraserBtn = panel.querySelector('.eraser-btn');
       draggableSeals = panel.getElementsByClassName('draggable-seal');
 
       target.classList.add('active');
@@ -1029,15 +1255,19 @@ var initPanel = (function (e) {
       initMove.init(panel, 'add');
       for (var i = 0; i < draggableSeals.length; i++) {
         draggableSeals[i].addEventListener('dragstart', initDrag.start, false);
+        draggableSeals[i].addEventListener('touchstart', initDrag.start, false);
       }
       for (var i = 0; i < rotateBtns.length; i++) {
         rotateBtns[i].addEventListener('mousedown', initRotate.start, false);
+        rotateBtns[i].addEventListener('touchstart', initRotate.start, false);
         if (rotateBtns[i].classList.contains('rotate-compass-draw')) {
           rotateBtns[i].addEventListener('mousedown', initDraw.start, false);
+          rotateBtns[i].addEventListener('touchstart', initDraw.start, false);
         }
       }
       if (panelScaleBtn) {
         panelScaleBtn.addEventListener('mousedown', initScale.start, false);
+        panelScaleBtn.addEventListener('touchstart', initScale.start, false);
       }
       if (panelFlipBtn) {
         panelFlipBtn.addEventListener('click', flip, false);
@@ -1045,9 +1275,12 @@ var initPanel = (function (e) {
       if (scaleFlipBtn) {
         scaleFlipBtn.addEventListener('click', scaleFlip, false);
       }
-      if (scalePenBtn) {
-        scalePenBtn.addEventListener('click', scaleDraw, false);
+      if (setPenBtn) {
+        setPenBtn.addEventListener('click', setPen, false);
       }
+      if (setEraserBtn) {
+        setEraserBtn.addEventListener('click', setEraser, false);
+      }      
       if (panelType == "abacus") {
         var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
         for (var i = 0; i < beads.length; i++) {
@@ -1055,8 +1288,8 @@ var initPanel = (function (e) {
         }
         var resetArea = document.getElementById('resetArea');
         resetArea.addEventListener('mousedown', initAbacus.resetStart, false);
-      }
-      if (panelType == "calculator") {
+        resetArea.addEventListener('touchstart', initAbacus.resetStart, false);
+      } else if (panelType == "calculator") {
         var buttons = panel.querySelectorAll('[data-button-type]');
         for (var i = 0; i < buttons.length; i++) {
           buttons[i].addEventListener('click', initCalc.calculate, false);
@@ -1066,6 +1299,8 @@ var initPanel = (function (e) {
         panel.addEventListener('click', bringInFront, false);
       }
 
+      cv.addEventListener('mousedown', initDraw.start, false);
+      cv.addEventListener('touchstart', initDraw.start, false);
 
       // update current geometry set type and remove any highlighted panel if any
       if (panel.dataset.panelSet) {
@@ -1097,7 +1332,8 @@ var initPanel = (function (e) {
     panelFlipBtn = panel.querySelector('.flip-btn');
     panelScaleBtn = panel.querySelector('.scale-btn');
     scaleFlipBtn = panel.querySelector('.scale-flip-btn');
-    scalePenBtn = panel.querySelector('.scale-pen-btn');
+    setPenBtn = panel.querySelector('.pen-btn');
+    setEraserBtn = panel.querySelector('.eraser-btn');
 
     draggableSeals = panel.getElementsByClassName('draggable-seal');
     panel.classList.remove('active');
@@ -1109,15 +1345,19 @@ var initPanel = (function (e) {
     initMove.init(panel, 'remove');
     for (var i = 0; i < draggableSeals.length; i++) {
       draggableSeals[i].removeEventListener('dragstart', initDrag.start, false);
+      draggableSeals[i].removeEventListener('touchstart', initDrag.start, false);
     }
     for (var i = 0; i < rotateBtns.length; i++) {
       rotateBtns[i].removeEventListener('mousedown', initRotate.start, false);
+      rotateBtns[i].removeEventListener('touchstart', initRotate.start, false);
       if (rotateBtns[i].classList.contains('rotate-compass-draw')) {
         rotateBtns[i].removeEventListener('mousedown', initDraw.start, false);
+        rotateBtns[i].removeEventListener('touchstart', initDraw.start, false);
       }
     }
     if (panelScaleBtn) {
       panelScaleBtn.removeEventListener('mousedown', initScale.start, false);
+      panelScaleBtn.removeEventListener('touchstart', initScale.start, false);
     }
     if (panelFlipBtn) {
       panelFlipBtn.removeEventListener('click', flip, false);
@@ -1125,28 +1365,28 @@ var initPanel = (function (e) {
     if (scaleFlipBtn) {
       scaleFlipBtn.removeEventListener('click', scaleFlip, false);
     }
-    if (scalePenBtn) {
-      scalePenBtn.classList.remove('active');
-      scalePenBtn.removeEventListener('click', scaleDraw, false);
+    if (setPenBtn) {
+      setPenBtn.classList.remove('active');
+      setPenBtn.removeEventListener('click', setPen, false);
     }
+    if (setEraserBtn) {
+      setEraserBtn.classList.remove('active');
+      setEraserBtn.removeEventListener('click', setEraser, false);
+    }  
     if (panelType == "calculator") {
       var buttons = panel.querySelectorAll('[data-button-type]');
       for (var i = 0; i < buttons.length; i++) {
         buttons[i].removeEventListener('click', initCalc.calculate, false);
       }
-    }
-    if (panelType == "abacus") {
+    } else if (panelType == "abacus") {
       var beads = document.querySelectorAll('[data-panel="abacus"] .bead');
       var resetArea = document.getElementById('resetArea');
       for (var i = 0; i < beads.length; i++) {
         beads[i].removeEventListener('click', initAbacus.changePos, false);
       }
       resetArea.removeEventListener('mousedown', initAbacus.resetStart, false);
-    }
-    if (panel.classList.contains('draggable-seal')) {
-      panel.removeEventListener('click', bringInFront, false);
-    }
-    if (panelType.substr(0, 5) == "scale") {
+      resetArea.removeEventListener('touchstart', initAbacus.resetStart, false);
+    } else if (panelType.substr(0, 5) == "scale") {
       var secActiveBtns = document.querySelectorAll('[data-tool-group-type="scale"].secondary.active');
       var panelGroupBtn = document.querySelector('[data-tool-group-type="scale"]');
       if (secActiveBtns.length < 1) {
@@ -1159,6 +1399,14 @@ var initPanel = (function (e) {
         panelGroupBtn.classList.remove('active');
       }
     }
+    if (panel.classList.contains('draggable-seal')) {
+      panel.removeEventListener('click', bringInFront, false);
+    }
+    var panelCount = document.querySelectorAll('[data-panel-set].active').length;
+    if(panelCount == 0 && initTools.currToolType != "pen") {
+      cv.removeEventListener('mousedown', initDraw.start, false);
+      cv.removeEventListener('touchstart', initDraw.start, false);
+    }    
 
     // update current geometry set type to null
     if (panel.dataset.panelSet) {
@@ -1230,13 +1478,31 @@ var initPanel = (function (e) {
   var scaleFlip = function (e) {
     console.log('scale flipping');
   }
-  var scaleDraw = function (e) {
-    console.log('scale drawing');
-
+  var setPen = function () {
+    // console.log('set drawing');
     if (this.classList.contains('active')) {
       this.classList.remove('active');
     } else {
       this.classList.add('active');
+      if(setEraserBtn) {
+        setEraserBtn.classList.remove('active');
+      }
+      eraser.classList.remove('active');
+      initTools.currToolType = null;
+    }
+  }
+  var setEraser = function (e) {
+    // console.log('set erasing');
+
+    if (this.classList.contains('active')) {
+      this.classList.remove('active');
+      eraser.classList.remove('active');
+      initTools.currToolType = null;
+    } else {
+      this.classList.add('active');
+      eraser.click();
+      // remove active class from setPenBtn
+      setPenBtn.classList.remove('active');
     }
   }
 
@@ -1418,7 +1684,7 @@ var initCubes = (function (e) {
 
     var transitionEvent = whichTransitionEvent();
 
-    var sealType = dragParent.querySelector('[data-seal-type]').dataset.sealType;
+    var sealType = dragParent.dataset.sealType;
     var src = dragParent.querySelector('img').src;
     var width = dragParent.querySelector('img').width;
     var height = dragParent.querySelector('img').height;
@@ -1455,7 +1721,7 @@ var initCubes = (function (e) {
       if (snapType == "vertical") {
         for (var r = 0; r < dragParentCubeCount; r++) {
           cubeOuter += `
-            <div class="cube-outer drag-area" data-index="${dropParentCubeCount + r}" data-seal-type="${sealType}">
+            <div class="cube-outer drag-area" data-index="${dropParentCubeCount + r}">
               <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
             </div>        
           `;
@@ -1465,7 +1731,7 @@ var initCubes = (function (e) {
       } else if (snapType == "horizontal") {
         cubeOuter = '';
         for (var c = 0; c < totalCubes; c++) {
-          cubeOuter += `<div class="cube-outer drag-area" data-index="${c}" data-seal-type="${sealType}">`;
+          cubeOuter += `<div class="cube-outer drag-area" data-index="${c}">`;
           for (var r = 0; r < row; r++) {
             cubeOuter += `<div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
           }
@@ -1512,7 +1778,7 @@ var initCubes = (function (e) {
             // make vertical complete group (layout needs to update)
             cubeOuter = `<div class="cube-outer">`;
             for (var r = 0; r < row; r++) {
-              cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+              cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
             }
             cubeOuter += `
               </div>
@@ -1549,7 +1815,7 @@ var initCubes = (function (e) {
         // make vertical complete group (layout needs to update)
         cubeOuter = `<div class="cube-outer">`;
         for (var r = 0; r < row; r++) {
-          cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+          cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
         }
         cubeOuter += `
           </div>
@@ -1573,7 +1839,7 @@ var initCubes = (function (e) {
         // make horizontal complete group 
         cubeOuter = "";
         for (var c = 0; c < canBeAddedCubes; c++) {
-          cubeOuter += `<div class="cube-outer drag-area" data-index="${dropParentCubeCount + c}" data-seal-type="${sealType}">`;
+          cubeOuter += `<div class="cube-outer drag-area" data-index="${dropParentCubeCount + c}">`;
           for (var r = 0; r < row; r++) {
             cubeOuter += `<div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
           }
@@ -1586,7 +1852,7 @@ var initCubes = (function (e) {
         if (remainingCubes == 1) {
           cubeOuter = `<div class="cube-outer">`;
           for (var r = 0; r < row; r++) {
-            cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
+            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
           `;
           }
           cubeOuter += `
@@ -1665,7 +1931,7 @@ var initCubes = (function (e) {
           cubeOuter = '';
           for (var r = 0; r < index; r++) {
             cubeOuter += `
-              <div class="cube-outer drag-area" data-index="${r}" data-seal-type="${sealType}">
+              <div class="cube-outer drag-area" data-index="${r}">
                 <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
               </div>        
             `;
@@ -1699,7 +1965,7 @@ var initCubes = (function (e) {
         cubeOuter = '';
         for (var r = 0; r < detachCubes; r++) {
           cubeOuter += `
-          <div class="cube-outer drag-area" data-index="${r}" data-seal-type="${sealType}">
+          <div class="cube-outer drag-area" data-index="${r}">
             <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
           </div>        
         `;
@@ -1726,7 +1992,7 @@ var initCubes = (function (e) {
       var totalCubes = dragParent.querySelectorAll('.drag-area').length;
       var detachCubes = totalCubes - index;
 
-      var sealType = dragParent.querySelector('[data-seal-type]').dataset.sealType;
+      var sealType = dragParent.dataset.sealType;
       var src = dragParent.querySelector('img').src;
       var width = dragParent.querySelector('img').width;
       var height = dragParent.querySelector('img').height;
@@ -1744,7 +2010,7 @@ var initCubes = (function (e) {
         if (index == 1) {
           cubeOuter = `<div class="cube-outer">`;
           for (var r = 0; r < row; r++) {
-            cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
+            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
           `;
           }
           cubeOuter += `
@@ -1781,7 +2047,7 @@ var initCubes = (function (e) {
         if (detachCubes == 1) { // detach partion is only 1
           cubeOuter = `<div class="cube-outer">`;
           for (var r = 0; r < row; r++) {
-            cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
+            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
           `;
           }
           cubeOuter += `
@@ -1795,7 +2061,7 @@ var initCubes = (function (e) {
         } else { // detach partion - more than 1
           cubeOuter = '';
           for (var c = 0; c < detachCubes; c++) {
-            cubeOuter += `<div class="cube-outer drag-area" data-index="${c}" data-seal-type="${sealType}">`;
+            cubeOuter += `<div class="cube-outer drag-area" data-index="${c}">`;
             for (var r = 0; r < row; r++) {
               cubeOuter += `<div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
             }
@@ -1858,7 +2124,7 @@ var initCubes = (function (e) {
           dragParent.classList.remove('vertical')
 
           cubeOuter = `
-            <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
+            <div class="cube-outer drag-area" data-index="0">
             <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>  
           `;
 
@@ -1889,7 +2155,7 @@ var initCubes = (function (e) {
           }
 
           cubeOuter = `
-            <div class="cube-outer drag-area" data-index="0" data-seal-type="${sealType}">
+            <div class="cube-outer drag-area" data-index="0">
             <div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>
             </div>        
             <div class="dot dot-top"></div>
@@ -1925,7 +2191,7 @@ var initCubes = (function (e) {
         cubeOuter = `<div class="cube-outer">`;
 
         for (var r = 0; r < row; r++) {
-          cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+          cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
         }
         cubeOuter += `</div>`;
 
@@ -1949,7 +2215,7 @@ var initCubes = (function (e) {
           cubeOuter = `<div class="cube-outer">`;
 
           for (var r = 0; r < row; r++) {
-            cubeOuter += `<div class="cube drag-area" data-index="${r}" data-seal-type="${sealType}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
           }
           cubeOuter += `
           </div>        
@@ -2027,8 +2293,8 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var start = function (e) {
-    console.group('Rotate')
-    console.log('start-rotate');
+    // console.group('Rotate')
+    // console.log('start-rotate');
 
     e.preventDefault();
 
@@ -2065,6 +2331,8 @@ var initRotate = (function () {
       } else if (rotateBtn.classList.contains('rotate-hand')) {
         refEl = panel.querySelector('.rotate-hand-ref');
       }
+    } else if (panelType == "clock") {
+      refEl = panel;
     }
 
     refObj = refEl.getBoundingClientRect();
@@ -2079,9 +2347,8 @@ var initRotate = (function () {
       y: top + (height / 2)
     };
 
-    x = e.clientX - refPoint.x;
-    y = e.clientY - refPoint.y;
-
+    x = ((e.type == 'touchstart') ? e.touches[0].clientX : e.clientX) - refPoint.x;
+    y = ((e.type == 'touchstart') ? e.touches[0].clientY : e.clientY) - refPoint.y;
 
     if (panelType == 'compass') { // for compass
       // update resetRotation variable
@@ -2158,8 +2425,11 @@ var initRotate = (function () {
     }
 
     cvOuter.addEventListener('mousemove', rotate, false);
+    cvOuter.addEventListener('touchmove', rotate, false);
     cvOuter.addEventListener('mouseup', end, false);
+    cvOuter.addEventListener('touchend', end, false);
     cvOuter.addEventListener('mouseleave', end, false);
+    cvOuter.addEventListener('touchleave', end, false);
   };
 
   var end = function (e) {
@@ -2176,8 +2446,11 @@ var initRotate = (function () {
     }
 
     cvOuter.removeEventListener('mousemove', rotate, false);
+    cvOuter.removeEventListener('touchmove', rotate, false);
     cvOuter.removeEventListener('mouseup', end, false);
+    cvOuter.removeEventListener('touchend', end, false);
     cvOuter.removeEventListener('mouseleave', end, false);
+    cvOuter.removeEventListener('touchleave', end, false);
   };
 
   var rotate = function (e) {
@@ -2187,8 +2460,9 @@ var initRotate = (function () {
 
       e.preventDefault();
 
-      x = e.clientX - refPoint.x;
-      y = e.clientY - refPoint.y;
+      x = ((e.type == 'touchmove') ? e.touches[0].clientX : e.clientX) - refPoint.x;
+      y = ((e.type == 'touchmove') ? e.touches[0].clientY : e.clientY) - refPoint.y;
+  
       currAngle = Math.floor(R2D * Math.atan2(y, x));
 
       if (currAngle < 0) {
@@ -2201,7 +2475,7 @@ var initRotate = (function () {
       }
 
       if (panelType == 'clock') {
-        rotatable.style.transform = "translateY(-50%) rotate(" + d + "deg)";
+        rotatable.style.transform = "translateY(-50%) rotate(" + currAngle + "deg)";
       } else if (panelType == "compass") { // rotate compass itself or its hands
         if (rotateBtn.classList.contains('rotate-hand')) {
           if (!isNaN(angle)) { currAngle = currAngle - angle; }
@@ -2237,48 +2511,68 @@ var initRotate = (function () {
 
 // scale sets logics
 var initScale = (function (e) {
-  // console.log('scaling');
-
+  var mousedownRotate = mousemoveRotate = false;
   var startPoint, currPoint;
-  var panel = document.querySelector('[data-panel="protractor"]');
+  var scalable = null;
   var w = null;
   var h = null;
-  var d = null;
+  var dx = null;
+  var dy = null;
   var ratio = null;
 
   var start = function (e) {
-    // console.log('start');
+    // console.group('Scale')
+    // console.log('start-scale');
 
-    w = panel.getBoundingClientRect().width;
-    h = panel.getBoundingClientRect().height;
-    ratio = w / h;
-    startPoint = math.getMousePosition(e, cv);
-    // console.log('startPoint: ', startPoint.x)
-
-    cvOuter.addEventListener('mousemove', scale, false);
-    cvOuter.addEventListener('mouseup', end, false);
-  }
-  var scale = function (e) {
-    // console.log('scale');
     e.preventDefault();
 
-    currPoint = math.getMousePosition(e, cv);
-    d = currPoint.x - startPoint.x;
-    // console.log(startPoint.x, currPoint.x, d)
+    mousedownRotate = true;
+    
+    scalable = e.target.closest('.scalable');
+    w = scalable.offsetWidth;
+    h = scalable.offsetHeight;
+    ratio = w / h;
+    startPoint = math.getMousePosition(e, cv);
 
-    console.log(w, d, ratio, w + d, w * ratio)
-    if (ratio > 1) { // width is more
-      panel.style.width = w + d + 'px';
-      panel.style.height = h + (d * ratio) + 'px';
-    } else { // height is more
-
-    }
+    cvOuter.addEventListener('mousemove', scale, false);
+    cvOuter.addEventListener('touchmove', scale, false);
+    cvOuter.addEventListener('mouseup', end, false);
+    cvOuter.addEventListener('touchend', end, false);
   }
   var end = function (e) {
-    // console.log('end');
+    // console.log('end-rotate')
+    // console.groupEnd();
+
+    mousedownRotate = mousemoveRotate = false
 
     cvOuter.removeEventListener('mousemove', scale, false);
+    cvOuter.removeEventListener('touchmove', scale, false);
     cvOuter.removeEventListener('mouseup', end, false);
+    cvOuter.removeEventListener('touchend', end, false);
+  }  
+  var scale = function (e) {
+    if (mousedownRotate && mousemoveRotate) {
+      // console.log('scale');
+
+      e.preventDefault();
+  
+      currPoint = math.getMousePosition(e, cv);
+      dx = currPoint.x - startPoint.x;
+      dy = currPoint.y - startPoint.y;
+
+      // startPoint = currPoint;
+      // ratio = dx/dy;
+
+      if(dx > dy) { // width is more
+        scalable.style.width = (w + dx) + 'px';
+        scalable.style.height = ((w + dx) / ratio) + 'px';
+      } else { // height is more
+        scalable.style.height = (h + dy) + 'px';
+        scalable.style.width = ((h + dy) * ratio) + 'px';
+      }
+  
+    }
+    mousemoveRotate = true;
   }
 
   return {
@@ -2340,7 +2634,7 @@ var initAbacus = (function () {
     var layer = this.dataset.layer;
     var state = this.dataset.state;
 
-    
+
     if (layer == 'up') { // up layer
       if (state == 'up') {
         this.setAttribute('transform', 'translate(0, 29)');
@@ -2351,7 +2645,7 @@ var initAbacus = (function () {
       }
     } else { // down layer
       var col = this.dataset.col;
-      var beads = panel.querySelectorAll('[data-layer="down"][data-col="'+col+'"]');
+      var beads = panel.querySelectorAll('[data-layer="down"][data-col="' + col + '"]');
       var pos = this.dataset.pos;
       if (state == 'down') {
         for (var i = 0; i <= pos; i++) {
@@ -2371,13 +2665,13 @@ var initAbacus = (function () {
   var resetStart = function (e) {
     // console.group('Reset Start');
     // console.log('resetStart');
-    
+
     // total cols in panel
     totalCol = panel.querySelectorAll('[data-layer="up"]').length;
 
     // total cols to reset
     totalColToResetArr = [];
-    for(var c = 1; c <= totalCol; c++) {
+    for (var c = 1; c <= totalCol; c++) {
       if (panel.querySelector('[data-col="' + c + '"][data-layer="up"][data-state="down"]')) {
         totalColToResetArr.push(c);
       } else if (panel.querySelector('[data-col="' + c + '"][data-layer="down"][data-state="up"]')) {
@@ -2390,8 +2684,11 @@ var initAbacus = (function () {
     startX = posX - panelX;
 
     panel.addEventListener('mousemove', reset, false);
+    panel.addEventListener('touchmove', reset, false);
     cvOuter.addEventListener('mouseup', resetEnd, false);
+    cvOuter.addEventListener('touchend', resetEnd, false);
     cvOuter.addEventListener('mouseleave', resetEnd, false);
+    cvOuter.addEventListener('touchleave', resetEnd, false);
   }
   var reset = function (e) {
     // console.log('reset');
@@ -2399,29 +2696,25 @@ var initAbacus = (function () {
     posX = math.getMousePosition(e, cvOuter).x;
     endX = posX - panelX;
 
-    if(startX < endX) {
-    } else {
-    }
-    
     // detect range and reset cols
     for (var c = 0; c < totalColToResetArr.length; c++) {
       col = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"]').getBoundingClientRect();
       colX = col.x + col.width / 2;
       colX = parseInt(colX - panelX);
-      
+
       if (colX < endX && startX < endX && colX > startX) {
         // console.log('reset L to R')
         var beadUp = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"][data-layer="up"][data-state="down"]');
         var beadsDown = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-layer="down"][data-state="up"]');
-        if(beadUp) {
+        if (beadUp) {
           beadUp.setAttribute('transform', 'translate(0, 0)');
-          beadUp.dataset.state = 'up';          
+          beadUp.dataset.state = 'up';
         }
         beadsDown.forEach(beadDown => {
           beadDown.setAttribute('transform', 'translate(0, 0)');
-          beadDown.dataset.state = 'down';          
+          beadDown.dataset.state = 'down';
         });
-      } else if(colX > endX && startX > endX && colX < startX) {
+      } else if (colX > endX && startX > endX && colX < startX) {
         // console.log('reset R to L')
         var beadUp = panel.querySelector('[data-col="' + totalColToResetArr[c] + '"][data-layer="up"][data-state="down"]');
         var beadsDown = panel.querySelectorAll('[data-col="' + totalColToResetArr[c] + '"][data-layer="down"][data-state="up"]');
@@ -2443,8 +2736,11 @@ var initAbacus = (function () {
     // console.groupEnd();
 
     panel.removeEventListener('mousemove', reset, false);
+    panel.removeEventListener('touchmove', reset, false);
     cvOuter.removeEventListener('mouseup', resetEnd, false);
+    cvOuter.removeEventListener('touchend', resetEnd, false);
     cvOuter.removeEventListener('mouseleave', resetEnd, false);
+    cvOuter.removeEventListener('touchleave', resetEnd, false);
   }
 
   return {
@@ -2557,7 +2853,7 @@ var math = (function (e) {
     // x coordinate of intersection of two lines
     // var x = (m * (y2 - y1) + m * m * x1 - x2) / ((m * m) + m)
 
-    var x, y, _x;
+    var x, y;
     var s = initDraw.strokeWidth / 2;
 
     if (m == 0) {

@@ -112,6 +112,8 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
     <div class="draggable draggable-set rotatable" data-panel="scale-wooden-lg" data-panel-set="scale">
       <img class="drag-area scale" src="./_assets/widgets/scale-wooden-lg.svg">
@@ -123,6 +125,8 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
     <div class="draggable draggable-set rotatable" data-panel="scale-transparent-sm" data-panel-set="scale">
       <img class="drag-area scale" src="./_assets/widgets/scale-transparent-sm.svg">
@@ -134,7 +138,8 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
-      <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
     <div class="draggable draggable-set rotatable" data-panel="scale-transparent-lg" data-panel-set="scale">
       <img class="drag-area scale" src="./_assets/widgets/scale-transparent-lg.svg">
@@ -146,7 +151,8 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
-      <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
     <div class="draggable draggable-set rotatable" data-panel="scale-new" data-panel-set="scale">
       <img class="drag-area scale" src="./_assets/widgets/scale-new.svg">
@@ -158,8 +164,8 @@
       <span class="point point-4"></span>
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
-      <!-- <img class="btn scale-flip-btn" src="./_assets/img/scale-flip-btn.svg"> -->
-      <img class="btn scale-pen-btn" src="./_assets/img/scale-pen-wooden.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
 
     <div class="draggable draggable-set rotatable" data-panel="set-square-isosceles" data-panel-set="set-square">
@@ -189,18 +195,20 @@
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
     </div>
 
-    <div class="draggable draggable-set rotatable" data-panel="protractor" data-panel-set="protractor">
-      <img class="drag-area protractor" src="./_assets/widgets/protractor-widget.svg">
+    <div id="protractor" class="draggable draggable-set rotatable scalable" data-panel="protractor" data-panel-set="protractor">
+      <img class="protractor" src="./_assets/widgets/protractor-widget.svg">
+
+      <div class="drag-area"></div>
+
       <span class="borderlr"></span>
       <span class="bordertb"></span>
-      <span class="point point-1"></span>
-      <span class="point point-2"></span>
-      <span class="point point-3"></span>
-      <span class="point point-4"></span>
+      <span class="point point-center"></span>
       <img class="btn close-btn" src="./_assets/img/tool-close-btn.svg">
-      <img class="btn flip-btn" src="./_assets/img/tool-flip-btn.svg">
+      <!-- <img class="btn flip-btn" src="./_assets/img/tool-flip-btn.svg"> -->
       <img class="btn scale-btn" src="./_assets/img/tool-scale-btn.svg">
       <img class="btn rotate-btn" src="./_assets/img/tool-rotate-btn.svg">
+      <img class="btn pen-btn" src="./_assets/img/set-pen-blue.svg">
+      <img class="btn eraser-btn" src="./_assets/img/tool-eraser-btn.svg">
     </div>
 
     <div class="draggable draggable-set rotatable" data-panel="compass" data-panel-set="compass">
@@ -426,9 +434,10 @@
 
     <!-- widget panels -->
     <div class="draggable draggable-widget" data-panel="abacus">
-      <!-- <div class="drag-area"></div> -->
+      <div id="resetArea" class="reset"></div>
+      <div class="drag-area custom-drag-area"></div>
       <div class="close-btn"></div>
-      <svg class="drag-area" xmlns="http://www.w3.org/2000/svg" width="600" height="204.805">
+      <svg class="drag-area abacus" xmlns="http://www.w3.org/2000/svg" width="600" height="204.805">
         <!-- Lower Layer -->
         <g data-name="Group 455">
           <path class="drag-area" data-name="Rectangle 209" fill="#b68b62" d="M552.436 69.146h2.086v122.152h-2.086z" />
@@ -752,67 +761,67 @@
           <path data-name="Rectangle 230" fill="#b68b62" d="M45.3 13.505h2.086v42.136H45.3z" />
 
           <!-- Upper Layer of beads -->
-          <g class="bead" data-layer="up" data-state="down" data-col="11" data-name="Group 444" id="Group_444" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="11" transform="translate(0, -20)" data-name="Group 444" id="Group_444" fill-rule="evenodd">
             <path data-name="Path 2005"
               d="M573.577 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2006"
               d="M573.577 42.97h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="10" data-name="Group 445" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="10" transform="translate(0, -20)" data-name="Group 445" fill-rule="evenodd">
             <path data-name="Path 2007"
               d="M522.864 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2008"
               d="M522.864 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="9" data-name="Group 446" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="9" transform="translate(0, -20)" data-name="Group 446" fill-rule="evenodd">
             <path data-name="Path 2009"
               d="M472.15 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2010"
               d="M472.15 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="8" data-name="Group 447" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="8" transform="translate(0, -20)" data-name="Group 447" fill-rule="evenodd">
             <path data-name="Path 2011"
               d="M421.436 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2012"
               d="M421.436 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="7" data-name="Group 448" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="7" transform="translate(0, -20)" data-name="Group 448" fill-rule="evenodd">
             <path data-name="Path 2013"
               d="M370.722 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2014"
               d="M370.722 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="6" data-name="Group 449" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="6" transform="translate(0, -20)" data-name="Group 449" fill-rule="evenodd">
             <path data-name="Path 2015"
               d="M320.009 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2016"
               d="M320.009 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="5" data-name="Group 450" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="5" transform="translate(0, -20)" data-name="Group 450" fill-rule="evenodd">
             <path data-name="Path 2017"
               d="M269.295 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2018"
               d="M269.295 42.97h-40.2c2.562 5.426 10.589 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="4" data-name="Group 451" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="4" transform="translate(0, -20)" data-name="Group 451" fill-rule="evenodd">
             <path data-name="Path 2019"
               d="M218.582 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2020"
               d="M218.582 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="3" data-name="Group 452" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="3" transform="translate(0, -20)" data-name="Group 452" fill-rule="evenodd">
             <path data-name="Path 2021"
               d="M167.868 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2022"
               d="M167.868 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="2" data-name="Group 453" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="2" transform="translate(0, -20)" data-name="Group 453" fill-rule="evenodd">
             <path data-name="Path 2023"
               d="M117.154 42.969h-40.2c2.562-5.426 10.59-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2024"
               d="M117.154 42.97h-40.2c2.562 5.426 10.59 9.387 20.1 9.387s17.538-3.962 20.1-9.387z" fill="#f5d1ae" />
           </g>
-          <g class="bead" data-layer="up" data-state="down" data-col="1" data-name="Group 454" fill-rule="evenodd">
+          <g class="bead" data-layer="up" data-state="up" data-col="1" transform="translate(0, -20)" data-name="Group 454" fill-rule="evenodd">
             <path data-name="Path 2025"
               d="M66.441 42.969h-40.2c2.562-5.426 10.589-9.386 20.1-9.386s17.538 3.96 20.1 9.386z" fill="#fbe4cd" />
             <path data-name="Path 2026"
@@ -826,7 +835,7 @@
           <path data-name="Rectangle 235" fill="none" d="M13.506 13.505h572.972v42.136H13.506z" />
           <path class="drag-area" data-name="Rectangle 236" fill="#633" d="M13.506 55.641h572.972v13.505H13.506z" />
           
-          <path id="resetArea" class="reset" data-name="Path 2027" d="M586.477 13.505h.017V-.001H13.506v13.506z" fill="#633" />
+          <path class="drag-area" data-name="Path 2027" d="M586.477 13.505h.017V-.001H13.506v13.506z" fill="#633" />
 
           <path class="drag-area" data-name="Path 2028" d="M586.477 191.298H13.506v13.506h572.989v-13.506z"
             fill="#633" />
