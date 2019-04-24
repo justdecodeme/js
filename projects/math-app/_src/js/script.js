@@ -1098,6 +1098,8 @@ var initDrag = (function () {
         draggable.setAttribute('data-seal-type', sealType);
         draggable.setAttribute('data-order-top', 0);
         draggable.setAttribute('data-order-bottom', 0);
+        draggable.setAttribute('data-order-right', 0);
+        draggable.setAttribute('data-order-left', 0);
         if (sealType == 'numbers') {
           draggable.setAttribute('data-number-design', numberDesign);
           draggable.setAttribute('data-number-value', numberValue);
@@ -1150,7 +1152,7 @@ var initDrag = (function () {
                 data-col="1" 
                 data-id="${++initDrag.cubeId}" 
                 data-side="${cubeSide}"
-                class="cube drag-area b t r l">
+                class="cube drag-area t r b l">
               <div class="dot dot-top"></div>
               <div class="dot dot-bottom"></div>
               <div class="dot dot-left"></div>
@@ -2000,12 +2002,13 @@ var initCubes = (function (e) {
     
     var orderBottom = parseInt(dropParent.dataset.orderBottom);
     var orderTop = parseInt(dropParent.dataset.orderTop);
+    var orderRight = parseInt(dropParent.dataset.orderRight);
+    var orderLeft = parseInt(dropParent.dataset.orderLeft);
     var order = '';
 
     var dropParentCubeCount = dropParent.querySelectorAll('.cube').length;
     var dragParentCubeCount = dragParent.querySelectorAll('.cube').length;
     var totalCubes = dropParentCubeCount + dragParentCubeCount;
-    var canBeAddedCubes = rowLimit - dropParentCubeCount;
 
     var classes = '';
 
@@ -2027,11 +2030,13 @@ var initCubes = (function (e) {
       // dropParent.style.zIndex = ++initMove.dragParentzIndex;              
     } else if (initCubes.snapInfo.dropSide == 1 || initCubes.snapInfo.dropSide == 3) { // RIGHT OR LEFT wrt DROP ELEMENT
       if (totalCubes <= colLimit) {
-        console.log('totalCubes <= colLimit');
+        // console.log('totalCubes <= colLimit');
+        var canBeAddedCubes = rowLimit - dropParentCubeCount;
         (initCubes.snapInfo.dropSide == 1) ? addToRight(dragParentCubeCount): addToLeft(dragParentCubeCount);
       } else if (totalCubes > colLimit) {
-        console.log('totalCubes > colLimit');
-        (initCubes.snapInfo.dropSide == 3) ? addToRight(canBeAddedCubes): addToLeft(canBeAddedCubes);
+        // console.log('totalCubes > colLimit');
+        var canBeAddedCubes = colLimit - dropParentCubeCount;
+        (initCubes.snapInfo.dropSide == 1) ? addToRight(canBeAddedCubes): addToLeft(canBeAddedCubes);
       }
 
       initMove.dropParent.innerHTML += cubeOuter;
@@ -2044,6 +2049,7 @@ var initCubes = (function (e) {
     }
 
     function addToBottom(cubeToAdd) {
+      console.log('addToBottom');
       cubeOuter = '';
       for (var i = 1; i <= cubeToAdd; i++) {
         // apply new row and update order
@@ -2051,7 +2057,7 @@ var initCubes = (function (e) {
         order = ++orderBottom;
 
         // apply new classes
-        classes = (i == cubeToAdd) ? 'b r l' : 'r l';
+        classes = (i == cubeToAdd) ? 'r b l' : 'r l';
 
         cubeOuter += `
           <div 
@@ -2073,6 +2079,7 @@ var initCubes = (function (e) {
       dropParent.dataset.orderBottom = orderBottom; // update order or dropParent cubes      
     }
     function addToTop(cubeToAdd) {
+      console.log('addToTop');
       cubeOuter = '';
       for (var i = cubeToAdd; i >= 1; i--) {
         // apply new row and update order
@@ -2109,23 +2116,24 @@ var initCubes = (function (e) {
       }
     }
     function addToRight(cubeToAdd) {
+      console.log('addToRight');
       cubeOuter = '';
       for (var i = 1; i <= cubeToAdd; i++) {
         // apply new row and update order
-        row = lastDropRow + i;
-        order = ++orderBottom;
+        col = lastDropCol + i;
+        order = ++orderRight;
 
         // apply new classes
-        classes = (i == cubeToAdd) ? 'b r l' : 'r l';
+        classes = (i == cubeToAdd) ? 't r b' : 't b';
 
         cubeOuter += `
           <div 
-              data-row="${row}" 
-              data-col="${lastDropCol}" 
+              data-row="${lastDropRow}" 
+              data-col="${col}" 
               data-id="${++initDrag.cubeId}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
-              style="top: ${cube.height*order}px;">
+              style="left: ${cube.width*order}px;">
             <div class="dot dot-top"></div>
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
@@ -2134,27 +2142,28 @@ var initCubes = (function (e) {
         `;
       }
 
-      lastDropRowEl.classList.remove('b'); // remove 'b-bottom' class from old element
-      dropParent.dataset.orderBottom = orderBottom; // update order or dropParent cubes      
+      lastDropColEl.classList.remove('r'); // remove 'r-right' class from old element
+      dropParent.dataset.orderRight = orderRight; // update order or dropParent cubes      
     }
     function addToLeft(cubeToAdd) {
+      console.log('addToLeft');
       cubeOuter = '';
-      for (var r = cubeToAdd; r >= 1; r--) {
+      for (var i = cubeToAdd; i >= 1; i--) {
         // apply new row and update order
-        row = r;
-        order = --orderTop;
+        col = i;
+        order = --orderLeft;
 
         // apply new classes
-        classes = (r == 1) ? 't r l' : 'r l';
+        classes = (i == 1) ? 't b l' : 't b';
 
         cubeOuter += `
           <div 
-              data-row="${row}" 
-              data-col="${lastDropCol}" 
+              data-row="${lastDropRow}" 
+              data-col="${col}" 
               data-id="${++initDrag.cubeId}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
-              style="top: ${cube.height*order}px;">
+              style="left: ${cube.width*order}px;">
             <div class="dot dot-top"></div>
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
@@ -2163,14 +2172,14 @@ var initCubes = (function (e) {
         `;
       }
 
-      firstDropRowEl.classList.remove('t'); // remove 't-top' class from old element
-      dropParent.dataset.orderTop = orderTop; // update order or dropParent cubes
+      firstDropColEl.classList.remove('l'); // remove 'l-left' class from old element
+      dropParent.dataset.orderLeft = orderLeft; // update order or dropParent cubes
 
       // ↑ all below row values by 1
       var cubes = dropParent.querySelectorAll('.cube');
       for (var i = 0; i < cubes.length; i++) {
-        var r = parseInt(cubes[i].dataset.row);
-        cubes[i].dataset.row = r + cubeToAdd;
+        var c = parseInt(cubes[i].dataset.col);
+        cubes[i].dataset.col = c + cubeToAdd;
       }
     }
 
