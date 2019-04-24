@@ -1096,6 +1096,8 @@ var initDrag = (function () {
         draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.setAttribute('data-seal-type', sealType);
+        draggable.setAttribute('data-order-top', 0);
+        draggable.setAttribute('data-order-bottom', 0);
         if (sealType == 'numbers') {
           draggable.setAttribute('data-number-design', numberDesign);
           draggable.setAttribute('data-number-value', numberValue);
@@ -1147,7 +1149,6 @@ var initDrag = (function () {
                 data-row="1" 
                 data-col="1" 
                 data-id="${++initDrag.cubeId}" 
-                data-order="0"
                 data-side="${cubeSide}"
                 class="cube drag-area b t r l">
               <div class="dot dot-top"></div>
@@ -1536,7 +1537,6 @@ var initCubes = (function (e) {
     width: 34,
     height: 34
   }
-  var order = orderBottom = orderTop = 0;
 
   // wrt dragParent
   var getCoords = function () {
@@ -2000,6 +2000,8 @@ var initCubes = (function (e) {
     var maxRow = parseInt(maxRowEl.dataset.row);
     var maxCol = parseInt(maxColEl.dataset.row);
     var classes = '';
+    var orderBottom = parseInt(dropParent.dataset.orderBottom);
+    var orderTop = parseInt(dropParent.dataset.orderTop);
 
     console.log(initCubes.snapInfo, maxRow, rowLimit, maxRow < rowLimit)
     // snap occordng to snape side
@@ -2013,6 +2015,7 @@ var initCubes = (function (e) {
           row = row + 1;
 
           order = ++orderBottom;
+          dropParent.dataset.orderBottom = orderBottom;
 
           // remove 'max-row' class from old element
           maxRowEl.classList.remove('b');
@@ -2023,6 +2026,7 @@ var initCubes = (function (e) {
           row = 1;
 
           order = --orderTop;
+          dropParent.dataset.orderTop = orderTop;
 
           // ↑ all below row values by 1
           var cubes = dropParent.querySelectorAll('.cube');
@@ -2042,7 +2046,6 @@ var initCubes = (function (e) {
               data-row="${row}" 
               data-col="${col}" 
               data-id="${++initDrag.cubeId}" 
-              data-order="${order}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
               style="top: ${cube.height*order}px;">
@@ -2060,6 +2063,8 @@ var initCubes = (function (e) {
         // dragParent.remove();
         // dropParent.style.zIndex = ++initMove.dragParentzIndex;
       }
+    } else {
+      console.warn('Bottom and Top Limit Reached!!!');
     }
 
     dragParent.addEventListener(transitionEvent, transitionEndCallback);
