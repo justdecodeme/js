@@ -462,23 +462,26 @@ body {
     position: absolute;    
     &[data-side=front] {
       background-image: url(../img/cube-front-1.png);
+      background: yellow;
     }
     &[data-side=back] {
       background-image: url(../img/cube-back-1.png);
+      background: lightgreen;
     }
     &:before, &:after {
       position: absolute;
       color: black;
-      font-size: 20px;
+      font-size: 16px;
     }
     &:before {
       content: attr(data-row);
-      left: 0;
-      color: red;
+      left: 3px;
+      top: 3px;
     }
     &:after {
       content: attr(data-col);
-      left: 12px;
+      right: 3px;
+      bottom: 3px;
     }
     &.t {
       .dot-top { 
