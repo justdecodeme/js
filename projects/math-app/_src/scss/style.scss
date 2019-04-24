@@ -474,48 +474,70 @@ body {
     &:before {
       content: attr(data-row);
       left: 0;
+      color: red;
     }
     &:after {
       content: attr(data-col);
       left: 12px;
     }
+    &.t {
+      .dot-top { 
+        visibility: visible;
+      }
+    }
+    &.r {
+      .dot-right { 
+        visibility: visible;
+      }
+    }
+    &.b {
+      .dot-bottom { 
+        visibility: visible;
+      }
+    }
+    &.l {
+      .dot-left { 
+        visibility: visible;
+      }
+    }
+    .dot {
+      position: absolute;
+      visibility: hidden;
+      &.dot-top {
+        height: 4px;
+        width: 100%;
+        left: 50%;
+        bottom: 100%;
+        background: rgb(255, 102, 0);
+        transform: translate(-50%, 50%);
+      }
+      &.dot-right {
+        height: 100%;
+        width: 4px;
+        top: 50%;
+        left: 100%;
+        transform: translate(-50%, -50%);
+        background: black;
+      }
+      &.dot-bottom {
+        height: 4px;
+        width: 100%;
+        left: 50%;
+        top: 100%;
+        transform: translate(-50%, -50%);
+        background: darkturquoise;
+      }
+      &.dot-left {
+        height: 100%;
+        width: 4px;
+        top: 50%;
+        right: 100%;
+        transform: translate(50%, -50%);
+        background: blue;
+      }
+    }
   }
 
-  .dot {
-    height: 3px;
-    width: 3px;
-    border-radius: 50%;
-    position: absolute;
-    // visibility: hidden;
-
-    &.dot-top {
-      left: 50%;
-      bottom: 100%;
-      background: rgb(255, 102, 0);
-      transform: translate(-50%, 50%);
-    }
-
-    &.dot-bottom {
-      left: 50%;
-      top: 100%;
-      transform: translate(-50%, -50%);
-      background: yellow;
-    }
-
-    &.dot-left {
-      top: 50%;
-      right: 100%;
-      transform: translate(50%, -50%);
-      background: white;
-    }
-
-    &.dot-right {
-      top: 50%;
-      left: 100%;
-      transform: translate(-50%, -50%);
-      background: rgb(5, 155, 255);
-    }
-  }
 
   .detach-btn {
     position: absolute;

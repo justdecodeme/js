@@ -1527,8 +1527,8 @@ var initCubes = (function (e) {
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
   var snapDist = 10;
   var snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
-  var rowLimit = 4;
-  var colLimit = 4;
+  var rowLimit = 10;
+  var colLimit = 10;
   var rowNumber = 10;
   var colNumber = 0;
   var dragParentLeft = dragParentTop = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
