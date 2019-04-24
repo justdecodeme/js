@@ -998,7 +998,7 @@ var initMove = (function () {
       if (dragParent.classList.contains('draggable-cubes')) {
         dragParent.classList.remove('detach');
         // initCubes.isSnapping = true;
-        initCubes.getShortestDist();
+        initCubes.getShortestDist(e);
         // highlight groups accordingly
         if (initCubes.snapInfo.shortestDist != null) {
           if (initCubes.snapInfo.shortestDist < initCubes.snapDist) {
@@ -1524,7 +1524,7 @@ var initCubes = (function (e) {
   var dropCoords = {};
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
   var snapDist = 10;
-  var snapInfo = { 'dragSide': 0, 'dropSide': 0, row: 0, col: 0, id: '', shortestDist: null };
+  var snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
   var rowLimit = 4;
   var colLimit = 4;
   var rowNumber = 10;
@@ -1583,7 +1583,6 @@ var initCubes = (function (e) {
       dropCoords[id] = dropCoord;
     }
 
-    console.log(dropCoords);
     dragParentLeft = dragParent.style.left;
     dragParentTop = dragParent.style.top;
   }
@@ -1592,7 +1591,7 @@ var initCubes = (function (e) {
 
     var shortestDist = null;
 
-    initCubes.snapInfo = { 'dragSide': 0, 'dropSide': 0, row: 0, col: 0, id: '', shortestDist: null };
+    initCubes.snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
 
     if (snapType == 'vertical') {
       dropDotCoord_0 = dragParent.querySelector('.dot-top').getBoundingClientRect();
@@ -1683,17 +1682,17 @@ var initCubes = (function (e) {
       }
     }
   }
-  var getShortestDist = function () {
+  var getShortestDist = function (e) {
     // console.log('geting shortest dist');
 
     var i, j = 0;
+    var dragCube = e.target.closest('.cube');
+    initCubes.snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
 
-    initCubes.snapInfo = { 'dragSide': 0, 'dropSide': 0, row: 0, col: 0, id: '', shortestDist: null };
-
-    dragDotCoord_top = dragParent.querySelector('.dot-top').getBoundingClientRect();
-    dragDotCoord_right = dragParent.querySelector('.dot-right').getBoundingClientRect();
-    dragDotCoord_bottom = dragParent.querySelector('.dot-bottom').getBoundingClientRect();
-    dragDotCoord_left = dragParent.querySelector('.dot-left').getBoundingClientRect();
+    dragDotCoord_top = dragCube.querySelector('.dot-top').getBoundingClientRect();
+    dragDotCoord_right = dragCube.querySelector('.dot-right').getBoundingClientRect();
+    dragDotCoord_bottom = dragCube.querySelector('.dot-bottom').getBoundingClientRect();
+    dragDotCoord_left = dragCube.querySelector('.dot-left').getBoundingClientRect();
 
     // 0, 1, 2, 3 | top, right, bottom, left respectively
     var dragCoord = {
@@ -1715,7 +1714,7 @@ var initCubes = (function (e) {
       },
     }
 
-    // wrt dragParent
+    // wrt dragCube
     for(i = 0; i < 4; i++) { // 0,1,2,3 -> snap using ALL FOUR sides (top and botton and left and right)
       for (var dropCoord in dropCoords) {
         switch (i) {
@@ -1746,10 +1745,8 @@ var initCubes = (function (e) {
               // i - side of drag element, j - side of drop element
               'dragSide': i, 
               'dropSide': j, 
-              row: parseInt(dropCube.dataset.row),
-              col: parseInt(dropCube.dataset.col),              
               id: parseInt(dropCoord),
-              shortestDist: parseFloat(d).toFixed(2)
+              shortestDist: d
             }
           };
         }
@@ -1993,58 +1990,137 @@ var initCubes = (function (e) {
     // whether drag cube is 'front' or 'back
     var cubeSide = dragParent.querySelector('.cube').dataset.side;
 
-    var maxRowEl = dropParent.querySelector('.cube.b');
-    var maxColEl = dropParent.querySelector('.cube.r');
-    var minRowEl = dropParent.querySelector('.cube.t');
-    var minColEl = dropParent.querySelector('.cube.l');
-    var maxRow = parseInt(maxRowEl.dataset.row);
-    var maxCol = parseInt(maxColEl.dataset.row);
-    var classes = '';
+    var firstDropRowEl = dropParent.querySelector('.cube.t');
+    var lastDropRowEl = dropParent.querySelector('.cube.b');
+    var firstDropColEl = dropParent.querySelector('.cube.l');
+    var lastDropColEl = dropParent.querySelector('.cube.r');
+    
+    var lastDropRow = parseInt(lastDropRowEl.dataset.row);
+    var lastDropCol = parseInt(lastDropColEl.dataset.col);
+    
     var orderBottom = parseInt(dropParent.dataset.orderBottom);
     var orderTop = parseInt(dropParent.dataset.orderTop);
+    var order = '';
 
-    console.log(initCubes.snapInfo, maxRow, rowLimit, maxRow < rowLimit)
+    var dropParentCubeCount = dropParent.querySelectorAll('.cube').length;
+    var dragParentCubeCount = dragParent.querySelectorAll('.cube').length;
+    var totalCubes = dropParentCubeCount + dragParentCubeCount;
+
+    var classes = '';
+
+    // console.log(initCubes.snapInfo, totalCubes)
     // snap occordng to snape side
     if (initCubes.snapInfo.dropSide == 2 || initCubes.snapInfo.dropSide == 0) { // BOTTOM OR TOP wrt DROP ELEMENT
-      if (maxRow < rowLimit) {
-        col = initCubes.snapInfo.col;
+      if (totalCubes <= rowLimit) {
+        console.log('totalCubes <= rowLimit');
 
         if (initCubes.snapInfo.dropSide == 2) { // BOTTOM
-          // apply new row
-          var row = parseInt(maxRowEl.dataset.row);
-          row = row + 1;
-
-          order = ++orderBottom;
-          dropParent.dataset.orderBottom = orderBottom;
-
-          // remove 'max-row' class from old element
-          maxRowEl.classList.remove('b');
-          // apply new classes
-          classes = 'b r l';
+          addBottom(dragParentCubeCount);
         } else if (initCubes.snapInfo.dropSide == 0) { // TOP
-          // apply new row
-          row = 1;
+          cubeOuter = '';
+          for (var r = dragParentCubeCount; r >= 1; r--) {
+            // apply new row and update order
+            row = r;
+            order = --orderTop;
 
-          order = --orderTop;
-          dropParent.dataset.orderTop = orderTop;
+            // apply new classes
+            classes = (r == 1) ? 't r l' : 'r l';
+
+            cubeOuter += `
+              <div 
+                  data-row="${row}" 
+                  data-col="${lastDropCol}" 
+                  data-id="${++initDrag.cubeId}" 
+                  data-side="${cubeSide}" 
+                  class="cube drag-area ${classes}"
+                  style="top: ${cube.height*order}px;">
+                <div class="dot dot-top"></div>
+                <div class="dot dot-bottom"></div>
+                <div class="dot dot-left"></div>
+                <div class="dot dot-right"></div>   
+              </div>     
+            `;
+          }
+
+          firstDropRowEl.classList.remove('t'); // remove 't-top' class from old element
+          dropParent.dataset.orderTop = orderTop; // update order or dropParent cubes
 
           // ↑ all below row values by 1
           var cubes = dropParent.querySelectorAll('.cube');
           for (var i = 0; i < cubes.length; i++) {
             var r = parseInt(cubes[i].dataset.row);
-            cubes[i].dataset.row = r + 1;
+            cubes[i].dataset.row = r + dragParentCubeCount;
+          }
+        }
+      } else if(totalCubes > rowLimit) {
+        console.log('totalCubes > rowLimit');
+
+        var canBeAddedCubes = rowLimit - dropParentCubeCount;
+        // var remainingCubes = dragParentCubeCount - canBeAddedCubes;
+
+        if (initCubes.snapInfo.dropSide == 2) { // BOTTOM
+          addBottom(canBeAddedCubes);
+        } else if (initCubes.snapInfo.dropSide == 0) { // TOP
+          cubeOuter = '';
+          for (var r = canBeAddedCubes; r >= 1; r--) {
+            // apply new row and update order
+            row = r;
+            order = --orderTop;
+
+            // apply new classes
+            classes = (r == 1) ? 't r l' : 'r l';
+
+            cubeOuter += `
+              <div 
+                  data-row="${row}" 
+                  data-col="${lastDropCol}" 
+                  data-id="${++initDrag.cubeId}" 
+                  data-side="${cubeSide}" 
+                  class="cube drag-area ${classes}"
+                  style="top: ${cube.height*order}px;">
+                <div class="dot dot-top"></div>
+                <div class="dot dot-bottom"></div>
+                <div class="dot dot-left"></div>
+                <div class="dot dot-right"></div>   
+              </div>     
+            `;
           }
 
-          // remove 'min-row' class from old element
-          minRowEl.classList.remove('t');
-          // apply new classes
-          classes = 't r l';
-        }
+          // ↑ all below row values by 1
+          var cubes = dropParent.querySelectorAll('.cube');
+          for (var i = 0; i < cubes.length; i++) {
+            cubes[i].dataset.row = canBeAddedCubes + i + 1;
+          }
 
-        cubeOuter = `
+          firstDropRowEl.classList.remove('t'); // remove 't-top' class from old element
+          dropParent.dataset.orderTop = orderTop; // update order or dropParent cubes
+
+        }  
+      }
+
+      initMove.dropParent.innerHTML += cubeOuter;
+      dropParent = initMove.dropParent;
+      initMove.init(dropParent, 'add');
+      // dragParent.remove();
+      // dropParent.style.zIndex = ++initMove.dragParentzIndex;              
+    } else {
+      console.warn('Bottom and Top Limit Reached!!!');
+    }
+
+    function addBottom(cubeToAdd) {
+      cubeOuter = '';
+      for (var r = 1; r <= cubeToAdd; r++) {
+        // apply new row and update order
+        row = lastDropRow + r;
+        order = ++orderBottom;
+
+        // apply new classes
+        classes = (r == cubeToAdd) ? 'b r l' : 'r l';
+
+        cubeOuter += `
           <div 
               data-row="${row}" 
-              data-col="${col}" 
+              data-col="${lastDropCol}" 
               data-id="${++initDrag.cubeId}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
@@ -2055,16 +2131,10 @@ var initCubes = (function (e) {
             <div class="dot dot-right"></div>   
           </div>     
         `;
-
-        initMove.dropParent.innerHTML += cubeOuter;
-        dropParent = initMove.dropParent;
-        initMove.init(dropParent, 'add');
-
-        // dragParent.remove();
-        // dropParent.style.zIndex = ++initMove.dragParentzIndex;
       }
-    } else {
-      console.warn('Bottom and Top Limit Reached!!!');
+
+      lastDropRowEl.classList.remove('b'); // remove 'b-bottom' class from old element
+      dropParent.dataset.orderBottom = orderBottom; // update order or dropParent cubes      
     }
 
     dragParent.addEventListener(transitionEvent, transitionEndCallback);
