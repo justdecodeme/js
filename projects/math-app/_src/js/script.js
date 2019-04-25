@@ -2018,14 +2018,14 @@ var initCubes = (function (e) {
     // snap occordng to snape side
     if (initCubes.snapInfo.dropSide == 2 || initCubes.snapInfo.dropSide == 0) { // BOTTOM OR TOP wrt DROP ELEMENT
       var dropRowCubeCount = dropParent.querySelectorAll('[data-col="' + dropCol + '"].cube').length;
-      var dragRowCubeCount = dragParent.querySelectorAll('[data-col="' + dropCol + '"].cube').length;
+      var dragRowCubeCount = dragParent.querySelectorAll('[data-col].cube').length;
       var totalCubes = dropRowCubeCount + dragRowCubeCount;
 
       if (totalCubes <= rowLimit) {
-        // console.log('totalCubes <= rowLimit');
+        console.log('totalCubes <= rowLimit');
         (initCubes.snapInfo.dropSide == 2) ? addToBottom(dragRowCubeCount) : addToTop(dragRowCubeCount);
       } else if(totalCubes > rowLimit) {
-        // console.log('totalCubes > rowLimit');
+        console.log('totalCubes > rowLimit');
         var canBeAddedCubes = rowLimit - dropRowCubeCount;
         (initCubes.snapInfo.dropSide == 2) ? addToBottom(canBeAddedCubes) : addToTop(canBeAddedCubes);
       }
@@ -2037,14 +2037,14 @@ var initCubes = (function (e) {
       // dropParent.style.zIndex = ++initMove.dragParentzIndex;              
     } else if (initCubes.snapInfo.dropSide == 1 || initCubes.snapInfo.dropSide == 3) { // RIGHT OR LEFT wrt DROP ELEMENT
       var dropRowCubeCount = dropParent.querySelectorAll('[data-col="' + dropRow + '"].cube').length;
-      var dragRowCubeCount = dragParent.querySelectorAll('[data-col="' + dropRow + '"].cube').length;
+      var dragRowCubeCount = dragParent.querySelectorAll('[data-col].cube').length;
       var totalCubes = dropRowCubeCount + dragRowCubeCount;
 
       if (totalCubes <= colLimit) {
-        // console.log('totalCubes <= colLimit');
+        console.log('totalCubes <= colLimit');
         (initCubes.snapInfo.dropSide == 1) ? addToRight(dragRowCubeCount): addToLeft(dragRowCubeCount);
       } else if (totalCubes > colLimit) {
-        // console.log('totalCubes > colLimit');
+        console.log('totalCubes > colLimit');
         var canBeAddedCubes = colLimit - dropRowCubeCount;
         (initCubes.snapInfo.dropSide == 1) ? addToRight(canBeAddedCubes): addToLeft(canBeAddedCubes);
       }
@@ -2064,7 +2064,8 @@ var initCubes = (function (e) {
       for (var i = cubeToAdd; i >= 1; i--) {
         // calculate left and top position
         var l = cube.width * (dropCol - 1);
-        var t = cube.height * (--orderTop);
+        var l = cube.height * (1 - dropRow);
+        // var t = cube.height * (--orderTop);
 
         // apply new row and update order
         row = i;
@@ -2073,19 +2074,19 @@ var initCubes = (function (e) {
         classes = (i == 1) ? 't r l' : 'r l';
 
         cubeOuter += `
-      <div 
-          data-row="${row}" 
-          data-col="${dropCol}" 
-          data-id="${++initDrag.cubeId}" 
-          data-side="${cubeSide}" 
-          class="cube drag-area ${classes}"
-          style="left: ${l}px; top: ${t}px;">
-        <div class="dot dot-top"></div>
-        <div class="dot dot-bottom"></div>
-        <div class="dot dot-left"></div>
-        <div class="dot dot-right"></div>   
-      </div>     
-    `;
+          <div 
+              data-row="${row}" 
+              data-col="${dropCol}" 
+              data-id="${++initDrag.cubeId}" 
+              data-side="${cubeSide}" 
+              class="cube drag-area ${classes}"
+              style="left: ${l}px; top: ${t}px;">
+            <div class="dot dot-top"></div>
+            <div class="dot dot-bottom"></div>
+            <div class="dot dot-left"></div>
+            <div class="dot dot-right"></div>   
+          </div>     
+        `;
       }
 
       dropCube.classList.remove('t'); // remove 't-top' class from old element
