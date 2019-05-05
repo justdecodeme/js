@@ -1,0 +1,180 @@
+@charset "UTF-8";
+
+.fs_fusen_base {
+	position: absolute;
+    background-color: #d3d5d8;
+    z-index: 2210000001;
+    margin: auto;
+    left: 0px;
+    right: 0px;
+    background-repeat: no-repeat;
+}
+
+#fs_fusen_submenu {
+	position: absolute;
+    z-index: 2210000001;
+    margin: auto;
+    left: 0;
+    right: 0;
+    background-repeat: no-repeat;
+    background-size: contain;
+    
+}
+#fs_fusen_text_bk {
+	position: absolute;
+    top:5%;
+    left:5.2%;
+    width:89.6%;
+    height:70%;
+	background-color: #fff;
+}
+#fs_fusen_text {
+	position: absolute;
+    top:5%;
+    left:5.2%;
+    width:89.6%;
+    height:70%;
+    vertical-align: top;
+    overflow: scroll;
+    -webkit-user-select: text;
+    user-select: text;
+}
+.placeholder{
+    opacity: 0.5 !important;
+}
+
+#fs_fusen_text p {
+    line-height: 1.0;
+}
+
+.fs_fusen_btn{
+    position: absolute;
+    width: 24%;
+    height: 15%;
+    cursor: pointer;
+}
+
+.fs_fusen_img{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.fs_fusen_radio{
+    position: absolute;
+    cursor: pointer;
+}
+
+.fs_fusen_img_radio{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+#fs_fusen_rDir_Tate{
+    top: 22%;
+    left: 29%;
+    width: 20%;
+    height: auto;
+}
+#fs_fusen_rDir_Yoko{
+    top: 22%;
+    left: 51.5%;
+    width: 20%;
+    height: auto;
+}
+#fs_fusen_rFontType_G{
+    top: 42%;
+    left: 29%;
+    width: 20%;
+    height: auto;
+}
+#fs_fusen_rFontType_M{
+    top: 42%;
+    left: 51.5%;
+    width: 20%;
+    height: auto;
+}
+#fs_fusen_rFontType_K{
+    top: 42%;
+    left: 73.8%;
+    width: 20%;
+    height: auto;
+}
+#fs_fusen_btnColor{
+    top: 81%;
+    left: 28%;
+    width: 25%;
+    height: auto;
+}
+#fs_fusen_sampleColor{
+/*
+    position: absolute;
+    top: 3%;
+    left: 15%;
+    width: 70%;
+    height: 15%;
+*/
+    display:none;
+}
+#fs_fusen_sampleFontColor{
+/*
+    position: absolute;
+    top: 3%;
+    left: 15%;
+    width: 70%;
+    height: 15%;
+    white-space: nowrap;
+    overflow: hidden;
+*/
+    display:none;
+}
+#fs_fusen_btnOK{
+    top: 79%;
+    left: 17%;
+}
+
+#fs_fusen_btnCancel{
+    top: 79%;
+    left: 58%;
+}
+
+#fs_fusen_btnOpen{
+    top: 0%;
+    right: 3%;
+    width: 10.42%;
+    height: 16.7%;
+}
+
+.fssb_palette_fusen_fsize_img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#fssb_palette_fusen_fsize_knob {
+    position: absolute;
+    top: 63.5%;
+    width: 4%;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fssb_palette_fusen_fsize_guidebar {
+    position: absolute;
+    top: 68%;
+    left: 44%;
+    width: 31%;
+    height: 3%;
+    border-top: 0.1rem solid #313232;
+}
+
+.fssb_palette_fusen_fsize_touchbar {
+	position: absolute;
+    top: 64%;
+    left: 41%;
+    width: 37%;
+    height: 10%;
+/*    border: 0.1rem solid #f00;*/
+	cursor: pointer;
+}

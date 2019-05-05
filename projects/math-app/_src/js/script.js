@@ -1096,10 +1096,6 @@ var initDrag = (function () {
         draggable = document.createElement('div');
         draggable.classList.add('draggable-cubes');
         draggable.setAttribute('data-seal-type', sealType);
-        draggable.setAttribute('data-order-top', 0);
-        draggable.setAttribute('data-order-bottom', 0);
-        draggable.setAttribute('data-order-right', 0);
-        draggable.setAttribute('data-order-left', 0);
         if (sealType == 'numbers') {
           draggable.setAttribute('data-number-design', numberDesign);
           draggable.setAttribute('data-number-value', numberValue);
@@ -1152,7 +1148,8 @@ var initDrag = (function () {
                 data-col="1" 
                 data-id="${++initDrag.cubeId}" 
                 data-side="${cubeSide}"
-                class="cube drag-area t r b l">
+                class="cube drag-area t r b l"
+                style="left: 0px; top: 0px;">
               <div class="dot dot-top"></div>
               <div class="dot dot-bottom"></div>
               <div class="dot dot-left"></div>
@@ -1164,7 +1161,7 @@ var initDrag = (function () {
 
         // draggable.addEventListener('dblclick', initCubes.remove, false);
         // draggable.addEventListener('click', initCubes.detachUI, false);
-        draggable.addEventListener('dblclick', initCubes.detach, false);
+        // draggable.addEventListener('dblclick', initCubes.detach, false);
       } else if (sealType == "shapes") { // generate shapes
         draggable = document.createElement('div');
         draggable.classList.add('draggable-shape');
@@ -1525,19 +1522,19 @@ var initPanel = (function (e) {
 var initCubes = (function (e) {
   var dropCoords = {};
   var isSnapping = false; // REMOVE LATER IF NOT REQUIRED
-  var snapDist = 10;
+  var snapDist = 20;
   var snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
-  var rowLimit = 5;
-  var colLimit = 5;
+  var rowLimit = 2;
+  var colLimit = 2;
   var rowNumber = 10;
-  var colNumber = 0;
+  var colNumber = 10;
   var dragParentLeft = dragParentTop = snapType = dragParent = dropParent = cubeLimit = cubeOuter = null;
   var detachType = null;
   var dropDotCoord_top = dropDotCoord_right = dropDotCoord_bottom = dropDotCoord_left = null;
   var cubeOuter = '';
   var cube = {
-    width: 34,
-    height: 34
+    width: 40,
+    height: 40
   }
   var dropCube = null;
 
@@ -1551,18 +1548,21 @@ var initCubes = (function (e) {
     detachType = (dragParent.classList.contains('horizontal')) ? 'horizontal' : 'vertical';
     dropCoords = {};
 
-    var cubeForSnap = document.querySelectorAll('.draggable .cube');
-
-
-    for (let i = 0; i < cubeForSnap.length; i++) {
-      if (cubeForSnap[i].closest('.draggable') == dragParent) { continue; }
+    var draggables = document.querySelectorAll('.draggable-cubes');
+    
+    for (let i = 0; i < draggables.length; i++) {
+      if (draggables[i] == dragParent) { continue; }
       
-      var dropDotCoord_top = cubeForSnap[i].querySelector('.dot-top').getBoundingClientRect();
-      var dropDotCoord_right = cubeForSnap[i].querySelector('.dot-right').getBoundingClientRect();
-      var dropDotCoord_bottom = cubeForSnap[i].querySelector('.dot-bottom').getBoundingClientRect();
-      var dropDotCoord_left = cubeForSnap[i].querySelector('.dot-left').getBoundingClientRect();
+      var rightTopDropCube = draggables[i].querySelector('.cube.r.t');
+      var leftBottomDropCube = draggables[i].querySelector('.cube.l.b');
+      
+      var dropDotCoord_right = rightTopDropCube.querySelector('.dot-right').getBoundingClientRect();
+      var dropDotCoord_top = rightTopDropCube.querySelector('.dot-top').getBoundingClientRect();
 
-      var id = cubeForSnap[i].dataset.id;
+      var dropDotCoord_left = leftBottomDropCube.querySelector('.dot-left').getBoundingClientRect();
+      var dropDotCoord_bottom = leftBottomDropCube.querySelector('.dot-bottom').getBoundingClientRect();
+
+      var id = draggables[i].dataset.id;
 
       // 0, 1, 2, 3 | top, right, bottom, left respectively
       var dropCoord = {
@@ -1585,9 +1585,6 @@ var initCubes = (function (e) {
       }
       dropCoords[id] = dropCoord;
     }
-
-    dragParentLeft = dragParent.style.left;
-    dragParentTop = dragParent.style.top;
   }
   var getShortestDistBackup = function () {
     // console.log('geting shortest dist');
@@ -1688,14 +1685,17 @@ var initCubes = (function (e) {
   var getShortestDist = function (e) {
     // console.log('geting shortest dist');
 
+    var leftTopDragCube = dragParent.querySelector('.cube.l.t');
+    var rightBottomDragCube = dragParent.querySelector('.cube.b.r');
+
     var i, j = 0;
-    var dragCube = e.target.closest('.cube');
     initCubes.snapInfo = { 'dragSide': 0, 'dropSide': 0, id: '', shortestDist: null };
 
-    dragDotCoord_top = dragCube.querySelector('.dot-top').getBoundingClientRect();
-    dragDotCoord_right = dragCube.querySelector('.dot-right').getBoundingClientRect();
-    dragDotCoord_bottom = dragCube.querySelector('.dot-bottom').getBoundingClientRect();
-    dragDotCoord_left = dragCube.querySelector('.dot-left').getBoundingClientRect();
+    dragDotCoord_left = leftTopDragCube.querySelector('.dot-left').getBoundingClientRect();
+    dragDotCoord_top = leftTopDragCube.querySelector('.dot-top').getBoundingClientRect();
+
+    dragDotCoord_right = rightBottomDragCube.querySelector('.dot-right').getBoundingClientRect();
+    dragDotCoord_bottom = rightBottomDragCube.querySelector('.dot-bottom').getBoundingClientRect();
 
     // 0, 1, 2, 3 | top, right, bottom, left respectively
     var dragCoord = {
@@ -1741,10 +1741,11 @@ var initCubes = (function (e) {
 
           // if shortest dist is not defined, make it equal to first calculated dist
           if (initCubes.snapInfo.shortestDist == null || initCubes.snapInfo.shortestDist > d) {
-            dropCube = document.querySelector('.cube[data-id="' + dropCoord + '"');
-            var row = dropCube.dataset.row;
-            var col = dropCube.dataset.col;
-            dropParent = initMove.dropParent = dropCube.closest('.draggable');
+            dropParent = initMove.dropParent = document.querySelector('.draggable[data-id="' + dropCoord + '"');
+            var dropRowCount = dropParent.querySelectorAll('[data-row="1"]').length;
+            var dropColCount = dropParent.querySelectorAll('[data-col="1"]').length;
+            var dragRowCount = dragParent.querySelectorAll('[data-row="1"]').length;
+            var dragColCount = dragParent.querySelectorAll('[data-col="1"]').length;
 
             initCubes.snapInfo = {
               // i - side of drag element, j - side of drop element
@@ -1753,28 +1754,35 @@ var initCubes = (function (e) {
               id: parseInt(dropCoord),
               shortestDist: d
             }
+
+            if(((i == 0 || i == 2) && dropRowCount != dragRowCount) || ((i == 1 || i == 3) && dropColCount != dragColCount)) {
+              initCubes.snapInfo.shortestDist = null;
+            }
           };
-          
-          if (dropParent.querySelectorAll('[data-col="' + col + '"].cube').length == colLimit || 
-              dropParent.querySelectorAll('[data-row="' + row + '"].cube').length == rowLimit) {
-            initCubes.snapInfo.shortestDist = null;
-          }
         }
       }
     }
   }
   var highlight = function (flag) {
+    let _class = classes = oldHighlight = prefix = '';
     if (flag) {
       // console.log('highlighting')
-      var oldHighlight = document.querySelector('.draggable-cubes.highlight');
+      oldHighlight = document.querySelector('.draggable-cubes.highlight');
       if (oldHighlight) {
         oldHighlight.classList.remove('highlight');
       }
-      dragParent.classList.add('highlight');
-      dropParent.classList.add('highlight');
+      _class = 'highlight-'+initCubes.snapInfo.dragSide;
+      dragParent.classList.add(_class);
+      _class = 'highlight-'+initCubes.snapInfo.dropSide;
+      dropParent.classList.add(_class);
     } else {
-      dragParent.classList.remove('highlight');
-      dropParent.classList.remove('highlight');
+      prefix = "highlight";
+
+      classes = dragParent.className.split(" ").filter(c => !c.startsWith(prefix));
+      dragParent.className = classes.join(" ").trim();   
+
+      classes = dropParent.className.split(" ").filter(c => !c.startsWith(prefix));
+      dropParent.className = classes.join(" ").trim();      
     }
   }
   var snapBackup = function () {
@@ -2004,30 +2012,32 @@ var initCubes = (function (e) {
     var lastDropRowEl = dropParent.querySelector('.cube.b');
     var firstDropColEl = dropParent.querySelector('.cube.l');
     var lastDropColEl = dropParent.querySelector('.cube.r');
-    
-    var dropRow = parseInt(dropCube.dataset.row);
-    var dropCol = parseInt(dropCube.dataset.col);
-    
-    var orderBottom = parseInt(dropParent.dataset.orderBottom);
-    var orderTop = parseInt(dropParent.dataset.orderTop);
-    var orderRight = parseInt(dropParent.dataset.orderRight);
-    var orderLeft = parseInt(dropParent.dataset.orderLeft);
-    var order = '';
+    var noOfCols, noOfRows;
     var classes = '';
 
-    // snap occordng to snape side
-    if (initCubes.snapInfo.dropSide == 2 || initCubes.snapInfo.dropSide == 0) { // BOTTOM OR TOP wrt DROP ELEMENT
-      var dropRowCubeCount = dropParent.querySelectorAll('[data-col="' + dropCol + '"].cube').length;
-      var dragRowCubeCount = dragParent.querySelectorAll('[data-col].cube').length;
-      var totalCubes = dropRowCubeCount + dragRowCubeCount;
+    // to calculate row and col numbers 
+    if(initCubes.snapInfo.dropSide == 3 || initCubes.snapInfo.dropSide == 0) { // L or T
+      dropCube = dropParent.querySelector('.cube.l.t');
+    } else {
+      dropCube = dropParent.querySelector('.cube.r.b');
+    }
+    var dropRow = parseInt(dropCube.dataset.row);
+    var dropCol = parseInt(dropCube.dataset.col);
+    console.log(dropCube, dropRow, dropCol);
 
-      if (totalCubes <= rowLimit) {
-        console.log('totalCubes <= rowLimit');
-        (initCubes.snapInfo.dropSide == 2) ? addToBottom(dragRowCubeCount) : addToTop(dragRowCubeCount);
-      } else if(totalCubes > rowLimit) {
-        console.log('totalCubes > rowLimit');
-        var canBeAddedCubes = rowLimit - dropRowCubeCount;
-        (initCubes.snapInfo.dropSide == 2) ? addToBottom(canBeAddedCubes) : addToTop(canBeAddedCubes);
+    // snap occordng to snape side
+    if(initCubes.snapInfo.shortestDist) {
+      if (initCubes.snapInfo.dropSide == 0 || initCubes.snapInfo.dropSide == 2) { // TOP or BOTTOM wrt DROP ELEMENT
+        var dragColCubeCount = dragParent.querySelectorAll('[data-col].cube').length;
+  
+        (initCubes.snapInfo.dropSide == 2) ? addToBottom(dragColCubeCount) : addToTop(dragColCubeCount);     
+      } else if (initCubes.snapInfo.dropSide == 3 || initCubes.snapInfo.dropSide == 1) { // LEFT or RIGHT wrt DROP ELEMENT
+        noOfCols = dragParent.querySelectorAll('.cube.t').length;
+        noOfRows = dragParent.querySelectorAll('.cube.l').length;
+        var cubeToAdd = noOfRows * noOfCols;
+        console.log('row: ' + noOfRows + ' col: ' + noOfCols + ' total: ' + cubeToAdd);
+  
+        (initCubes.snapInfo.dropSide == 1) ? addToRight(cubeToAdd): addToLeft(cubeToAdd);     
       }
 
       initMove.dropParent.innerHTML += cubeOuter;
@@ -2035,37 +2045,17 @@ var initCubes = (function (e) {
       initMove.init(dropParent, 'add');
       // dragParent.remove();
       // dropParent.style.zIndex = ++initMove.dragParentzIndex;              
-    } else if (initCubes.snapInfo.dropSide == 1 || initCubes.snapInfo.dropSide == 3) { // RIGHT OR LEFT wrt DROP ELEMENT
-      var dropRowCubeCount = dropParent.querySelectorAll('[data-col="' + dropRow + '"].cube').length;
-      var dragRowCubeCount = dragParent.querySelectorAll('[data-col].cube').length;
-      var totalCubes = dropRowCubeCount + dragRowCubeCount;
-
-      if (totalCubes <= colLimit) {
-        console.log('totalCubes <= colLimit');
-        (initCubes.snapInfo.dropSide == 1) ? addToRight(dragRowCubeCount): addToLeft(dragRowCubeCount);
-      } else if (totalCubes > colLimit) {
-        console.log('totalCubes > colLimit');
-        var canBeAddedCubes = colLimit - dropRowCubeCount;
-        (initCubes.snapInfo.dropSide == 1) ? addToRight(canBeAddedCubes): addToLeft(canBeAddedCubes);
-      }
-
-      initMove.dropParent.innerHTML += cubeOuter;
-      dropParent = initMove.dropParent;
-      initMove.init(dropParent, 'add');
-      // dragParent.remove();
-      // dropParent.style.zIndex = ++initMove.dragParentzIndex;        
-    } else {
-      console.warn('Bottom and Top Limit Reached!!!');
     }
 
     function addToTop(cubeToAdd) {
-      console.log('addToTop');
+      // console.log('addToTop');
       cubeOuter = '';
+      var j = 0;
+      // calculate left and top position
+      var l = cube.width * (dropCol - 1);
+      var t = parseInt(dropCube.style.top);
       for (var i = cubeToAdd; i >= 1; i--) {
-        // calculate left and top position
-        var l = cube.width * (dropCol - 1);
-        var l = cube.height * (1 - dropRow);
-        // var t = cube.height * (--orderTop);
+        t -= cube.height;
 
         // apply new row and update order
         row = i;
@@ -2090,7 +2080,6 @@ var initCubes = (function (e) {
       }
 
       dropCube.classList.remove('t'); // remove 't-top' class from old element
-      dropParent.dataset.orderTop = orderTop; // update order or dropParent cubes
 
       // ↑ all below row values by 1
       var cubes = dropParent.querySelectorAll('.cube');
@@ -2100,12 +2089,17 @@ var initCubes = (function (e) {
       }
     }
     function addToBottom(cubeToAdd) {
-      console.log('addToBottom');
+      // console.log('addToBottom');
       cubeOuter = '';
+      var j = 0;
+      // calculate left and top position
+      var l = cube.width * (dropCol - 1);
+      var t = parseInt(dropCube.style.top);
       for (var i = 1; i <= cubeToAdd; i++) {
+        t += cube.height;
+
         // apply new row and update order
         row = dropRow + i;
-        order = ++orderBottom;
 
         // apply new classes
         classes = (i == cubeToAdd) ? 'r b l' : 'r l';
@@ -2117,7 +2111,7 @@ var initCubes = (function (e) {
               data-id="${++initDrag.cubeId}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
-              style="top: ${cube.height*order}px;">
+              style="left: ${l}px; top: ${t}px;">
             <div class="dot dot-top"></div>
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
@@ -2127,45 +2121,95 @@ var initCubes = (function (e) {
       }
 
       dropCube.classList.remove('b'); // remove 'b-bottom' class from old element
-      dropParent.dataset.orderBottom = orderBottom; // update order or dropParent cubes      
     }
     function addToRight(cubeToAdd) {
-      console.log('addToRight');
+      // console.log('addToRight');
       cubeOuter = '';
-      for (var i = 1; i <= cubeToAdd; i++) {
-        // apply new row and update order
-        col = dropCol + i;
-        order = ++orderRight;
+      var j = 0;
+      // calculate left and top position
+      var l = parseInt(dropCube.style.left);
+      var t = parseInt(dropCube.style.top);
+      for (var c = 1; c <= noOfCols; c++) {
+        if(noOfRows > 1) {
+          col = dropCol + c;
+          l += cube.width;
+          for(var r = 1; r <= noOfRows; r++) {
+            t = cube.height * (r-1);
+            
+            // apply new row and col
+            row = r;
+            console.log(row, dropRow, r);
 
-        // apply new classes
-        classes = (i == cubeToAdd) ? 't r b' : 't b';
+            // apply new classes
+            if(r == 1) {
+              classes = 't r';
+            } else if (r == noOfRows) {
+              classes = 'r b';
+            } else {
+              classes = 'r';
+            }
 
-        cubeOuter += `
-          <div 
-              data-row="${dropRow}" 
-              data-col="${col}" 
-              data-id="${++initDrag.cubeId}" 
-              data-side="${cubeSide}" 
-              class="cube drag-area ${classes}"
-              style="left: ${cube.width*order}px;">
-            <div class="dot dot-top"></div>
-            <div class="dot dot-bottom"></div>
-            <div class="dot dot-left"></div>
-            <div class="dot dot-right"></div>   
-          </div>     
-        `;
-      }
+            cubeOuter += `
+              <div 
+                  data-row="${row}" 
+                  data-col="${col}" 
+                  data-id="${++initDrag.cubeId}" 
+                  data-side="${cubeSide}" 
+                  class="cube drag-area ${classes}"
+                  style="left: ${l}px; top: ${t}px;">
+                <div class="dot dot-top"></div>
+                <div class="dot dot-bottom"></div>
+                <div class="dot dot-left"></div>
+                <div class="dot dot-right"></div>   
+              </div>     
+            `;
+          }
+          // remove all 'r-right' classes from previous col
+          var prevColRows = dropParent.querySelectorAll('.cube[data-col="'+dropCol+'"');
+          for(var r = 0; r < prevColRows.length; r++) {
+            prevColRows[r].classList.remove('r');
+          }
+        } else {
+          l += cube.width;
+          
+          // apply new row and col
+          row = dropRow;
+          col = dropCol + c;
+  
+          // apply new classes
+          classes = (c == noOfCols) ? 't r b' : 't b';
 
-      dropCube.classList.remove('r'); // remove 'r-right' class from old element
-      dropParent.dataset.orderRight = orderRight; // update order or dropParent cubes      
+          cubeOuter += `
+            <div 
+                data-row="${row}" 
+                data-col="${col}" 
+                data-id="${++initDrag.cubeId}" 
+                data-side="${cubeSide}" 
+                class="cube drag-area ${classes}"
+                style="left: ${l}px; top: ${t}px;">
+              <div class="dot dot-top"></div>
+              <div class="dot dot-bottom"></div>
+              <div class="dot dot-left"></div>
+              <div class="dot dot-right"></div>   
+            </div>     
+          `;
+          dropCube.classList.remove('r'); // remove 'r-right' class from old element
+        }
+      }      
+
     }
     function addToLeft(cubeToAdd) {
-      console.log('addToLeft');
+      // console.log('addToLeft');
       cubeOuter = '';
+      var j = 0;
+      // calculate left and top position
+      var l = parseInt(dropCube.style.left);
+      var t = cube.width * (dropRow - 1);
       for (var i = cubeToAdd; i >= 1; i--) {
+        l -= cube.width;
+        
         // apply new row and update order
         col = i;
-        order = --orderLeft;
 
         // apply new classes
         classes = (i == 1) ? 't b l' : 't b';
@@ -2177,17 +2221,16 @@ var initCubes = (function (e) {
               data-id="${++initDrag.cubeId}" 
               data-side="${cubeSide}" 
               class="cube drag-area ${classes}"
-              style="left: ${cube.width*order}px;">
+              style="left: ${l}px; top: ${t}px;">
             <div class="dot dot-top"></div>
             <div class="dot dot-bottom"></div>
             <div class="dot dot-left"></div>
             <div class="dot dot-right"></div>   
           </div>     
         `;
-      }
+      }         
 
       dropCube.classList.remove('l'); // remove 'l-left' class from old element
-      dropParent.dataset.orderLeft = orderLeft; // update order or dropParent cubes
 
       // ↑ all below row values by 1
       var cubes = dropParent.querySelectorAll('.cube');
@@ -2604,8 +2647,8 @@ var initRotate = (function () {
   var R2D = 180 / Math.PI;
 
   var start = function (e) {
-    console.group('Rotate')
-    console.log('start-rotate');
+    // console.group('Rotate')
+    // console.log('start-rotate');
 
     e.preventDefault();
 
@@ -2644,6 +2687,17 @@ var initRotate = (function () {
       }
     } else if (panelType == "clock") {
       refEl = panel;
+    } else if(panelType == "protractor") {
+      var pointsObj = math.getSetPoints(initTools.currSetType);
+      var leftTopCoords = {
+        x: pointsObj[2].x,
+        y: pointsObj[2].y
+      }
+      
+      // update 'position' and 'origin' for scaling
+      // rotatable.style.transformOrigin = "center bottom";
+      // rotatable.style.left = leftTopCoords.x - 1 + 'px';
+      // rotatable.style.top = leftTopCoords.y - 1 + 'px';        
     }
 
     refObj = refEl.getBoundingClientRect();
@@ -2745,8 +2799,8 @@ var initRotate = (function () {
   };
 
   var end = function (e) {
-    console.log('end-rotate');
-    console.groupEnd();
+    // console.log('end-rotate');
+    // console.groupEnd();
 
     mousedownRotate = mousemoveRotate = false
 
@@ -2767,7 +2821,7 @@ var initRotate = (function () {
 
   var rotate = function (e) {
     if (mousedownRotate && mousemoveRotate) {
-      console.log('rotate');
+      // console.log('rotate');
 
       e.preventDefault();
 
@@ -2825,11 +2879,17 @@ var initScale = (function (e) {
   var mousedownRotate = mousemoveRotate = false;
   var startPoint, currPoint;
   var scalable = null;
+  var panel = null;
   var w = null;
   var h = null;
   var dx = null;
   var dy = null;
   var ratio = null;
+  var dist1 = null;
+  var dist2 = null;
+  var dist = null;
+  var newWidth = null;
+  var leftTopCoords;
 
   var start = function (e) {
     // console.group('Scale')
@@ -2838,13 +2898,30 @@ var initScale = (function (e) {
     e.preventDefault();
 
     mousedownRotate = true;
+
+    cvOuter.classList.add('pe-none');
+
+    var pointsObj = math.getSetPoints(initTools.currSetType);
+    leftTopCoords = {
+      x: pointsObj[2].x,
+      y: pointsObj[2].y
+    }
+    
+    startPoint = math.getMousePosition(e, cv);
+    dist1 = Math.sqrt((pointsObj[2].x-startPoint.x) * (pointsObj[2].x-startPoint.x) + (pointsObj[2].y-startPoint.y) * (pointsObj[2].y-startPoint.y));
     
     scalable = e.target.closest('.scalable');
+    panel = e.target.closest('.draggable');
     w = scalable.offsetWidth;
     h = scalable.offsetHeight;
     ratio = w / h;
-    startPoint = math.getMousePosition(e, cv);
-
+    
+    console.log(leftTopCoords);
+    // update 'position' and 'origin' for scaling
+    // scalable.style.transformOrigin = "left top";
+    panel.style.left = leftTopCoords.x - 1 + 'px';
+    panel.style.top = leftTopCoords.y - 1 + 'px';  
+    
     cvOuter.addEventListener('mousemove', scale, false);
     cvOuter.addEventListener('touchmove', scale, false);
     cvOuter.addEventListener('mouseup', end, false);
@@ -2854,7 +2931,16 @@ var initScale = (function (e) {
     // console.log('end-rotate')
     // console.groupEnd();
 
-    mousedownRotate = mousemoveRotate = false
+    mousedownRotate = mousemoveRotate = false;
+
+    cvOuter.classList.remove('pe-none');  
+    
+    // update 'transform-origin' of panel for rotation
+    var l = newWidth / 2 + 'px ';
+    var t = (newWidth / ratio) + 'px';
+    // panel.style.transformOrigin = l + t;    
+    // panel.style.left = panel.getBoundingClientRect().left - dist + 'px';
+    // console.log(panel.getBoundingClientRect(), dist)
 
     cvOuter.removeEventListener('mousemove', scale, false);
     cvOuter.removeEventListener('touchmove', scale, false);
@@ -2867,21 +2953,18 @@ var initScale = (function (e) {
 
       e.preventDefault();
   
-      currPoint = math.getMousePosition(e, cv);
-      dx = currPoint.x - startPoint.x;
-      dy = currPoint.y - startPoint.y;
+      currPoint = math.getMousePosition(e, cvOuter);
 
-      // startPoint = currPoint;
-      // ratio = dx/dy;
-
-      if(dx > dy) { // width is more
-        scalable.style.width = (w + dx) + 'px';
-        scalable.style.height = ((w + dx) / ratio) + 'px';
-      } else { // height is more
-        scalable.style.height = (h + dy) + 'px';
-        scalable.style.width = ((h + dy) * ratio) + 'px';
-      }
-  
+      // distance between left-top and right-bottom corners
+      dist2 = Math.sqrt((leftTopCoords.x-currPoint.x) * (leftTopCoords.x-currPoint.x) + (leftTopCoords.y-currPoint.y) * (leftTopCoords.y-currPoint.y));
+      dist = dist2 - dist1
+      newWidth = w + dist;
+      scalable.style.width = newWidth + 'px';
+      scalable.style.height = (newWidth / ratio) + 'px';
+      // scalable.style.transform = "scale("+scale+")"
+      // panel.style.transform = "rotate(45deg) scale("+scale+")"
+      panel.style.width = newWidth + 'px';
+      panel.style.height = (newWidth / ratio) + 'px';
     }
     mousemoveRotate = true;
   }

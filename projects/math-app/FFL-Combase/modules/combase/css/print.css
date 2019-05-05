@@ -1,0 +1,13 @@
+@media print{
+    body {
+        -webkit-print-color-adjust: exact;
+        top:0 !important;
+        left:0 !important;
+        width:200mm !important;
+        height:290mm !important;
+    }
+    
+    .no-print-area {
+      display: none !important;
+    }
+}

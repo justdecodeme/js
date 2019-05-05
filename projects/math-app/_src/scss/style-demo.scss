@@ -1067,12 +1067,19 @@ body {
   .point {
     &.point-center {
       left: 50%;
-      top: 100%;
+      top: 100%;      
     }
-
     &.point-side {
       left: 50%;
       top: 50%;
+    }
+    &.left-top {
+      left: 0;
+      top: 0;
+    }
+    &.right-bottom {
+      right: 0;
+      bottom: 0;
     }
   }
 }

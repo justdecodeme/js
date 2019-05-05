@@ -1,0 +1,71 @@
+var sealTypes = {
+  "flowers": {
+    "max": 50,
+    "values": [
+      "flower-pink.svg",
+      "flower-aqua.svg",
+      "stack-blue.svg",
+      "stack-orange.svg"
+    ],
+  },
+  "money": {
+    "max": 5,
+    "values": [
+      "coin-1.svg",
+      "coin-10.svg",
+      "coin-100.svg",
+      "coin-500.svg"
+    ],
+  },
+  "numbers": {
+    "max": 50,
+    "values": {
+      'white': [
+        ["number-white-1.svg", 1],
+        ["number-white-10.svg", 10],
+        ["number-white-100.svg", 100],
+        ["number-white-1000.svg", 1000],
+        ["number-white-10000.svg", 10000]
+      ],
+      'blue': [
+        ["number-blue-1.svg", 1],
+        ["number-blue-10.svg", 10],
+        ["number-blue-100.svg", 100],
+        ["number-blue-1000.svg", 1000],
+        ["number-blue-10000.svg", 10000]
+      ]
+    }
+  },
+  "shapes": {
+    "max": 50,
+    "values": [
+      "square-1.svg",
+      "square-2.svg",
+      "square-3.svg",
+      "square-4.svg",
+      "triangle-iso-1.svg",
+      "triangle-iso-2.svg",
+      "triangle-iso-3.svg",
+      "triangle-iso-4.svg",
+      "triangle-sca-1.svg",
+      "triangle-sca-2.svg",
+      "triangle-sca-3.svg",
+      "triangle-sca-4.svg",
+      "circle-1.svg",
+      "circle-2.svg",
+      "circle-3.svg",
+      "circle-4.svg"
+    ],
+  },
+  "cubes": {
+    "max": 100,
+    "values": [
+      ["cube-front-1.png", "front", 1],
+      ["cube-back-1.png", "back", 1],
+      ["cube-front-10.png", "front", 10],
+      ["cube-back-10.png", "back", 10],
+      ["cube-front-100.png", "front", 100],
+      ["cube-back-100.png", "back", 100]
+    ]
+  }
+}

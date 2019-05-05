@@ -1,0 +1,73 @@
+@charset"UTF-8";
+.fs_dialog_base{
+	position:fixed;
+	z-index:2210000001;
+	display:none;
+    pointer-events: none;
+}
+
+.fs_dialog_clbt{
+	position:absolute;
+	width:35%;
+	height:28%;
+    pointer-events: auto;
+/*	border:solid red thin;*/
+}
+
+.fs_dialog_bt_img{
+	position:relative;
+	width:100%;
+	height:100%;
+}
+
+#fs_dialog_clbt_1{
+	left:10%;
+	bottom:10%;
+}
+
+#fs_dialog_clbt_2{
+	right:10%;
+	bottom:10%;
+}
+
+#fs_dialog_text{
+	left:22%;
+	top:12%;
+	width:75%;
+	height:12%;
+	font-size:2.3vw;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+	text-align:left;
+	outline:0;
+	border:0px;
+	background: transparent;
+    line-height: normal;
+}
+
+#fs_dialog_text2{
+	left:22%;
+	top:27%;
+	width:75%;
+	height:12%;
+	font-size:2.3vw;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+	text-align:left;
+	outline:0;
+	border:0px;
+	background: transparent;
+    line-height: normal;
+}
+
+#fs_dialog_text3{
+	left:22%;
+	top:42%;
+	width:75%;
+	height:12%;
+	font-size:2.3vw;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+	text-align:left;
+	outline:0;
+	border:0px;
+	background: transparent;
+    line-height: normal;
+}

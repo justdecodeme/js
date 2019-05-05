@@ -1,0 +1,507 @@
+@charset "UTF-8";
+
+.math_program{
+	visibility:hidden;
+}
+
+@keyframes fadeIn {
+    0% {opacity: 0}
+    100% {opacity: 1}
+}
+
+@-webkit-keyframes fadeIn {
+    0% {opacity: 0}
+    100% {opacity: 1}
+}
+
+@font-face {
+    font-family: 'fflcom';
+    src: url('fflcom.ttf') format('truetype');
+}
+
+.fade_in{
+	animation:fadeIn 0.8s ease 0s 1 normal;
+	visibility:visible;
+}
+
+.dirHr ::-webkit-scrollbar {
+    width: 20px;
+    height: 0px;
+}
+.dirVt ::-webkit-scrollbar {
+    width: 0px;
+    height: 20px;
+}
+
+.mainBase ::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .1);
+}
+.mainBase ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 50, .5);
+  border-radius: 10px;
+  box-shadow:0 0 0 1px rgba(255, 255, 255, .3);
+}
+#fs_setting_preview_base ::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .1);
+}
+#fs_setting_preview_base ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 50, .5);
+  border-radius: 10px;
+  box-shadow:0 0 0 1px rgba(255, 255, 255, .3);
+}
+
+.mainBase{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.reflowArea{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    line-break:strict;
+}
+
+.reflowArea img {
+    display: block;
+	height: auto;
+	border: 5px #ffffff solid;
+    pointer-events: auto;
+}
+
+.textArea{
+    padding: 2%; 
+}
+
+.allRubyArea{
+    padding: 2%; 
+    display: none;
+}
+
+.btnSettings {
+    position: fixed;
+    right: 0.5%;
+    width: 4%;
+    z-index: 2200000021;
+}
+
+.btnSetting {
+    position: relative;
+}
+
+.imgSetting {
+    height: 100%;
+    width: 100%;
+}
+
+.noTitleDialog .ui-dialog-titlebar {
+    display:none;
+}
+
+#coloringMenu {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 60px;
+    width: 60px;
+    z-index: 2200000031;
+}
+
+.fs_setting_base {
+	position: absolute;
+    background-repeat: no-repeat;
+    z-index: 2210000001;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.fs_setting_bt_img{
+    position: relative;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+
+#fs_setting_clbt_dir_tate{
+    top: 43.5%;
+    left: 28%;
+    width: 20%;
+}
+
+#fs_setting_clbt_dir_yoko{
+    top: 43.5%;
+    left: 52%;
+    width: 20%;
+}
+
+#fs_setting_clbt_rFontType_G{
+    top: 49.5%;
+    left: 28%;
+    width: 20%;
+}
+
+#fs_setting_clbt_rFontType_M{
+    top: 49.5%;
+    left: 52%;
+    width: 20%;
+}
+
+#fs_setting_clbt_rFontType_K{
+    top: 49.5%;
+    left: 76%;
+    width: 20%;
+}
+
+#fs_setting_clbt_Wakachi_off{
+    top: 74.1%;
+    left: 28%;
+    width: 20%;
+}
+
+#fs_setting_clbt_Wakachi_on{
+    top: 74.1%;
+    left: 52%;
+    width: 20%;
+}
+
+#fs_setting_clbt_Kana_off{
+    top: 80.2%;
+    left: 28%;
+    width: 20%;
+}
+
+#fs_setting_clbt_Kana_on{
+    top: 80.2%;
+    left: 52%;
+    width: 20%;
+}
+
+#fs_setting_clbt_fsize_knob {
+    position: absolute;
+    top: 55.5%;
+    width: 4%;
+    height: 3%;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fs_setting_clbt_fsize_guidebar {
+    position: absolute;
+    top: 57%;
+    left: 42.5%;
+    width: 35%;
+    height: 3%;
+    border-top: 0.1rem solid #313232;
+}
+
+.fs_setting_clbt_fsize_touchbar {
+	position: absolute;
+    top:54%;
+    left: 37%;
+    width: 45%;
+    height: 6%;
+/*    border: 0.1rem solid #f00;*/
+	cursor: pointer;
+}
+
+#fs_setting_clbt_lheight_knob {
+    position: absolute;
+    top: 68%;
+    width: 4%;
+    height: 3%;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fs_setting_clbt_lheight_guidebar {
+    position: absolute;
+    top: 69.5%;
+    left: 42.5%;
+    width: 35%;
+    height: 3%;
+    border-top: 0.1rem solid #313232;
+}
+
+.fs_setting_clbt_lheight_touchbar {
+	position: absolute;
+    top: 66.5%;
+    left: 37%;
+    width: 45%;
+    height: 6%;
+/*    border: 0.1rem solid #f00;*/
+	cursor: pointer;
+}
+
+#fs_setting_preview_base{
+    position: relative;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 90%;
+    height: 39%;
+    top: 2.5%;
+    background-color: white;
+}
+
+.fs_setting_prev{
+    position: absolute;
+    width: 75%;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    text-align: center;
+    padding-top: 3%;
+    margin: auto;
+    
+}
+
+.fs_setting_param {
+    position: absolute;
+	color: #fff;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+/*    font-size: 3vmin;*/
+    font-size: 2.5vh;
+    width:100%;
+    cursor: pointer;
+}
+
+#fs_setting_clbt_color1{
+    top: 4%;
+    height: 8%;
+}
+
+#fs_setting_clbt_color2{
+    top: 14%;
+    height: 8%;
+}
+
+#fs_setting_clbt_color3{
+    top: 24%;
+    height: 8%;
+}
+
+#fs_setting_clbt_color4{
+    top: 34%;
+    height: 8%;
+}
+
+#fs_setting_clbt_fontcolor{
+    top: 44.5%;
+    height: 7%;
+    width: 25%;
+    left: 35%;
+    border:1px solid red;
+}
+
+#fs_setting_clbt_backcolor{
+    top: 53%;
+    height: 7%;
+    width: 25%;
+    left: 35%;
+    border:1px solid red;
+}
+
+#fs_setting_clbt_rubycolor{
+    top: 61.5%;
+    height: 7%;
+    width: 25%;
+    left: 35%;
+    border:1px solid red;
+}
+
+#fs_setting_clbt_highcolor{
+    top: 70%;
+    height: 7%;
+    width: 25%;
+    left: 35%;
+    border:1px solid red;
+}
+
+.fs_coloring_prev{
+    position: absolute;
+    width: 20%;
+    height: 80%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.fs_setting_clbt {
+    position: absolute;
+}
+
+.fs_coloring_clbt{
+    position: absolute;
+    width: 20%;
+    height: 10%;
+}
+
+#fs_setting_clbt_ok_view{
+    width: 25%;
+    left: 15%;
+    bottom: 7.5%;
+    cursor: pointer;
+}
+
+#fs_setting_clbt_cancel_view{
+    width: 25%;
+    right: 15%;
+    bottom: 7.5%;
+    cursor: pointer;
+}
+
+
+#fs_setting_clbt_ok_color{
+    width: 25%;
+    left: 15%;
+    bottom: 7%;
+    cursor: pointer;
+}
+
+#fs_setting_clbt_cancel_color{
+    width: 25%;
+    right: 15%;
+    bottom: 7%;
+    cursor: pointer;
+}
+
+#fs_setting_clbt_Color {
+    left: 28%;
+    top: 61.3%;
+    width: 25%;
+}
+
+#previewTextArea{
+}
+
+#previewAllRubyArea{
+    display:none;
+}
+
+sep{
+    display:none;
+}
+
+#fs_setting_clbt_volume{
+	top:10%;
+}
+
+#fs_setting_clbt_rate{
+	top:30%;
+}
+
+#fs_setting_clbt_pitch{
+	top:50%;
+}
+
+.reflowHRLine {
+    width: 100%;
+    height: 100%;
+    border: solid 1px #000;
+    
+}
+
+.pNumber{
+    position:absolute;
+    font-size: 12px;
+}
+
+.reflowLink{
+    font-family: 'fflcom';
+    cursor: pointer;
+}
+
+/*音声ダイアログ*/
+.fs_setting_clbt_s {
+    position: absolute;
+    width: 25%;
+    cursor: pointer;
+}
+
+.fs_setting_bt_guidebar {
+    position: absolute;
+    width: 40%;
+    height: 3%;
+    left: 30%;
+    border-top: 0.1rem solid #313232;
+}
+
+.fs_setting_bt_touchbar {
+    position: absolute;
+    left: 25%;
+    width: 50%;
+    height: 14%;
+/*    border: 0.1rem solid #f00;*/
+	cursor: pointer;
+}
+
+.fs_setting_bt_knob{
+    position: absolute;
+    width: 5%;
+    cursor: pointer;
+}
+
+#fs_setting_clbt_test {
+	top:65%;
+    left:37%;
+}
+
+#fs_setting_clbt_ok_speech {
+    top: 82%;
+    left: 15%;
+}
+
+#fs_setting_clbt_cancel_speech {
+    top: 82%;
+    right: 15%;
+}
+
+#fs_setting_clbt_volume_guidebar {
+    top: 13%;
+}
+
+#fs_setting_clbt_volume_touchbar {
+    top: 6%;
+}
+
+#fs_setting_clbt_volume_knob {
+    top: 9%
+}
+
+#fs_setting_clbt_rate_guidebar {
+    top: 33%;
+}
+
+#fs_setting_clbt_rate_touchbar {
+    top: 26%;
+}
+
+#fs_setting_clbt_rate_knob {
+    top: 29%
+}
+
+#fs_setting_clbt_pitch_guidebar {
+    top: 53%;
+}
+
+#fs_setting_clbt_pitch_touchbar {
+    top: 46%;
+}
+
+#fs_setting_clbt_pitch_knob {
+    top: 49%
+}
+
+

@@ -1,0 +1,71 @@
+var sealTypes = {
+  "flowers": {
+    "max": 50,
+    "values": [
+      "red-flower.png",
+      "blue-flower.png",
+      "stack-blue.svg",
+      "stack-orange.svg"
+    ],
+  },
+  "money": {
+    "max": 5,
+    "values": [
+      "coin-1.svg",
+      "coin-10.svg",
+      "coin-100.svg",
+      "coin-500.svg"
+    ],
+  },
+  "numbers": {
+    "max": 50,
+    "values": {
+      'white': [
+        ["number-white-1.svg", 1],
+        ["number-white-10.svg", 10],
+        ["number-white-100.svg", 100],
+        ["number-white-1000.svg", 1000],
+        ["number-white-10000.svg", 10000]
+      ],
+      'blue': [
+        ["number-blue-1.svg", 1],
+        ["number-blue-10.svg", 10],
+        ["number-blue-100.svg", 100],
+        ["number-blue-1000.svg", 1000],
+        ["number-blue-10000.svg", 10000]
+      ]
+    }
+  },
+  "shapes": {
+    "max": 50,
+    "values": [
+      "square-demo-1.svg",
+      "square-demo-2.svg",
+      "square-demo-3.svg",
+      "square-demo-4.svg",
+      "triangle-iso-demo-1.svg",
+      "triangle-iso-demo-2.svg",
+      "triangle-iso-demo-3.svg",
+      "triangle-iso-demo-4.svg",
+      "triangle-sca-demo-1.svg",
+      "triangle-sca-demo-2.svg",
+      "triangle-sca-demo-3.svg",
+      "triangle-sca-demo-4.svg",
+      "circle-demo-1.svg",
+      "circle-demo-2.svg",
+      "circle-demo-3.svg",
+      "circle-demo-4.svg"
+    ],
+  },
+  "cubes": {
+    "max": 100,
+    "values": [
+      ["cube-front-1.png", "front", 1],
+      ["cube-back-1.png", "back", 1],
+      ["cube-front-10.png", "front", 10],
+      ["cube-back-10.png", "back", 10],
+      ["cube-front-100.png", "front", 100],
+      ["cube-back-100.png", "back", 100]
+    ]
+  }
+}

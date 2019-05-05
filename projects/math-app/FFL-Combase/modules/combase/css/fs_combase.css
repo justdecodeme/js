@@ -1,0 +1,2309 @@
+@charset "UTF-8";
+
+@-ms-viewport { width: auto; initial-scale: 1; user-zoom: fixed; }
+@viewport { width: device-width; initial-scale: 1; user-zoom: fixed; }
+
+/*
+html {
+    touch-action: none;
+    -ms-touch-action: none;
+}
+*/
+body {
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    background-color: #f5f5f5;
+	padding: 0;
+}
+
+.refuseusel {
+    user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+    -ms-content-zooming: none;
+    -ms-overflow-style: none;
+    /* */
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .1);
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 50, .5);
+  border-radius: 10px;
+  box-shadow:0 0 0 1px rgba(255, 255, 255, .3);
+}
+
+@media screen and (min-width:0\0) {
+  _::-ms-reveal,
+  .invert:before{
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+    outline: 2000px solid invert;
+  }
+  _::-ms-reveal,
+  .invert{
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+@font-face {
+    font-family: 'adobe-blank';
+    src: url('AdobeBlank.ttf') format('truetype');
+}
+
+img {
+	height: auto;
+	border: none;
+    pointer-events: none;
+	/*line-height: 1em;*/
+}
+
+.imgContents{
+    width: auto;
+    height: 50vh;
+    margin: 10px;
+    border: 100px solid "#333333";
+}
+
+.btnImg {
+    width: 90%;
+    padding: 5%;
+}
+
+.pageImage {
+    width: 100%;
+}
+
+.btimgFrame {
+    width: 100%;
+}
+
+.btimgPage {
+    width: 80%;
+    padding: 10%;
+    cursor: "pointer";
+}
+.btimgSideTab {
+    width: 100%;
+}
+
+.btChPageNext {
+    width: 80%;
+    height: auto;
+    cursor: pointer;
+}
+.btChPageBack {
+    width: 80%;
+    height: auto;
+    cursor: pointer;
+}
+.btChChapterNext {
+    width: 90%;
+    height: auto;
+    cursor: pointer;
+}
+
+.btChChapterBack {
+    width: 90%;
+    height: auto;
+    cursor: pointer;
+}
+
+#content {
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2144450000;
+}
+
+#frontPage {
+	position: relative;
+    width: 100%;
+    height: 100%;
+	z-index: 2144450002;
+}
+
+#contFrontPage{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+    width: 50%;
+    margin: auto;
+}
+/*
+#contFrontPage:hover {
+    background-color: #ffff00;
+    outline-width: 5px;    
+    outline-style: solid;
+    outline-color: #ffff00;
+}
+*/
+.imgFrontPage {
+	position: absolute;
+    cursor: pointer;
+    height: auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+    margin: auto;
+    box-shadow :  0px 0px 20px -5px rgba(0, 0, 0, 0.8);
+}
+
+.openListUl {
+    position: absolute;
+    list-style: none;
+    padding: 0;
+}
+
+.openListLi {
+    margin: 10% 0;
+}
+
+#openListL {
+    position: absolute;
+    left: 50%;
+    width: 24%;
+    height: 50%;
+    top: 0;
+    bottom: 20%;
+    margin: auto;
+}
+
+#openListR {
+    position: absolute;
+    left: 75%;
+    width: 24%;
+    height: 50%;
+    top: 0;
+    bottom: 20%;
+    margin: auto;
+}
+
+#frontNameDiv{
+    position: absolute;
+    width: 50%;
+    height: 10%;
+    top: 80%;
+    left: 50%;
+}
+
+.frontTxt{
+    position: relative;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    font-weight: bold;
+    font-size: 3vmin;
+    text-indent: 1em;
+    color: #000;
+}
+
+#frontSchoolName{
+    width: 100%;
+    height: 100%;
+}
+#frontUserName{
+    width: 100%;
+    height: 100%;
+}
+
+.fflcom_open{
+    position: relative;
+	z-index: 2144450001;
+    width: 100%;
+    cursor: pointer;
+/*    border: 5px solid #ffffff00;*/
+}
+.img_fflcom_open {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+/*
+.fflcom_open:hover {
+    background-color: #043c78;
+    border: 5px solid #043c78;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+}
+*/
+
+#shield {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.8);
+	z-index: 2144500010;
+	display: none;
+}
+
+#dlgSeltem {
+	position: fixed;
+	left: 8px;
+	top: 8px;
+	right: 8px;
+	bottom: 8px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    background-color: #007f41;
+	z-index: 2144500012;
+	display: none;
+}
+
+#helpPDF {
+    position: absolute;
+    right: 100px;
+    top: 20px;
+    margin: 0;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#selIdxTitle {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    margin: 0;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#selIdxBtClose {
+    position: absolute;
+    right: 20px;
+    top: 0px;
+    bottom: 60px;
+    margin: 0;
+    color: white;
+    font-size: 40px;
+    line-height: 60px;
+    cursor: pointer;
+}
+
+#selIdxPane {
+    position: absolute;
+    left: 20px;
+    top: 60px;
+    right: 20px;
+    bottom: 20px;
+    background-color: white;
+}
+
+#selIdxWall {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.selIdxWallImg {
+    width: 100%;
+}
+
+.selIdxItem {
+    position: absolute;
+}
+
+.fssb_palette_pager_next_bt{
+    position: absolute;
+    cursor: pointer;
+    text-align: center;
+    top: 5%;
+}
+.fssb_palette_pager_pagetext{
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    font-weight: bold;
+    font-size: 1.5vh;
+    vertical-align: middle;
+    color: #000;
+    background-color: #f7f7f7;
+    border: 1px solid #a4a1a2;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.pagetext_tablecell{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.fssb_palette_pager_back_bt{
+    position: absolute;
+    cursor: pointer;
+    text-align: center;
+    top: 72%;
+}
+
+.fssb_sideFrame {
+	position: fixed;
+	top: 0;
+    width: 0px;
+    z-index: 2144500001;
+    background-repeat: no-repeat;  
+    background-attachment: fixed;  
+    background-size: cover;
+}
+#leftFrame {
+	left: 0;
+}
+#rightFrame {
+	right: 0;
+}
+
+.fssb_mainBtns {
+    position: absolute;
+    top: 0;
+    display: none;
+}
+
+.fssb_palette_simplePen {
+    position: absolute;
+    cursor: pointer;
+    margin: auto;
+}
+
+.fssb_palette_zoom {
+    position: relative;
+    left: 0px;
+    width: 100%;
+    margin: auto;
+}
+
+.fssb_palette_pager {
+    position: absolute;
+    border: 1px solid #a5a5a5;
+    -webkit-border-radius: 5%;
+    -moz-border-radius: 5%;
+    border-radius: 15% / 5%;
+    background-color: #cccccc;
+    right: 0;
+    left: 0;
+    margin: auto;
+    width: 100%;
+}
+
+#leftTabBase {
+    position: absolute;
+    display: flex;
+    bottom: 8px;
+    flex-direction: column-reverse;
+}
+
+.leftTab {
+    position: relative;
+    left: 0px;
+    width: 100%;
+    margin: auto;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.tabtext {
+    position: absolute;
+    top: 0px;
+    left: 5px;
+    font-weight: bold;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    font-size: 1.5vh;
+    white-space: nowrap;
+}
+
+#rightTabBase {
+    position: absolute;
+    display: flex;
+    bottom: 8px;
+    flex-direction: column-reverse;
+}
+
+.rightTab {
+    position: relative;
+    right: 0px;
+    width: 100%;
+    margin: auto;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.btimgSimplePenBack{
+    position: absolute;
+    background-color: "";
+}
+
+.btSimplePen{
+    position: relative;
+}
+
+#centerFrame {
+    position: absolute;
+	left: 0px;
+    right: 0px;
+	top: 0px;
+	bottom: 40px;
+    background-color: #f5f5f5;
+}
+
+#contBase {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#contResource {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    display: none;
+}
+
+#contViewer {
+    width: 100%;
+    height: 100%;
+    display: none;
+    box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -moz-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -webkit-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -ms-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -o-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+/*  overflow: auto; */
+/*    overflow: hidden;*/
+}
+
+#contStage {
+    position: relative;
+}
+
+#contPage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#contPageLeft {
+    position: relative;
+    float: left;
+    width: calc(50% - 2px);
+    height: calc(100% - 2px);
+}
+
+#contPageRight {
+    position: relative;
+    float: right;
+    width: calc(50% - 2px);
+    height: calc(100% - 2px);
+}
+
+/* ishiiy add start */
+#contCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#contPageCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2144480001;
+}
+
+#contPageCanvas_wk {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2144480002;
+}
+
+#contCanvasFusen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#contFusenCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2144480000;
+}
+
+#contZoom {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#contZoomCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2144490001;
+}
+
+#contPointer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#contPointerCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2144490001;
+}
+
+#contScroll {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    overflow: hidden;
+}
+
+#contScrlEx {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.fssb_palette_zoom {
+    padding: 0px 0px;
+}
+
+.fssb_palette_zoom_tools{
+    display: none;
+}
+
+.fssb_palette_zoom_guidebar {
+    position: relative;
+    left: 20px;
+    width: 1px;
+    border: 1px solid #333333;
+    background-color: #333333;
+    margin-top: 15%;
+    margin-bottom: 15%;
+    cursor: pointer;
+}
+
+.fssb_palette_zoom_touchbar {
+    position: absolute;
+    top: 45%;
+    width: 100%;
+    height: 35%;
+	cursor: pointer;
+}
+
+.fssb_palette_zoom_bt {
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+    right: 0;
+    margin: auto;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fssb_palette_zoom_in_bt {
+    position: relative;
+    text-align: center;
+    margin-top: 10%;
+    cursor: pointer;
+}
+
+.fssb_palette_zoom_out_bt {
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+}
+
+.fssb_palette_zoom_btimg {
+    width: 40%;
+    height: 40%;
+}
+
+.fssb_palette_zoom_slider_btimg {
+    width: 100%;
+    height: 100%;
+}
+
+.fssb_palette_zoom_drag_bt {
+    position: relative;
+    cursor: pointer;
+}
+
+#contLinkPoint {
+    width: 100%;
+}
+
+.clickPointArea {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /*
+    z-index: 2144470001-2144470200;
+*/
+}
+.clickPointSpeak {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: none;
+    /*
+    z-index: 2144470001-2144470200;
+*/
+}
+
+.zoomArea {
+    position: absolute;
+    z-index: 2144471000;
+    background-color: rgba(255,255,255,0);
+    outline: 2px dashed #000;
+    pointer-events: none;
+}
+
+.clickPointAreaOff {
+    opacity: 0;
+}
+.clickPointAreaOff.clickPointIcon {
+    opacity: 0.3;
+}
+
+.clickPointAreaOn {
+    opacity: 0.3;
+}
+.clickPointAudioOn {
+    opacity: 0.3;
+}
+
+.clickPointAreaOn.clickPointIcon {
+    opacity: 1;
+}
+.clickPointAudioOn.clickPointIcon {
+    opacity: 1;
+}
+
+#contVideo {
+    position: absolute;
+    left: 5%;
+    display: none;
+    z-index: 2144471001;
+}
+
+#contAudio {
+    position: absolute;
+    left: 5%;
+    display: none;
+    z-index: 2144471002;
+}
+
+#appCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+	left: 0px;
+    right: 0px;
+    border: 0px;
+    margin: auto;
+    display: none;
+}
+
+#appPageCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#appPageCanvas_wk {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2100000001;
+}
+
+#appCanvasFusen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#appFusenCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2090000003;
+}
+
+.whiteBack {
+    z-index: 2144479000;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+#back {
+    z-index: 2144480001;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+}
+
+#enlarged_image {
+    z-index: 2144480002;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 1);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: none;
+}
+
+.resourceCloseBtn{
+    position: absolute;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    margin: auto;
+    cursor: pointer;
+    background-color: #ffffff;
+}
+.resourceCloseBtnImg{
+    position: absolute;
+    width:90%;
+    height:auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.allHidden{
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.mekuriOn{
+    /*visibility: visible;*/
+    display: block;
+    pointer-events: auto;
+}
+.mekuriOff{
+    /*visibility: hidden;*/
+/*
+    display: none;
+    pointer-events: none;
+*/
+    opacity: 0;
+}
+
+.resourceApp {
+	position: absolute;
+	left: 0;
+    right: 0;
+    top: 0;
+    border: 0;
+    margin: auto;
+}
+
+
+
+.resourceImg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.contScrlPages {
+    position: relative;
+    float: right;
+    height: 100%;
+    z-index: 2144450001;
+}
+
+#reflowPane {
+    position: absolute;
+    top: 2.5%;
+	left: 0px;
+    right: 0px;
+    margin: auto;
+    z-index: 2144450002;
+    visibility: hidden;
+    border: 1px solid #000;
+
+}
+
+/*
+.btimgClickable {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgTimer {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgWide {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgBook {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgZoomStep {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgZoomDrag {
+    width: 90%;
+    padding: 5%;
+}
+
+.btimgFusen {
+    width: 90%;
+    padding: 5%;
+}
+
+
+.fs_fusen_base {
+	position: absolute;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    -ms-border-radius: 40px;
+    -o-border-radius: 40px;
+    border-radius: 40px;
+    box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -moz-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -webkit-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -ms-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -o-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    z-index: 2210000001;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+
+#fs_fusen_text {
+	position: absolute;
+    top:32%;
+    left:8%;
+    width:84%;
+    height:50%;
+    font-size:150%;
+    vertical-align: top;    
+    overflow: scroll;
+	background-color: #fff;
+}
+
+.fs_fusen_btn{
+    position: absolute;
+    width: 28%;
+    height: 7.6%;
+    cursor: pointer;
+}
+
+.fs_fusen_img{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.fs_fusen_radio{
+    position: absolute;
+    cursor: pointer;
+}
+
+.fs_fusen_img_radio{
+    position: relative;
+    height: 100%;
+}
+
+#fs_fusen_rDir_Tate{
+    top: 3.8%;
+    left: 29%;
+    width: 16%;
+    height: 3%;
+}
+#fs_fusen_rDir_Yoko{
+    top: 3.8%;
+    left: 54.5%;
+    width: 16%;
+    height: 3%;
+}
+#fs_fusen_rFontType_G{
+    top: 10.3%;
+    left: 29%;
+    width: 23%;
+    height: 3%;
+}
+#fs_fusen_rFontType_M{
+    top: 10.3%;
+    left: 54.5%;
+    width: 16%;
+    height: 3%;
+}
+#fs_fusen_rFontType_K{
+    top: 10.3%;
+    left: 73.8%;
+    width: 23%;
+    height: 3%;
+}
+#fs_fusen_rFontSize_1{
+    top: 16.8%;
+    left: 42.5%;
+    width: 4%;
+    height: 3%;
+}
+#fs_fusen_rFontSize_2{
+    top: 16.8%;
+    left: 50.25%;
+    width: 4%;
+    height: 3%;
+}
+#fs_fusen_rFontSize_3{
+    top: 16.8%;
+    left: 58%;
+    width: 4%;
+    height: 3%;
+}
+#fs_fusen_rFontSize_4{
+    top: 16.8%;
+    left: 65.75%;
+    width: 4%;
+    height: 3%;
+}
+#fs_fusen_rFontSize_5{
+    top: 16.8%;
+    left: 73.5%;
+    width: 4%;
+    height: 3%;
+}
+#fs_fusen_btnColor{
+    top: 22.5%;
+    left: 28%;
+    width: 28.1%;
+    height: 5.6%;
+}
+#fs_fusen_sampleColor{
+    position: absolute;
+    top: 22.5%;
+    left: 62%;
+    width: 28.1%;
+    height: 5.6%;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    font-size: 2vh;
+}
+
+#fs_fusen_btnOK{
+    top: 85%;
+    left: 14%;
+}
+
+#fs_fusen_btnCancel{
+    top: 85%;
+    left: 58%;
+}
+
+.fssb_palette_fusen_color_base {
+	position: absolute;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -moz-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -webkit-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -ms-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -o-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    z-index: 2210000001;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.fssb_palette_color_clbt {
+    position: absolute;
+    width: 37.5%;
+    height: 8.4%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    border: 1px solid #d2bab3;
+    box-sizing: border-box;
+	cursor: pointer;
+}
+
+.fssb_palette_color_select_fusen {
+    position: absolute;
+    width: 32.6%;
+    height: 7.3%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    border: 0.1em solid #f4f4f5;
+    box-sizing: border-box;
+    pointer-events: none;
+	display: none;
+    margin: 2.5%;
+}
+
+#fssb_palette_pen_clbt_red {
+    left: 8.5%;
+    top: 30%;
+    background-color: #ff2800;
+}
+
+#fssb_palette_pen_clbt_blue {
+    left: 55%;
+    top: 30%;
+    background-color: #0041ff;
+}
+
+#fssb_palette_pen_clbt_green {
+    left: 8.5%;
+    top: 40%;
+    background-color: #35a16b;
+}
+
+#fssb_palette_pen_clbt_yellow {
+    left: 55%;
+    top: 40%;
+    background-color: #fff500;
+}
+
+#fssb_palette_pen_clbt_black {
+    left: 8.5%;
+    top: 50%;
+    background-color: #000000;
+}
+
+#fssb_palette_pen_clbt_white {
+    left: 55%;
+    top: 50%;
+    background-color: #ffffff;
+}
+
+#fssb_palette_pen_clbt_free1 {
+    left: 8.5%;
+    top: 60%;
+    cursor: not-allowed;
+}
+
+#fssb_palette_pen_clbt_free2 {
+    left: 55%;
+    top: 60%;
+    cursor: not-allowed;
+}
+
+.fssb_palette_pen_bt_img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#fssb_palette_color_bt_result {
+    position: absolute;
+    left: 15%;
+    top: 87%;
+    width: 70.8%;
+    height: 5.8%;
+    cursor: pointer;
+}
+
+.fssb_palette_fusen_opc_guidebar {
+    position: absolute;
+    left: 16.5%;
+    top: 80%;
+    width: 67%;
+    height: 3%;
+    border-top: 0.1rem solid #313232;
+}
+
+.fssb_palette_fusen_opc_tauchbar{
+	position: absolute;
+    top: 77%;
+    width: 100%;
+    height: 6%;
+	cursor: pointer;
+}
+
+#fssb_palette_fusen_knob_opc {
+    position: absolute;
+    top: 78.6%;
+    width: 13%;
+    height: 3%;
+    cursor: pointer;
+}
+
+#fssb_palette_color_clbt_figure{
+    position: absolute;
+    left: 15%;
+    top: 13%;
+}
+*/
+
+.userApp {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+	left: 0px;
+    right: 0px;
+    top: 0px;
+    border: 0px;
+    margin: auto;
+    z-index: 2144450002;
+    background-color: #fff;
+}
+
+#userAppPane {
+	position: absolute;
+	left: 0px;
+    right: 0px;
+    border: 0px;
+    margin: auto;
+    display: none;
+}
+
+#bottomFrame {
+	position: fixed;
+	left: 0px;
+    right: 0px;
+	bottom: 0px;
+    height: 40px;
+    background-color: #555;
+    display: none;
+	z-index: 2144450001;
+}
+
+#logoArea {
+    position: absolute;
+    top: 2px;
+    left: 0px;
+    bottom: 2px;
+    width: 120px;
+    background-color: white;
+}
+
+.imgLogo {
+    position: absolute;
+    width: 80%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#bottomLeftPane {
+    position: absolute;
+    top: 0;
+    left: 2px;
+    bottom: 0;
+    right: 2px;
+}
+
+#bottomRightPane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 2px;
+    width: 0px;
+    display: none;
+}
+
+#sysMenu {
+    position: absolute;
+    top: 2px;
+    right: 0px;
+    bottom: 2px;
+    width: 36px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+#btSysMenu {
+    width: 100%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#btBottomScrlLeft {
+    position: absolute;
+    top: 2px;
+    left: 44px;
+    bottom: 2px;
+    width: 40px;
+    display: none;
+}
+
+#btBottomScrlRight {
+    position: absolute;
+    top: 2px;
+    left: 86px;
+    bottom: 2px;
+    width: 40px;
+    display: none;
+}
+
+#bottomLeftTabPane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    overflow: scroll;
+}
+
+#bottomLeftScrollPane {
+    width: 202px;
+    height: 40px;
+}
+
+#bottomRightTabPane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2px;
+    right: 2px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: none;
+}
+
+#bottomRightScrollPane {
+    width: 0px;
+    height: 0px;
+}
+
+.bottomTabCont {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 2px;
+    background-color: #999999;
+    -webkit-border-radius: 0 0 8px 8px;
+    -moz-border-radius: 0 0 8px 8px;
+    -ms-border-radius: 0 0 8px 8px;
+    -o-border-radius: 0 0 8px 8px;
+    border-radius: 0 0 8px 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: default;
+    display: none;
+    position: relative;
+    color: #333333;
+    text-align: left;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    white-space: nowrap;
+}
+.bottomTabSubPageCont {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 2px;
+    background-color: #999999;
+    color: #333333;
+    text-align: left;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    -webkit-border-radius: 0 0 8px 8px;
+    -moz-border-radius: 0 0 8px 8px;
+    -ms-border-radius: 0 0 8px 8px;
+    -o-border-radius: 0 0 8px 8px;
+    border-radius: 0 0 8px 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: default;
+    white-space: nowrap;
+}
+
+.bottomTabAppCont {
+    position: relative;
+    float: left;
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 2px;
+    background-color: #999999;
+    color: #333333;
+    text-align: left;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+    -webkit-border-radius: 0 0 8px 8px;
+    -moz-border-radius: 0 0 8px 8px;
+    -ms-border-radius: 0 0 8px 8px;
+    -o-border-radius: 0 0 8px 8px;
+    border-radius: 0 0 8px 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: default;
+    display: none;
+    white-space: nowrap;
+}
+
+.btmtabiconD{
+    position: relative;
+    float: left;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 100%;
+}
+.btmtabicon {
+    position: absolute;
+    height: 60%;
+    width: auto;
+    top: 0;
+    bottom: 0;
+    left: 5px;
+    margin: auto;
+}
+.closeAppBtn{
+    position: absolute;
+    width: 20%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    cursor: pointer;
+    background-color: #cccccc;
+    -webkit-border-radius: 0 0 8px 0;
+    -moz-border-radius: 0 0 8px 0;
+    -ms-border-radius: 0 0 8px 0;
+    -o-border-radius: 0 0 8px 0;
+    border-radius: 0 0 8px 0;
+    
+}
+.closeAppBtnIcon {
+    position: absolute;
+    width: 70%;
+    height: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#video_wrapper{
+    display: none;
+}
+
+#video_player{
+    position: relative;
+	background-color:#d3d5d8;
+	width:100%;
+	height:100%;
+}
+
+#video_top{
+    position: relative;
+	width:100%;
+	height:13.5%;
+    right:0;
+    margin:auto;
+}
+
+#video_top div{
+	display:inline-block;
+}
+.video_button{
+    position: absolute;
+    top:10%;
+	cursor:pointer;
+}
+
+.video_button img{
+    position: relative;
+	width:100%;
+    height:100%;
+}
+
+#close_btn{
+    position: relative;
+    float: right;
+    margin: 0px 5px;
+}
+
+#video_div{
+    position: relative;
+	width:100%;
+	height:86.5%;
+	background-color:#000;
+}
+
+#video{
+	height:100%;
+	width:100%;
+}
+
+#video_html5_api{
+	height:100%;
+	width:100%;
+}
+
+#video_bottom{
+    position: relative;
+	width:100%;
+	height:13.5%;
+    left:0;
+    right:0;
+    margin:auto;
+}
+
+.video_bottom_conponent{
+	display:inline-block;
+}
+
+#video_button_play{
+	position:absolute;
+    left: 2%;
+	cursor: pointer;
+}
+
+#video_button_play img{
+	position:relative;
+	width:100%;
+	height:auto;
+}
+
+#video_div_time{
+	position:absolute;
+    left: 8%;
+    height: 100%;
+    width: 18%;
+	-webkit-transform:scale(0.8);
+	-moz-transform:scale(0.8);
+	-ms-transform:scale(0.8);
+	-o-transform:scale(0.8);
+	transform:scale(0.8);
+}
+
+_::-webkit-full-page-media, _:future, :root #video_div_time{
+	position:absolute;
+    left: 8%;
+    height: 100%;
+    width: 15%;
+	-webkit-transform:scale(0.8);
+	-moz-transform:scale(0.8);
+	-ms-transform:scale(0.8);
+	-o-transform:scale(0.8);
+	transform:scale(0.8);
+}
+
+#video_div_time span{
+    display:inline-block;
+	position:absolute;
+	font-weight:bold;
+    white-space:nowrap;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+}
+
+#video_div_seek_bar{
+	position:absolute;
+	width:18%;
+	height:50%;
+	top:50%;
+    left: 30%;
+    margin-top:-0.5vh;
+	cursor: pointer;
+}
+
+#video_seek_bar{
+	background-color:#000;
+	border-radius:6px;
+	border-width:0px;
+	border-style:solid;
+	border-color:#ccc;
+	height:20%;
+}
+
+#video_seek_bar .ui-slider-handle{
+	width:15%;
+	height:300%;
+	margin-top:-3%;
+	margin-left:-7.5%;
+    background-size:100% 100%;
+	
+	border-radius:50%;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc;
+	cursor: pointer;
+}
+
+#video_seek_bar .ui-slider-range {
+	background:#fff;
+	
+}
+
+#video_button_repeat{
+	position:absolute;
+	left:50%;
+	cursor: pointer;
+}
+
+#video_button_repeat img{
+	position:relative;
+	width:100%;
+	height:auto;
+}
+
+
+#video_button_sound{
+	position:absolute;
+	left:56.5%;
+	cursor: pointer;
+}
+
+#video_button_sound img{
+	position:relative;
+	width:100%;
+	height:auto;
+}
+
+#video_div_volume_bar{
+	display:inline-block;
+	position:absolute;
+	width:14%;
+	height:50%;
+	top:50%;
+    left: 63%;
+    margin-top:-0.5vh;
+	cursor: pointer;
+}
+
+#video_volume_bar{
+	background-color:#000;
+	border-radius:6px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc;
+	margin:0;
+	height:20%;
+
+}
+
+#video_volume_bar .ui-slider-handle{
+	width:19.7%;
+	height:300%;
+	margin-top:-3%;
+	background-size:100% 100%;
+	
+	border-radius:50%;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc;
+	cursor: pointer;
+}
+
+#video_volume_bar .ui-slider-range {
+	background:#fff;
+	
+}
+#video_fullscreen_btn{
+    position: absolute;
+    left: 80%;
+	cursor: pointer;
+}
+
+#video_button_setting{
+    position: absolute;
+    left: 90%;
+	cursor: pointer;
+}
+
+#video_button_setting img{
+	width:100%;
+	height:auto;
+}
+
+#video_div_setting{
+	position:absolute;
+	height:32.8%;
+    width:63%;
+	bottom:0%;
+	right:1%;
+	display:inline;
+	
+	background-image:url(../img/video_setting_menu.png);
+	background-size:100% 100%;
+	
+	transition: opacity 1s, visibility 0s ease 1s;
+	opacity: 0;
+	visibility: hidden;
+	
+}
+
+#video_div_setting.show {
+	transition-delay: 0s;
+	opacity: 1;
+	visibility: visible;
+}
+
+.video_setting_obj{
+	display:inline-block;
+	margin-top:5%;
+	cursor: pointer;
+}
+
+.video_setting_radio{
+	width:7%;
+	height:7%;
+	cursor: pointer;
+}
+
+#video_setting_radio_low{
+	position:absolute;
+	height:28%;
+	top:13%;
+	left:8%;
+}
+
+#video_setting_radio_mid{
+	position:absolute;
+	height:27%;
+	top:13%;
+	left:39%;
+}
+
+#video_setting_radio_high{
+	position:absolute;
+	height:27%;
+	top:13%;
+	left:66%;
+}
+
+.video_setting_radio img{
+	width:100%;
+}
+
+#video_div_setting label{
+	position:relative;
+	font-size:1.5em;
+}
+
+#video_setting_blank_label_low{
+	position:absolute;
+	width:20%;
+	height:27%;
+	top:7%;
+	left:15%;
+}
+
+#video_setting_blank_label_mid{
+	position:absolute;
+	width:17%;
+	height:27%;
+	top:7%;
+	left:46%;
+}
+
+#video_setting_blank_label_high{
+	position:absolute;
+	width:17%;
+	height:27%;
+	top:7%;
+	left:73%;
+}
+
+.video_close{
+    visibility: hidden;
+}
+#video_close_btn_l{
+    position: absolute;
+    left: -10%;
+	cursor: pointer;
+}
+#video_close_btn_r{
+    position: absolute;
+    left: 103%;
+	cursor: pointer;
+}
+
+#audio_wrapper{
+	position:relative;
+    display: none;
+    height: 100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    
+}
+
+#audio_wrapper{
+	position:relative;
+	height:100%;
+}
+
+
+#audio_player{
+	width:100%;
+	height:100%;
+	background-image:url(../img/audio_bg.png);
+	background-size:100% 100%;
+	position:relative;
+}
+
+.audio_conponent{
+	display:inline-block;
+}
+
+#audio_play{
+	position:absolute;
+	top:25%;
+	left:3.3%;
+	width:4.7%;
+	height:50%;
+	
+}
+#audio_player img{
+	position:relative;
+	width:100%;
+	height:100%;
+	cursor:pointer;
+}
+
+/*
+#audio_div_time{
+	height:100%;
+	font-weight:bold;
+	font-size:0.8em;
+	margin-left:1%;
+}
+
+#audio_div_time span{
+	display:inline-block;
+	margin-bottom:30%;
+	position:relative;
+	top:-36%;
+}
+
+*/
+#audio_div_time{
+	position:absolute;
+    left: 10%;
+    width: 25%;
+    height: 100%;
+}
+
+_::-webkit-full-page-media, _:future, :root #audio_div_time{
+	position:absolute;
+    left: 10%;
+    width: 23%;
+    height: 100%;
+}
+
+
+#audio_div_time span{
+    display:inline-block;
+	position:relative;
+	font-weight:bold;
+    white-space:nowrap;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+}
+
+#audio_prev{
+	position:absolute;
+	top:32%;
+	left:35.3%;
+	width:6.1%;
+	height:35.8%;
+}
+#audio_next{
+	position:absolute;
+	top:32%;
+	left:44%;
+	width:6.1%;
+	height:35.8%;
+}
+#audio_button_sound{
+	position:absolute;
+	top:33.3%;
+	left:52.6%;
+	width:3.7%;
+	height:33.3%;
+}
+
+#audio_div_volume_bar{
+	display:inline-block;
+	position:absolute;
+	top:50%;
+	left:57.5%;
+	width:20%;
+	height:100%;
+    margin-top:-0.5vh;
+}
+
+#audio_volume_bar{
+	background-color:#000;
+	border-radius:6px;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc;
+	height:10%;
+	cursor: pointer;
+}
+
+.ui-slider-handle:focus{
+  outline: none;
+}
+
+
+
+#audio_volume_bar .ui-slider-handle{
+	width:16%;
+	height:300%;
+	margin-top:-2%;
+	background-size:100% 100%;
+	
+	border-radius:50%;
+	border-width:1px;
+	border-style:solid;
+	border-color:#ccc;
+	cursor: pointer;
+}
+#audio_volume_bar .ui-slider-range{
+	background-color:#fff;
+	height:100%;
+}
+
+#audio_button_setting{
+	position:absolute;
+	top:13.3%;
+	left:80.5%;
+	width:8.2%;
+	height:76.7%;
+}
+
+#audio_button_close{
+	position:absolute;
+	top:8.3%;
+	left:90.3%;
+	width:8.7%;
+	height:81.7%;
+}
+
+
+#audio_div_setting{
+	position:absolute;
+	height:177.5%;
+	width:70.7%;
+	top:-177.5%;
+	left:20.4%;
+	display:inline;
+	
+	background-image:url(../img/audio_setting_menu.png);
+	background-size:100% 100%;
+	
+	transition: opacity 1s, visibility 0s ease 1s;
+	opacity: 0;
+	visibility: hidden;
+    z-index: 2144500003;
+	
+}
+
+#audio_div_setting.show {
+	transition-delay: 0s;
+	opacity: 1;
+	visibility: visible;
+}
+
+.audio_setting_obj{
+	display:inline-block;
+    cursor: pointer;
+}
+
+.audio_setting_radio{
+    position: absolute;
+	width:6.3%;
+	height:23.5%;
+}
+
+#audio_setting_radio_low{
+    top: 29%;
+    left: 9%;
+}
+#audio_setting_radio_mid{
+    top: 29%;
+    left: 40.5%;
+}
+#audio_setting_radio_high{
+    top: 29%;
+    left: 67.5%;
+}
+
+.audio_setting_radio img{
+	height:100%;
+	width:100%;
+}
+
+#audio_setting_blank_label_low{
+    position: absolute;
+    top: 30%;
+    left: 16%;
+	width:20%;
+	height:23.5%;
+}
+
+#audio_setting_blank_label_mid{
+    position: absolute;
+    top: 30%;
+    left: 47.5%;
+	width:16%;
+	height:23.5%;
+}
+
+#audio_setting_blank_label_high{
+    position: absolute;
+    top: 30%;
+    left: 74.5%;
+	width:16%;
+	height:23.5%;
+}
+
+/*
+@media print{
+    body {
+        -webkit-print-color-adjust: exact;
+        top:0 !important;
+        left:0 !important;
+        width:200mm !important;
+        height:290mm !important;
+    }
+    
+    .no-print-area {
+      display: none !important;
+    }
+}
+*/
+
+/*
+.pageImgRotate1 {
+    transform: rotate(90deg);
+}
+.pageImgRotate2 {
+    transform: rotate(180deg);
+}
+.pageImgRotate3 {
+    transform: rotate(-90deg);
+}
+*/
+
+#sysMenuBase {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+    margin: auto;
+	background-color: #d3d5d8;
+	z-index: 2144500011;
+	display: none;
+    color: #221815;
+    font-size: 3vmin;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#btCloseSysMenu {
+	position: absolute;
+    right: 1%;
+    top: 1%;
+    width: 11%;
+    height: 20%;
+    cursor: pointer;
+}
+
+.imgCloseSysMenu {
+    width: 100%;
+    height: 100%;
+}
+.sysMenuCtrl{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40%;
+    height: 60%;
+    margin: auto;
+}
+.sysMenuCtrlImg {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#sysMenuCtrl01 {
+	position: relative;
+    left: 40%;
+    top: 21%;
+    width: 60%;
+    height: 20%;
+}
+
+#sysMenuCtrl01_n {
+    left: 0%;
+}
+#sysMenuCtrl01_a {
+    left: 50%;
+}
+
+#sysMenuCtrl02 {
+	position: relative;
+    left: 40%;
+    top: 24%;
+    width: 60%;
+    height: 20%;
+}
+
+#sysMenuCtrl02_n {
+    left: 0%;
+}
+#sysMenuCtrl02_a {
+    left: 50%;
+}
+
+#versionInfo {
+	position: absolute;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    bottom: 5%;
+    color: #221815;
+    font-size: 3vmin;
+    text-align: center;
+}
+
+#wait_message{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+	z-index: 2144450001;
+}
+
+.loading {
+    position: absolute;
+    width: auto;
+    height: 30%;
+    left: 0;
+    top: 30%;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    text-align:center;
+}
+
+#div_input_user_area{
+	z-index: 2144480201;
+    font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'メイリオ', 'Meiryo', 'Meiryo UI', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+}
+
+#select_user_area{
+	background-color:#D1F1CC;
+	/*width:600px;*/
+	width:50%;
+	height:30%;
+	
+	text-align:center;
+	margin:10% auto;
+	margin-bottom:37.5%;
+	padding:30px 0;
+}
+
+.select_user_area_bg{
+	text-align:center;
+}
+
+/*
+[name="user_name"]{
+	margin:2px;
+	padding:2px;
+	border:solid 2px rgb(230,230,230);
+	border-radius:20px;
+	width:200px;
+	height:30px;
+	text-align:center;
+}
+*/
+
+#weight01{
+	height:40px;
+	display:block;
+}
+
+#label_user{
+	color:rgb(60,60,60);
+}
+
+#username_title{
+	color:#000;
+}
+#username_err_msg{
+	color:#f00;
+}
+
+#decision{
+	background-color:rgb(120,120,120);
+	border:solid 2px rgb(110,110,110);
+	border-radius:20px;
+	font-size:20px;
+	margin-top:20%;
+	padding:5px 20px;
+	color:rgb(230,230,230);
+	cursor:pointer;
+}
+
+input,button{
+	outline: none;
+}
+
+#decision::-webkit-inner-spin-button{
+	-webkit-appearance: none;
+}
+
+#decision::-webkit-clear-button{
+	-webkit-appearance: none;
+}
+
+.user_list_div{
+	color:rgb(180,180,180);
+}
+
+.user_list_div:hover{
+	/*background-color:rgb(240,240,240);*/
+	color:rgb(0,0,0);
+}
+
+.vjs-control-bar{
+	display:none !important;
+}
+
+.vjs-icon-placeholder{
+	display:none;
+}
+
+.vjs-big-play-button{
+	display:none;
+}
+
+.vjs-control{
+	display:none !important;
+}
+
+.vjs-big-play-button{
+	display:none !important;
+}

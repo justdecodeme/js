@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+#rulerCanvasDiv{
+    position: absolute;
+    z-index:2144480001;
+    
+}
+
+#rulerMoveDiv{
+    position: absolute;
+    z-index:2144480002;
+    top: 0;
+}
+
+#rulerDrawDiv{
+    position: absolute;
+    z-index:2144480002;
+    bottom: 0;
+    
+}
+
+#rulerShowDiv{
+    position: absolute;
+    z-index:2144480002;
+    top: 0;
+    right: 0;
+    background-color: darkgreen;
+}

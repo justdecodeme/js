@@ -1,0 +1,323 @@
+@charset "UTF-8";
+
+#fs_usercolor_back {
+    z-index: 2244500001;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: none;
+}
+
+.fs_usercolor_base {
+	position: absolute;
+    z-index: 2210000001;
+    margin: auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #d3d5d8;
+}
+
+.fssb_palette_usercolor_clbt {
+    position: absolute;
+	cursor: pointer;
+}
+
+.fs_usercolor_lbl{
+    position: absolute;
+    width: 23%;
+    top: 5.5%;
+    left: 30%;
+    cursor: pointer;
+}
+
+.fs_usercolor_btn{
+    position: absolute;
+    width: 28%;
+    height: 9%;
+    cursor: pointer;
+}
+
+.fs_usercolor_img{
+    position: relative;
+    width: 100%;
+    height: auto;
+}
+
+.fssb_palette_usercolor_inten_guidebar {
+    position: absolute;
+    left: 52%;
+    top: 4%;
+    width: 33%;
+    height: 5%;
+/*	border: 0.1rem solid #fff;*/
+    border-bottom: 0.1rem solid #313232;
+}
+
+.fssb_palette_usercolor_inten_touchbar{
+	position: absolute;
+    top: 6.5%;
+	left: 50%;
+    width: 38%;
+    height: 5%;
+/*    border: 0.1rem solid #f00;*/
+	cursor: pointer;
+}
+
+.fs_usercolor_rgb{
+	position: absolute;
+	-webkit-border-radius: 15%;
+    -moz-border-radius: 15%;
+    -ms-border-radius: 15%;
+    -o-border-radius: 15%;
+    border-radius: 15%;
+	height: 5%;
+	width: 12%;
+	top: 15%
+}
+
+.fs_usercolor_percent{
+	position: absolute;
+	left: 89%;
+	top: 7%;
+	height:4%;
+	width: 12%;
+	font-size: 3vh;
+	font-family: 'Hiragino Kaku Gothic ProN', '游ゴシック', 'Yu Gothic', '游ゴシック体', 'YuGothic', 'ＭＳ ゴシック', 'MS Gothic', 'monospace';
+	background-color: transparent;
+	border-style: none;
+}
+
+#fssb_palette_usercolor_knob_inten {
+    position: absolute;
+    top: 7.5%;
+    width: 4%;
+    height: 3.56%;
+    pointer-events: none;
+}
+
+#fssb_palette_usercolor_clbt_figure{
+    position: absolute;
+	width: 20%;
+	height: 17.8%;
+    left: 8%;
+    top: 3.5%;
+	-webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    border: 0.2em solid #f4f4f5;
+}
+
+#fs_usercolor_rgb_r{
+	position: relative;
+	color: #ff2800;
+	left: 37%;
+}
+
+#fs_usercolor_rgb_g{
+	position: relative;
+	color: #35a16b;
+	left: 42%;
+}
+
+#fs_usercolor_rgb_b{
+	position: relative;
+	color: #0041ff;
+	left: 47%;
+}
+
+#fssb_palette_usercolor_clbt_1 {
+    left: 10.625%;
+    top: 26%;
+    background-color: #ff0000;
+}
+
+#fssb_palette_usercolor_clbt_2 {
+    left: 10.625%;
+    top: 37.25%;
+    background-color: #ff3300;
+}
+
+#fssb_palette_usercolor_clbt_3 {
+    left: 10.625%;
+    top: 48.5%;
+    background-color: #ff6600;
+}
+
+#fssb_palette_usercolor_clbt_4 {
+    left: 10.625%;
+    top: 59.75%;
+    background-color: #ff9900;
+}
+
+#fssb_palette_usercolor_clbt_5 {
+    left: 10.625%;
+    top: 71%;
+    background-color: #ffcc00;
+}
+
+#fssb_palette_usercolor_clbt_6 {
+    left: 24.125%;
+    top: 26%;
+    background-color: #ffff00;
+}
+
+#fssb_palette_usercolor_clbt_7 {
+    left: 24.125%;
+    top: 37.25%;
+    background-color: #ccff00;
+}
+
+#fssb_palette_usercolor_clbt_8 {
+    left: 24.125%;
+    top: 48.5%;
+    background-color: #99ff00;
+}
+
+#fssb_palette_usercolor_clbt_9 {
+    left: 24.125%;
+    top: 59.75%;
+    background-color: #66ff00;
+}
+
+#fssb_palette_usercolor_clbt_10 {
+    left: 24.125%;
+    top: 71%;
+    background-color: #33ff00;
+}
+
+#fssb_palette_usercolor_clbt_11 {
+    left: 37.625%;
+    top: 26%;
+    background-color: #00ff00;
+}
+
+#fssb_palette_usercolor_clbt_12 {
+    left: 37.625%;
+    top: 37.25%;
+    background-color: #00ff33;
+}
+
+#fssb_palette_usercolor_clbt_13 {
+    left: 37.625%;
+    top: 48.5%;
+    background-color: #00ff66;
+}
+
+#fssb_palette_usercolor_clbt_14 {
+    left: 37.625%;
+    top: 59.75%;
+    background-color: #00ff99;
+}
+
+#fssb_palette_usercolor_clbt_15 {
+    left: 37.625%;
+    top: 71%;
+    background-color: #00ffcc;
+}
+
+#fssb_palette_usercolor_clbt_16 {
+    left: 51.125%;
+    top: 26%;
+    background-color: #00ffff;
+}
+
+#fssb_palette_usercolor_clbt_17 {
+    left: 51.125%;
+    top: 37.25%;
+    background-color: #00ccff;
+}
+
+#fssb_palette_usercolor_clbt_18 {
+    left: 51.125%;
+    top: 48.5%;
+    background-color: #0099ff;
+}
+
+#fssb_palette_usercolor_clbt_19 {
+    left: 51.125%;
+    top: 59.75%;
+    background-color: #0066ff;
+}
+
+#fssb_palette_usercolor_clbt_20 {
+    left: 51.125%;
+    top: 71%;
+    background-color: #0033ff;
+}
+
+#fssb_palette_usercolor_clbt_21 {
+    left: 64.625%;
+    top: 26%;
+    background-color: #0000ff;
+}
+
+#fssb_palette_usercolor_clbt_22 {
+    left: 64.625%;
+    top: 37.25%;
+    background-color: #3300ff;
+}
+
+#fssb_palette_usercolor_clbt_23 {
+    left: 64.625%;
+    top: 48.5%;
+    background-color: #6600ff;
+}
+
+#fssb_palette_usercolor_clbt_24 {
+    left: 64.625%;
+    top: 59.75%;
+    background-color: #9900ff;
+}
+
+#fssb_palette_usercolor_clbt_25 {
+    left: 64.625%;
+    top: 71%;
+    background-color: #cc00ff;
+}
+
+#fssb_palette_usercolor_clbt_26 {
+    left: 78.125%;
+    top: 26%;
+    background-color: #ff00ff;
+}
+
+#fssb_palette_usercolor_clbt_27 {
+    left: 78.125%;
+    top: 37.25%;
+    background-color: #ff00cc;
+}
+
+#fssb_palette_usercolor_clbt_28 {
+    left: 78.125%;
+    top: 48.5%;
+    background-color: #ff0099;
+}
+
+#fssb_palette_usercolor_clbt_29 {
+    left: 78.125%;
+    top: 59.75%;
+    background-color: #ff0066;
+}
+
+#fssb_palette_usercolor_clbt_30 {
+    left: 78.125%;
+    top: 71%;
+    background-color: #808080;
+}
+
+#fs_usercolor_btnOK{
+    top: 86%;
+    left: 14%;
+}
+
+#fs_usercolor_btnCancel{
+    top: 86%;
+    left: 58%;
+}

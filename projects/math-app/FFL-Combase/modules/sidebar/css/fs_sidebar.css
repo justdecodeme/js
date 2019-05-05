@@ -1,0 +1,310 @@
+@charset "UTF-8";
+
+.fssb_button_div {
+    position: relative;
+    
+}
+
+.fssb_button_l {
+    display: none;
+    width: 90%;
+    padding: 5%;
+}
+
+.fssb_button_r {
+    display: none;
+    width: 90%;
+    padding: 5%;
+}
+
+.fssb_separator_tl {
+    width: 100%;
+    height: 8px;
+    display: none;
+}
+
+.fssb_separator_tr {
+    width: 100%;
+    height: 8px;
+    display: none;
+}
+
+.fssb_separator_l {
+    width: 100%;
+    height: 4px;
+    display: none;
+}
+
+.fssb_separator_r {
+    width: 100%;
+    height: 4px;
+    display: none;
+}
+
+.fssb_palette_base {
+	position: fixed;
+/*
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -moz-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -webkit-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -ms-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+    -o-box-shadow: 1px 1px 3px 1px rgba(156,155,152,0.5);
+*/
+    z-index: 2144400010;
+/*    background-color: #f4f4f5;*/
+    top: 0;
+	display: none;
+}
+
+.fssb_palette_header{
+	position: absolute;
+    z-index: 2144400011;
+    background-color: #b0b4b9;
+    top: 0;
+    width: 100%;
+}
+
+.fssb_palette_footer{
+	position: absolute;
+    z-index: 2144400011;
+    background-color: #b0b4b9;
+    bottom: 0;
+    width: 100%;
+}
+
+.fssb_palette_close{
+    cursor: pointer;
+}
+
+.fssb_palette_btn_div {
+    position: relative;
+    width: 40%;
+    padding: 5%;
+    float: left;
+}
+
+.fssb_palette_btn {
+    height: auto;
+    width: 100%;
+}
+
+.fssb_palette_main{
+	position: absolute;
+    z-index: 2144400011;
+    background-color: #f4f4f5;
+    width: 100%;
+}
+
+.fssb_palette_sample_div {
+    position: relative;
+    width: 100%;
+    height: 10%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#fssb_palette_sample {
+    position: absolute;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+    left: 0;
+    right: 0;
+    top: 5%;
+    width: 90%;
+    height: 90%;
+    margin: auto;
+}
+
+.fssb_palette_lbl_div {
+    position: relative;
+    width: 100%;
+    pointer-events: none;
+}
+
+.fssb_palette_lbl {
+    height: auto;
+    width: 100%;
+}
+
+.fssb_palette_pointer{
+    cursor: pointer;
+}
+
+.fssb_palette_figtype{
+    cursor: pointer;
+    background-color:  #cccccc;
+}
+#fssb_palette_base_figtype{
+    position: absolute;
+    background-color:  #f4f4f5;
+    width: 100%;
+    height: 1.5%;
+    top: 16.3%;
+}
+
+.fssb_palette_figtype img{
+    position: relative;
+    bottom: 0;
+}
+
+.fssb_palette_figure{
+    cursor: pointer;
+}
+
+.fssb_palette_bColor{
+    
+}
+
+.fssb_palette_fColor{
+    top:3%;
+}
+
+.fssb_palette_color{
+    cursor: pointer;
+}
+
+.fssb_palette_color_select {
+    -webkit-border-radius: 25%;
+    -moz-border-radius: 25%;
+    -ms-border-radius: 25%;
+    -o-border-radius: 25%;
+    border-radius: 25%;
+    border: solid 0.05rem #a5a5a5;
+    margin: -0.05rem;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  _::-webkit-full-page-media, _:future, :root .fssb_palette_color_select{
+    border: solid 0.5px #a5a5a5;
+    margin: -0.5px;
+  }
+}
+.fssb_palette_knob_img {
+    position: relative;
+    width: auto;
+    height: 100%;
+}
+
+
+#fssb_palette_knob_opc {
+    position: absolute;
+    left: 28%;
+    height: 15%;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fssb_palette_opc {
+    position: relative;
+    left: 0%;
+    width: 50%;
+    height: 25%;
+    float: left;
+}
+.fssb_palette_opc_guidebar {
+    position: absolute;
+    top: 10%;
+    left: 45%;
+    width: 40%;
+    height: 80%;
+    border-left: 0.2rem solid #313232;
+}
+
+.fssb_palette_opc_touchbar{
+	position: absolute;
+    width: 100%;
+    height: 100%;
+	cursor: pointer;
+}
+
+#fssb_palette_knob_thick {
+    position: absolute;
+    left: 24%;
+    height: 15%;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.fssb_palette_thick {
+    position: relative;
+    left: 50%;
+    width: 50%;
+    height: 25%;
+}
+.fssb_palette_thick_guidebar {
+    position: absolute;
+    top: 10%;
+    left: 41%;
+    width: 40%;
+    height: 80%;
+    border-left: 0.2rem solid #313232;
+}
+
+.fssb_palette_thick_touchbar{
+	position: absolute;
+    width: 100%;
+    height: 100%;
+	cursor: pointer;
+}
+
+.fssb_palette_ok_div {
+    position: absolute;
+    width: 90%;
+    height: 8%;
+    bottom: 0%;
+    padding: 5%;
+}
+
+.fssb_palette_ok_img {
+	position: absolute;
+    height: auto;
+    width: 90%;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#fssb_palette_btn_bColor {
+    position: relative;
+    width: 90%;
+    height: 8%;
+    padding: 5%;
+}
+
+.fssb_palette_bColor_img {
+	position: absolute;
+    height: auto;
+    width: 90%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#fssb_palette_btn_fColor {
+    position: relative;
+    width: 90%;
+    height: 8%;
+    padding: 5%;
+}
+
+.fssb_palette_fColor_img {
+	position: absolute;
+    height: auto;
+    width: 90%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+

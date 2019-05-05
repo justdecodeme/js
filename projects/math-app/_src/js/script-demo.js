@@ -2519,6 +2519,9 @@ var initScale = (function (e) {
   var dx = null;
   var dy = null;
   var ratio = null;
+  var dist1 = null;
+  var dist2 = null;
+  var leftTopCoords;
 
   var start = function (e) {
     // console.group('Scale')
@@ -2527,12 +2530,21 @@ var initScale = (function (e) {
     e.preventDefault();
 
     mousedownRotate = true;
-    
+
+    cvOuter.classList.add('pe-none');
+        
+    var pointsObj = math.getSetPoints(initTools.currSetType);
+    leftTopCoords = {
+      x: pointsObj[2].x,
+      y: pointsObj[2].y
+    }
+    startPoint = math.getMousePosition(e, cv);
+    dist1 = Math.sqrt((pointsObj[2].x-startPoint.x) * (pointsObj[2].x-startPoint.x) + (pointsObj[2].y-startPoint.y) * (pointsObj[2].y-startPoint.y));
+
     scalable = e.target.closest('.scalable');
     w = scalable.offsetWidth;
     h = scalable.offsetHeight;
     ratio = w / h;
-    startPoint = math.getMousePosition(e, cv);
 
     cvOuter.addEventListener('mousemove', scale, false);
     cvOuter.addEventListener('touchmove', scale, false);
@@ -2544,6 +2556,8 @@ var initScale = (function (e) {
     // console.groupEnd();
 
     mousedownRotate = mousemoveRotate = false
+    
+    cvOuter.classList.remove('pe-none');  
 
     cvOuter.removeEventListener('mousemove', scale, false);
     cvOuter.removeEventListener('touchmove', scale, false);
@@ -2556,21 +2570,24 @@ var initScale = (function (e) {
 
       e.preventDefault();
   
-      currPoint = math.getMousePosition(e, cv);
-      dx = currPoint.x - startPoint.x;
-      dy = currPoint.y - startPoint.y;
+      currPoint = math.getMousePosition(e, cvOuter);
 
-      // startPoint = currPoint;
-      // ratio = dx/dy;
+      // distance between left-top and right-bottom corners
+      dist2 = Math.sqrt((leftTopCoords.x-currPoint.x) * (leftTopCoords.x-currPoint.x) + (leftTopCoords.y-currPoint.y) * (leftTopCoords.y-currPoint.y));
+      dist = dist2 - dist1;
+      scalable.style.width = (w + dist) + 'px';
+      scalable.style.height = ((w + dist) / ratio) + 'px';
+      
+      // dx = currPoint.x - startPoint.x;
+      // dy = currPoint.y - startPoint.y;
 
-      if(dx > dy) { // width is more
-        scalable.style.width = (w + dx) + 'px';
-        scalable.style.height = ((w + dx) / ratio) + 'px';
-      } else { // height is more
-        scalable.style.height = (h + dy) + 'px';
-        scalable.style.width = ((h + dy) * ratio) + 'px';
-      }
-  
+      // if(dx > dy) { // width is more
+      //   scalable.style.width = (w + dx) + 'px';
+      //   scalable.style.height = ((w + dx) / ratio) + 'px';
+      // } else { // height is more
+      //   scalable.style.height = (h + dy) + 'px';
+      //   scalable.style.width = ((h + dy) * ratio) + 'px';
+      // }
     }
     mousemoveRotate = true;
   }

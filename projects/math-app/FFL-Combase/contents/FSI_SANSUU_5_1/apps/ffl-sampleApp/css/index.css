@@ -1,0 +1,110 @@
+﻿@charset "UTF-8";
+
+@-ms-viewport { width: auto; initial-scale: 1; user-zoom: fixed; }
+@viewport { width: device-width; initial-scale: 1; user-zoom: fixed; }
+
+body {
+	font-family: '遊ゴシック', 'YuGothic', 'メイリオ', 'Hiragino Kaku Gothic Pro', sans-serif;
+	width: 100%;
+	height: 100%;
+    background-color:#FFFFFF;
+}
+.refuseusel {
+    user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+    -ms-content-zooming: none;
+    -ms-overflow-style: none;
+    /* */
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+#stage_0 {
+    width: 1200px;
+    height: 675px;
+	margin: 0 auto;
+/*	overflow: hidden;*/
+}
+
+#stage_1 {
+    width: 1200px;
+    height: 675px;
+}
+
+.contbase {
+	position: absolute;
+	margin: 0 auto;
+	overflow: hidden;
+	background-color: #FFF;
+}
+
+
+#fruits {
+    width:90%;
+    height:100%;
+    margin: 10px;
+    background-color:#FF9966;
+    border:1px solid #cc3333;
+}
+
+#dropbox {
+    width:90%;
+    height:100%;
+    margin: 10px;
+    background-color:#CCFF66;
+    border:1px solid #00cc00;
+    -khtml-user-drag: element;
+}
+
+.image{
+    width: 20%;
+    height: 20%;
+    margin:10px;
+}
+
+#rightArea{
+    position: absolute;
+    text-align: center;
+    width: 50%;
+    height:90%;
+    left: 50%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#leftArea{
+    position: absolute;
+    text-align: center;
+    width: 50%;
+    height:90%;
+    left: 0%;
+    right: 50;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+#Canvas {
+	position: absolute;
+    width: 100%;
+    height: 100%;
+	pointer-events: none;
+}
+
+#Mycanvas {
+    position: absolute;
+	width: 100%;
+    height: 100%;
+	z-index: 2144480000;
+	pointer-events: none;
+
+}
+
+
+
+            

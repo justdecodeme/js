@@ -1,0 +1,15 @@
+<svg id="_12.1.a_閉じる" data-name="12.1.a 閉じる" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62" height="62" viewBox="0 0 62 62">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#b1b3b4"/>
+      <stop offset="0.232" stop-color="#8b8b8b"/>
+      <stop offset="1" stop-color="#c2c4c6"/>
+    </linearGradient>
+  </defs>
+  <rect id="Rectangle_94" data-name="Rectangle 94" width="62" height="62" rx="8" fill="url(#linear-gradient)"/>
+  <g id="Rectangle_95" data-name="Rectangle 95" transform="translate(3 3)" fill="#afafaf" stroke="#747474" stroke-width="0.1">
+    <rect width="56" height="56" rx="7" stroke="none"/>
+    <rect x="0.05" y="0.05" width="55.9" height="55.9" rx="6.95" fill="none"/>
+  </g>
+  <path id="Union_1" data-name="Union 1" d="M15,18.676,3.674,30,0,26.323,11.324,15,0,3.674,3.674,0,15,11.324,26.323,0,30,3.677,18.675,15,30,26.323,26.323,30Z" transform="translate(16.071 15.913)" fill="#fff"/>
+</svg>

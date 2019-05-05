@@ -284,8 +284,8 @@ body {
   &.draggable-tool,
   &.draggable-widget {
     display: none;
-    left: 110px;
-    top: 100px;
+    left: 200px;
+    top: 200px;
 
     &.active {
       display: block;
@@ -428,7 +428,7 @@ body {
     }
 
     &.highlight {
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      // border: 1px solid rgba(0, 0, 0, 0.1);
 
       .btn {
         display: block;
@@ -452,12 +452,12 @@ body {
 /***********************************/
 .draggable-cubes {
   // border: 5px solid black;
-  box-shadow: 0 0 5px 5PX rgba(0,0,0,0.05);
+  // box-shadow: 0 0 5px 5PX rgba(0,0,0,0.05);
   .cube {
     pointer-events: all;
     cursor: move;
-    width: 31px;
-    height: 31px;
+    width: 40px;
+    height: 40px;
     background-size: 100%;  
     position: absolute;    
     &[data-side=front] {
@@ -508,14 +508,14 @@ body {
       visibility: hidden;
       &.dot-top {
         height: 4px;
-        width: 100%;
+        width: 4px;
         left: 50%;
         bottom: 100%;
         background: rgb(255, 102, 0);
         transform: translate(-50%, 50%);
       }
       &.dot-right {
-        height: 100%;
+        height: 4px;
         width: 4px;
         top: 50%;
         left: 100%;
@@ -524,14 +524,14 @@ body {
       }
       &.dot-bottom {
         height: 4px;
-        width: 100%;
+        width: 4px;
         left: 50%;
         top: 100%;
         transform: translate(-50%, -50%);
         background: darkturquoise;
       }
       &.dot-left {
-        height: 100%;
+        height: 4px;
         width: 4px;
         top: 50%;
         right: 100%;
@@ -540,68 +540,25 @@ body {
       }
     }
   }
-
-
-  .detach-btn {
-    position: absolute;
-    width: 34px;
-    height: 34px;
-    background: #e0e0e0;
-    left: calc(100% + 8px);
-    top: 0;
-    border-radius: 10px;
-    background-image: url(../img/detach.png);
-    background-repeat: no-repeat;
-    background-size: 78%;
-    background-position: center;
-    display: none;
-    padding: 7px;
-    cursor: pointer;
-    background-clip: border-box;
-
-    &:hover {
-      opacity: .8;
+  &.highlight-0 {
+    .dot {
+      &.dot-top { opacity: .2;}
     }
   }
-
-  &.vertical,
-  &.horizontal {
-    display: flex;
-  }
-
-  &.vertical {
-    // flex-flow: column;
-    box-shadow: 0 0 5px 5PX rgba(255, 0, 0, 0.479);
-  }
-
-  &.horizontal {
-    flex-flow: row;
-  }
-
-  &.horizontal {
-    box-shadow: 0 0 5px 5PX rgba(0, 0, 0, 0.151);
-  }
-
-  &.complete {
-    box-shadow: 0 0 5px 5px rgba(0, 153, 255, 0.555);
-  }
-
-  &.highlight {
-    box-shadow: 0 0 5px 5PX rgba(21, 255, 0, 0.479);
-  }
-
-  &.cant-snap {
-    transition: all .05s ease;
-  }
-
-  &.detach {
-    .detach-btn {
-      display: block;
+  &.highlight-1 {
+    .dot {
+      &.dot-right { opacity: .2;}
     }
   }
-
-  img {
-    display: block;
+  &.highlight-2 {
+    .dot {
+      &.dot-bottom { opacity: .2;}
+    }
+  }
+  &.highlight-3 {
+    .dot {
+      &.dot-left { opacity: .2;}
+    }
   }
 }
 
@@ -769,10 +726,10 @@ body {
   }
 
   .point {
-    visibility: hidden;
+    // visibility: hidden;
     position: absolute;
-    width: 2px;
-    height: 2px;
+    width: 10px;
+    height: 10px;
     background: rgb(0, 0, 0);
     border-radius: 50%;
     transform: translate(-50%, -50%);
@@ -980,15 +937,22 @@ body {
 }
 
 [data-panel=protractor] {
-  background: rgba(0, 0, 255, 0.01);
+  background: rgba(0, 251, 0, 0.24);
   pointer-events: none;
   transform-origin: center bottom;
-  height: 250px;
   width: 500px;  
+  height: 250px;
   .protractor {
     width: 100%;
     display: block;
   }
+  .scalable {
+    width: 500px;  
+    height: 250px;
+    position: absolute;
+    transform-origin: left top;
+    background: rgba(255, 0, 0, 0.17);
+    }
   .btn {
     pointer-events: all;
     &.close-btn {
@@ -1023,14 +987,14 @@ body {
   }
   &:after {
     position: absolute;
-    // content: '';
+    content: '';
     width: 100%;
     height: 200%;
     background: rgba(255, 0, 0, 0.123);
     left: 50%;
     top: 0;
     transform: translate(-50%, 0);
-    border-radius: 50%;    
+    // border-radius: 50%;    
     z-index: -1;
     pointer-events: none;
   }
@@ -1042,6 +1006,14 @@ body {
     &.point-side {
       left: 50%;
       top: 50%;
+    }
+    &.left-top {
+      left: 0;
+      top: 0;
+    }
+    &.right-bottom {
+      right: 0;
+      bottom: 0;
     }
   }
   .drag-area {
