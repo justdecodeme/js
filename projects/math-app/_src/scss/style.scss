@@ -539,6 +539,9 @@ body {
         background: blue;
       }
     }
+    &.ref {
+      background: gold;
+    }
   }
   &.highlight-0 {
     .dot {
