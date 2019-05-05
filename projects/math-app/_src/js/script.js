@@ -2023,7 +2023,6 @@ var initCubes = (function (e) {
     }
     var dropRow = parseInt(dropCube.dataset.row);
     var dropCol = parseInt(dropCube.dataset.col);
-    console.log(dropCube, dropRow, dropCol);
 
     // snap occordng to snape side
     if(initCubes.snapInfo.shortestDist) {
@@ -2035,7 +2034,7 @@ var initCubes = (function (e) {
         noOfCols = dragParent.querySelectorAll('.cube.t').length;
         noOfRows = dragParent.querySelectorAll('.cube.l').length;
         var cubeToAdd = noOfRows * noOfCols;
-        console.log('row: ' + noOfRows + ' col: ' + noOfCols + ' total: ' + cubeToAdd);
+        // console.log('row: ' + noOfRows + ' col: ' + noOfCols + ' total: ' + cubeToAdd);
   
         (initCubes.snapInfo.dropSide == 1) ? addToRight(cubeToAdd): addToLeft(cubeToAdd);     
       }
@@ -2122,7 +2121,7 @@ var initCubes = (function (e) {
 
       dropCube.classList.remove('b'); // remove 'b-bottom' class from old element
     }
-    function addToRight(cubeToAdd) {
+    function addToRight() {
       // console.log('addToRight');
       cubeOuter = '';
       var j = 0;
@@ -2130,54 +2129,32 @@ var initCubes = (function (e) {
       var l = parseInt(dropCube.style.left);
       var t = parseInt(dropCube.style.top);
       for (var c = 1; c <= noOfCols; c++) {
-        if(noOfRows > 1) {
-          col = dropCol + c;
-          l += cube.width;
-          for(var r = 1; r <= noOfRows; r++) {
-            t = cube.height * (r-1);
-            
-            // apply new row and col
-            row = r;
-            console.log(row, dropRow, r);
-
-            // apply new classes
-            if(r == 1) {
-              classes = 't r';
-            } else if (r == noOfRows) {
-              classes = 'r b';
-            } else {
-              classes = 'r';
-            }
-
-            cubeOuter += `
-              <div 
-                  data-row="${row}" 
-                  data-col="${col}" 
-                  data-id="${++initDrag.cubeId}" 
-                  data-side="${cubeSide}" 
-                  class="cube drag-area ${classes}"
-                  style="left: ${l}px; top: ${t}px;">
-                <div class="dot dot-top"></div>
-                <div class="dot dot-bottom"></div>
-                <div class="dot dot-left"></div>
-                <div class="dot dot-right"></div>   
-              </div>     
-            `;
-          }
-          // remove all 'r-right' classes from previous col
-          var prevColRows = dropParent.querySelectorAll('.cube[data-col="'+dropCol+'"');
-          for(var r = 0; r < prevColRows.length; r++) {
-            prevColRows[r].classList.remove('r');
-          }
-        } else {
-          l += cube.width;
+        col = dropCol + c;
+        l += cube.width;
+        for(var r = 1; r <= noOfRows; r++) {
+          t = cube.height * (r-1);
           
           // apply new row and col
-          row = dropRow;
-          col = dropCol + c;
-  
+          row = r;
+
           // apply new classes
-          classes = (c == noOfCols) ? 't r b' : 't b';
+          if(noOfRows == 1) {
+            classes = (c == noOfCols) ? 't r b' : 't b';
+          } else {
+            if (r == 1 && c == noOfCols) { // right top cube
+              classes = 't r';
+            } else if (r == noOfRows && c == noOfCols) { // right bottom cube
+              classes = 'r b';
+            } else if(c == noOfCols) { // right middle cubes
+              classes = 'r';
+            } else if(r == 1) { // middle top cubes
+              classes = 't';
+            } else if(r == noOfRows) { // middle bottom cubes
+              classes = 'b';
+            } else { // middle cubes 
+              classes = ''; 
+            }
+          }
 
           cubeOuter += `
             <div 
@@ -2193,7 +2170,12 @@ var initCubes = (function (e) {
               <div class="dot dot-right"></div>   
             </div>     
           `;
-          dropCube.classList.remove('r'); // remove 'r-right' class from old element
+        }
+
+        // remove all 'r-right' classes from previous col
+        var prevColRows = dropParent.querySelectorAll('.cube[data-col="' + dropCol + '"');
+        for(var i = 0; i < prevColRows.length; i++) {
+          prevColRows[i].classList.remove('r');
         }
       }      
 
