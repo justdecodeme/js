@@ -1104,42 +1104,75 @@ var initDrag = (function () {
         }
 
         if(cubeValue == 10) {
-          cubeOuter = `<div class="cube-outer">`;
-          for(var r = 0; r < 10; r++) {
-            cubeOuter += `<div class="cube drag-area" data-index="${r}"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+          cubeOuter = '';
+          for(var r = 1; r <= 10; r++) {
+            var classes = '';
+            if(r == 1) {
+              classes = 'ref t r l';
+            } else if(r == 10) {
+              classes = 'r b l';
+            } else {
+              classes = 'r l';
+            }
+            cubeOuter += `
+              <div 
+                  data-row="${r}" 
+                  data-col="1" 
+                  data-id="${++initDrag.cubeId}" 
+                  data-side="${cubeSide}"
+                  class="cube drag-area ${classes}"
+                  style="left: 0px; top: ${initCubes.cubeHeight * (r -1)}px;">
+                <div class="dot dot-top"></div>
+                <div class="dot dot-bottom"></div>
+                <div class="dot dot-left"></div>
+                <div class="dot dot-right"></div>
+              </div>
+              <div class="detach-btn"></div>
+            `;
           }
-          cubeOuter += `
-          </div>
-          <div class="dot dot-top"></div>
-          <div class="dot dot-bottom"></div>
-          <div class="dot dot-left"></div>
-          <div class="dot dot-right"></div>     
-          <div class="detach-btn"></div>
-        `;
 
           draggable.innerHTML = cubeOuter;
-          draggable.classList.add('vertical');
         } else if(cubeValue == 100) {
           cubeOuter = '';
-          for(var c = 0; c < 10; c++) {
-            cubeOuter += `<div class="cube-outer drag-area" data-index="${c}">`;
-            for(var r = 0; r < 10; r++) {
-              cubeOuter += `<div class="cube"><img src="${src}" style="width: ${width}px; height: ${height}px;"></div>`;
+          for(var c = 1; c <= 10; c++) {
+            for(var r = 1; r <= 10; r++) {
+              var classes = '';
+              if (r == 1 && c == 1) {
+                classes = 'ref t l';
+              } else if (r == 10 && c == 1) {
+                classes = 'b l';
+              } else if(r == 10 && c == 10) {
+                classes = 'r b';
+              } else if(r == 1 && c == 10) {
+                classes = 't r';
+              } else if(r == 1) {
+                classes = 't';
+              } else if(r == 10) {
+                classes = 'b';
+              } else if(c == 1) {
+                classes = 'l';
+              } else if(c == 10) {
+                classes = 'r';
+              }
+              cubeOuter += `
+                <div 
+                    data-row="${r}" 
+                    data-col="${c}" 
+                    data-id="${++initDrag.cubeId}" 
+                    data-side="${cubeSide}"
+                    class="cube drag-area ${classes}"
+                    style="left: ${initCubes.cubeWidth * (c -1)}px; top: ${initCubes.cubeHeight * (r -1)}px;">
+                  <div class="dot dot-top"></div>
+                  <div class="dot dot-bottom"></div>
+                  <div class="dot dot-left"></div>
+                  <div class="dot dot-right"></div>
+                </div>
+                <div class="detach-btn"></div>
+              `;
             }
-            cubeOuter += `</div>`;
           }
-          cubeOuter += `
-            <div class="dot dot-top"></div>
-            <div class="dot dot-bottom"></div>
-            <div class="dot dot-left"></div>
-            <div class="dot dot-right"></div>
-            <div class="detach-btn"></div>
-          `;          
 
           draggable.innerHTML = cubeOuter;
-          draggable.classList.add('vertical');
-          draggable.classList.add('horizontal');
-          draggable.classList.add('complete');
         } else {
           // b t r l - top, bottom, left, right
           draggable.innerHTML = `
@@ -2366,10 +2399,12 @@ var initCubes = (function (e) {
     getCoords: getCoords,
     getShortestDist: getShortestDist,
     highlight: highlight,
-    snap, snap,
+    snap: snap,
     detach: detach,
-    detachUI, detachUI,
-    remove, remove
+    detachUI: detachUI,
+    remove: remove,
+    cubeWidth: cube.width,
+    cubeHeight: cube.height 
   }
 })();
 
