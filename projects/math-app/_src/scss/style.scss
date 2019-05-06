@@ -463,10 +463,16 @@ body {
     &[data-side=front] {
       background-image: url(../img/cube-front-1.png);
       background: yellow;
+      &.ref {
+        background: gold;
+      }
     }
     &[data-side=back] {
       background-image: url(../img/cube-back-1.png);
       background: lightgreen;
+      &.ref {
+        background: darkseagreen;
+      }
     }
     &:before, &:after {
       position: absolute;
@@ -538,9 +544,6 @@ body {
         transform: translate(50%, -50%);
         background: blue;
       }
-    }
-    &.ref {
-      background: gold;
     }
   }
   &.highlight-0 {

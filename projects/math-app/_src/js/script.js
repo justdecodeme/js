@@ -1695,8 +1695,6 @@ var initCubes = (function (e) {
     // console.log('snapping');
     
     var transitionEvent = whichTransitionEvent();
-    // whether drag cube is 'front' or 'back
-    var cubeSide = dragParent.querySelector('.cube').dataset.side;
 
     var firstDropRowEl = dropParent.querySelector('.cube.t');
     var lastDropRowEl = dropParent.querySelector('.cube.b');
@@ -1762,8 +1760,10 @@ var initCubes = (function (e) {
         t -= cube.height;
         for (var c = noOfCols; c >= 1; c--) {
           l = leftOfDrop + cube.width * (c - 1);
-
           col = c;
+
+          // whether drag cube is 'front' or 'back
+          var cubeSide = dragParent.querySelector('.cube[data-row="' + r + '"][data-col="' + c + '"]').dataset.side;
 
           // apply new classes
           if (noOfCols == 1) {
@@ -1822,8 +1822,10 @@ var initCubes = (function (e) {
         t += cube.height;
         for (var c = 1; c <= noOfCols; c++) {
           l = leftOfDrop + cube.width * (c - 1);
-
           col = c;
+          
+          // whether drag cube is 'front' or 'back
+          var cubeSide = dragParent.querySelector('.cube[data-row="' + r + '"][data-col="' + c + '"]').dataset.side;
 
           // apply new classes
           if (noOfCols == 1) {
@@ -1875,8 +1877,10 @@ var initCubes = (function (e) {
         l += cube.width;
         for(var r = 1; r <= noOfRows; r++) {
           t = topOfDrop + cube.height * (r - 1);
-          
           row = r;
+
+          // whether drag cube is 'front' or 'back
+          var cubeSide = dragParent.querySelector('.cube[data-row="'+r+'"][data-col="'+c+'"]').dataset.side;
 
           // apply new classes
           if(noOfRows == 1) {
@@ -1928,9 +1932,11 @@ var initCubes = (function (e) {
         l -= cube.width;
         for (var r = noOfRows; r >= 1 ; r--) {
           t = topOfDrop + cube.height * (r - 1);
-
           row = r;
 
+          // whether drag cube is 'front' or 'back
+          var cubeSide = dragParent.querySelector('.cube[data-row="' + r + '"][data-col="' + c + '"]').dataset.side;
+          
           // apply new classes
           if (noOfRows == 1) {
             classes = (c == 1) ? 't b l' : 't b';
