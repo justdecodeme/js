@@ -1127,9 +1127,13 @@ var initDrag = (function () {
                 <div class="dot dot-left"></div>
                 <div class="dot dot-right"></div>
               </div>
-              <div class="detach-btn"></div>
             `;
           }
+          cubeOuter += `
+            <div class="detach-btn vertical"></div>
+            <div class="detach-btn horizontal"></div>
+            <div class="toggle-btn">Toggle</div>
+          `;
 
           draggable.innerHTML = cubeOuter;
         } else if(cubeValue == 100) {
@@ -1167,10 +1171,14 @@ var initDrag = (function () {
                   <div class="dot dot-left"></div>
                   <div class="dot dot-right"></div>
                 </div>
-                <div class="detach-btn"></div>
               `;
             }
           }
+          cubeOuter += `
+            <div class="detach-btn vertical"></div>
+            <div class="detach-btn horizontal"></div>
+            <div class="toggle-btn">Toggle</div>
+          `;
 
           draggable.innerHTML = cubeOuter;
         } else {
@@ -1188,12 +1196,14 @@ var initDrag = (function () {
               <div class="dot dot-left"></div>
               <div class="dot dot-right"></div>
             </div>
-            <div class="detach-btn"></div>
+            <div class="detach-btn vertical"></div>
+            <div class="detach-btn horizontal"></div>
+            <div class="toggle-btn">Toggle</div>
           `;
         }
 
-        // draggable.addEventListener('dblclick', initCubes.remove, false);
-        // draggable.addEventListener('click', initCubes.detachUI, false);
+        draggable.addEventListener('dblclick', initCubes.remove, false);
+        draggable.addEventListener('click', initCubes.detachAndFlip, false);
         // draggable.addEventListener('dblclick', initCubes.detach, false);
       } else if (sealType == "shapes") { // generate shapes
         draggable = document.createElement('div');
@@ -1781,8 +1791,11 @@ var initCubes = (function (e) {
       initMove.dropParent.innerHTML += cubeOuter;
       dropParent = initMove.dropParent;
       initMove.init(dropParent, 'add');
+
       // dragParent.remove();
       // dropParent.style.zIndex = ++initMove.dragParentzIndex;              
+
+      updateToggleBtnPos();
     }
 
     function addToTop() {
@@ -2020,6 +2033,16 @@ var initCubes = (function (e) {
       }        
     }
 
+    function updateToggleBtnPos() {
+      // update 'toggle-btn' position
+      let refEl = dropParent.querySelector('.cube.t.r');
+      let l = parseInt(refEl.style.left);
+      let b = Math.abs(parseInt(refEl.style.top));
+      dropParent.querySelector('.toggle-btn').style.left = l + cube.width + 10 + 'px';
+      dropParent.querySelector('.toggle-btn').style.bottom = b + 10 + 'px';
+    }
+
+    
     dragParent.addEventListener(transitionEvent, transitionEndCallback);
     function transitionEndCallback() {
       dragParent.removeEventListener(transitionEvent, transitionEndCallback);
@@ -2223,8 +2246,8 @@ var initCubes = (function (e) {
       }
     }
   }
-  var detachUI = function (e) {
-    console.log('detachUI');
+  var detachAndFlip = function (e) {
+    // console.log('detachAndFlip');
 
     var dragParent = e.target.closest('.draggable-cubes');
     var dragParentLeft = dragParent.style.left;
@@ -2235,14 +2258,16 @@ var initCubes = (function (e) {
     var cubeHeight = dragParent.querySelector('.drag-area').getBoundingClientRect().height;
     var cubeWidth = dragParent.querySelector('.drag-area').getBoundingClientRect().width;
     var cubeOuter;
-    //  console.lo
     var sealType = dragParent.dataset.sealType;
-    var src = dragParent.querySelector('img').src;
-    var width = dragParent.querySelector('img').width;
-    var height = dragParent.querySelector('img').height;
 
-    if (e.target.classList.contains('detach-btn')) { // detach all cubes
-      console.log('detaching All');
+    if(e.target.classList.contains('toggle-btn')) { // toggle 'active' class on 'toggle-btn'
+      if(e.target.classList.contains('active')) {
+        e.target.classList.remove('active');
+      } else {
+        e.target.classList.add('active');
+      }
+    } else if (e.target.classList.contains('detach-btn')) { // detach all cubes
+      // console.log('detaching All');
 
       if (detachType == 'vertical') { // vertical detaching all
         // console.log('vertical detaching all')
@@ -2303,7 +2328,7 @@ var initCubes = (function (e) {
 
           initMove.init(draggable, 'add');
           draggable.addEventListener('dblclick', remove, false);
-          draggable.addEventListener('click', detachUI, false);
+          draggable.addEventListener('click', detachAndFlip, false);
         }
 
       } else { // horizontal detaching all
@@ -2365,23 +2390,34 @@ var initCubes = (function (e) {
 
           initMove.init(draggable, 'add');
           draggable.addEventListener('dblclick', remove, false);
-          draggable.addEventListener('click', detachUI, false);
+          draggable.addEventListener('click', detachAndFlip, false);
         }
       }
-    } else { // toggle 'detach-btn'
-      if (dragParent.querySelectorAll('.drag-area').length > 1) {
-        if (!initMove.mousemove) { // update if mouse is not moving (update only on click)
-          if (dragParent.classList.contains('detach')) {
-            dragParent.classList.remove('detach');
-          } else {
-            // remove and old detach if any
-            var oldDetachEl = document.querySelector('.draggable-cubes.detach');
-            if (oldDetachEl) {
-              oldDetachEl.classList.remove('detach');
+    } else { 
+      if (!initMove.mousemove) { // update if mouse is not moving (update only on click)
+        if (dragParent.querySelector('.toggle-btn').classList.contains('active')) { // flip cubes
+          // console.log('flip cubes');
+          if (e.target.classList.contains('cube')) {
+            if (e.target.dataset.side == 'front') {
+              e.target.dataset.side = 'back';
+            } else {
+              e.target.dataset.side = 'front';
             }
-            dragParent.classList.add('detach');
           }
+        } else if (dragParent.classList.contains('detach')) { // toggle 'detach-btn'
+          dragParent.classList.remove('detach');
+        } else {
+          // remove and old detach if any
+          var oldDetachEl = document.querySelector('.draggable-cubes.detach');
+          if (oldDetachEl) {
+            oldDetachEl.classList.remove('detach');
+          }
+          dragParent.classList.add('detach');
         }
+      }
+      if (dragParent.querySelectorAll('.drag-area').length == 1) {
+        dragParent.querySelector('.detach-btn.vertical').style.display = 'none';
+        dragParent.querySelector('.detach-btn.horizontal').style.display = 'none';
       }
     }
   }
@@ -2389,7 +2425,9 @@ var initCubes = (function (e) {
     // console.log('deleting');
 
     // delete complete 'draggable' group
-    e.target.closest('.draggable').remove();
+    if(e.target.classList.contains('cube')) {
+      e.target.closest('.draggable').remove();
+    }
   }
 
   return {
@@ -2401,7 +2439,7 @@ var initCubes = (function (e) {
     highlight: highlight,
     snap: snap,
     detach: detach,
-    detachUI: detachUI,
+    detachAndFlip: detachAndFlip,
     remove: remove,
     cubeWidth: cube.width,
     cubeHeight: cube.height 

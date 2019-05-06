@@ -566,6 +566,47 @@ body {
       &.dot-left { opacity: .2;}
     }
   }
+  .toggle-btn {
+    // display: none;
+    position: absolute;
+    background: lightgrey;
+    padding: 10px;
+    cursor: pointer;
+    left: 50px;
+    bottom: 10px;
+    &:hover {
+      opacity: .8;
+    }
+    &.active {
+      background: lightgreen;
+    }
+  }
+  .detach-btn {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    background: #e0e0e0;
+    left: calc(100% + 8px);
+    top: 0;
+    border-radius: 10px;
+    background-image: url(../img/detach.png);
+    background-repeat: no-repeat;
+    background-size: 78%;
+    background-position: center;
+    display: none;
+    padding: 7px;
+    cursor: pointer;
+    background-clip: border-box;
+    &:hover {
+      opacity: .8;
+    }
+  }
+  &.detach {
+    .toggle-btn,
+    .detach-btn1 {
+      display: block;
+    }
+  }
 }
 
 .draggable-shape {
