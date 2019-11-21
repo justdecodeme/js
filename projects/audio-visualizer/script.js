@@ -1,15 +1,16 @@
-var file = document.getElementById("thefile");
-var audio = document.getElementById("audio");
-var playPauseBtn = document.getElementById("playPause");
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-var renderFrame = null;
-var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-var myReq;
 
 window.onload = function() {
+  var file = document.getElementById("thefile");
+  var audio = document.getElementById("audio");
+  var playPauseBtn = document.getElementById("playPause");
+  var canvas = document.getElementById("canvas");
+  var ctx = canvas.getContext("2d");
+  var renderFrame = null;
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+  var myReq;
+  
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
