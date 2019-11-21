@@ -103,5 +103,5 @@ const drawLineSegment = (ctx, x, height, width, isEven) => {
 };
 
 // drawAudio('https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3');
-drawAudio('faded.mp3');
-// drawAudio('sky.mp3');
+// drawAudio('faded.mp3');
+drawAudio('sky.mp3');
