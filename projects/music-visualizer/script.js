@@ -1,10 +1,16 @@
-
 // Set up audio context
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioContext = new AudioContext();
 
+// One-liner to resume playback when user interacted with the page.
+document.querySelector('button').addEventListener('click', function() {
+  audioContext.resume().then(() => {
+    console.log('Playback resumed successfully');
+  });
+});
+
 /**
- * Retrieves audio from an external source, the initializes the drawing function
+ * Retrieves audio from an external source, then initializes the drawing function
  * @param {String} url the url of the audio we'd like to fetch
  */
 const drawAudio = url => {
@@ -65,11 +71,12 @@ const draw = normalizedData => {
   const width = canvas.offsetWidth / normalizedData.length;
   for (let i = 0; i < normalizedData.length; i++) {
     const x = width * i;
-    let height = normalizedData[i] * canvas.offsetHeight - padding;
+    let height = (normalizedData[i] * canvas.offsetHeight) - padding;
     if (height < 0) {
         height = 0;
     } else if (height > canvas.offsetHeight / 2) {
         height = height > canvas.offsetHeight / 2;
+        // canvas.height = height;
     }
     drawLineSegment(ctx, x, height, width, (i + 1) % 2);
   }
@@ -84,8 +91,8 @@ const draw = normalizedData => {
  * @param {boolean} isEven whether or not the segmented is even-numbered
  */
 const drawLineSegment = (ctx, x, height, width, isEven) => {
-  ctx.lineWidth = 1; // how thick the line is
-  ctx.strokeStyle = "#fff"; // what color our line is
+  ctx.lineWidth = 2; // how thick the line is
+  ctx.strokeStyle = "#f00"; // what color our line is
   ctx.beginPath();
   height = isEven ? height : -height;
   ctx.moveTo(x, 0);
@@ -97,3 +104,4 @@ const drawLineSegment = (ctx, x, height, width, isEven) => {
 
 // drawAudio('https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/shoptalk-clip.mp3');
 drawAudio('faded.mp3');
+// drawAudio('sky.mp3');
