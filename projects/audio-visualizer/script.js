@@ -120,16 +120,20 @@ window.onload = function() {
   }, false);
 
   // 
-  let dragArea = (e) => {
-    const seekBar = canvas;
+  let initDrag = (e) => {
+    const seekBar = document.getElementById('seekBar');
+    const progressBar = document.getElementById('progressBar')
     let duration = audio.duration;
     let x = 0;
     let isMouseDown = isMouseMove = isMouseDownAndMove = isMouseMoveAndUp = false;
   
-    const updateSeekbar = pos => {
-      x = parseFloat(pos / cvW).toFixed(2);
-      audio.currentTime = x * duration;   
-      console.log(x)       
+    const updateProgressBar = pos => {
+      x = pos / cvW;
+      progressBar.style.width = x * 100 + '%';
+      if(!isMouseMove) {
+        audio.currentTime = x * duration;   
+        console.log(x)       
+      }
     }
 
     seekBar.addEventListener('mousedown', (e) => {
@@ -141,6 +145,8 @@ window.onload = function() {
         // console.log('mousemove');
         isMouseDownAndMove = true;
         isMouseMoveAndUp = true;
+
+        updateProgressBar(e.offsetX);
       }
       isMouseMove = true;
     }, false);
@@ -148,19 +154,17 @@ window.onload = function() {
       isMouseDown = isMouseMove = false;
       if(isMouseMoveAndUp) {
         // console.log('mouseup');
-
-        updateSeekbar(e.offsetX)    
+        updateProgressBar(e.offsetX)    
       }
     }, false);
     seekBar.addEventListener('click', (e) => {
       // run iff mouse didn't moved
       if(!isMouseDownAndMove) {
         // console.log('click');
-
-        updateSeekbar(e.offsetX)
+        updateProgressBar(e.offsetX)
       }
       isMouseDownAndMove = false;
     }, false);
   };
-  dragArea();
+  initDrag();
 };

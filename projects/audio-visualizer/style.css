@@ -20,12 +20,18 @@ input, button {
   top: 40px;
 }
 
-#canvas {
+#canvas, #seekBar, #progressBar {
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
+}
+#seekBar {
+  background: rgba(0, 255, 0, 0.1);
+}
+#progressBar {
+  background: rgba(0, 255, 0, 0.05);
 }
 
 audio {
