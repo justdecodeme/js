@@ -28,6 +28,7 @@ window.onload = function() {
   let barHeight;
   let x = 0;
 
+  // functions
   const renderFrame = () => {
     // console.log('renderFrame');
     x = 0;
@@ -64,6 +65,7 @@ window.onload = function() {
     audio.load();    
   }
 
+  // event handlers
   playPauseBtn.addEventListener('click', () => {
     if(audio.paused) {
       audio.play();
@@ -78,9 +80,7 @@ window.onload = function() {
 
   fileElem.addEventListener('change', handleDrop, false);  
 
-
   // Drag and Drop logic
-
   const dropArea = canvas;
 
   ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -95,14 +95,14 @@ window.onload = function() {
   dropArea.addEventListener('dragenter', () => {
     // console.log('dragenter')
     dropArea.classList.add('active');
-  }, false)
+  }, false);
   dropArea.addEventListener('dragleave', () => {
     // console.log('dragleave')
     dropArea.classList.remove('active');
-  }, false)
+  }, false);
   dropArea.addEventListener('dragover', () => {
     // console.log('dragover')
-  }, false)
+  }, false);
   dropArea.addEventListener('drop', (e) => {
     // console.log('drop')
     dropArea.classList.remove('active');
@@ -111,5 +111,25 @@ window.onload = function() {
     let files = dt.files;
 
     handleDrop(files);
-  }, false)  
+  }, false);
+
+  // 
+  const dragArea = canvas;
+  let isDown = isMove = false;
+
+  dragArea.addEventListener('mousedown', () => {
+    console.log('mousedown');
+    isDown = true;
+    isMove = false;
+  }, false);
+  dragArea.addEventListener('mousemove', () => {
+    if(isDown && isMove) {
+      console.log('mousemove');
+    }
+    isMove = true;
+  }, false);
+  dragArea.addEventListener('mouseup', () => {
+    console.log('mouseup');
+    isDown = isMove = false;
+  }, false);
 };
