@@ -1,71 +1,57 @@
-
 window.onload = function() {
-  var file = document.getElementById("thefile");
-  var audio = document.getElementById("audio");
-  var playPauseBtn = document.getElementById("playPause");
-  var canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  var renderFrame = null;
-  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-  var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-  var myReq;
-  
+  let file = document.getElementById("thefile");
+  let audio = document.getElementById("audio");
+  let playPauseBtn = document.getElementById("playPause");
+
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  file.onchange = function() {
-    var files = this.files;
-    audio.src = URL.createObjectURL(files[0]);
-    audio.load();
+  let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+  let myReq;
 
-    var context = new AudioContext();
-    var src = context.createMediaElementSource(audio);
-    var analyser = context.createAnalyser();
-    // console.log(src, analyser)
+  let context = new AudioContext();
+  let src = context.createMediaElementSource(audio);
+  let analyser = context.createAnalyser();
+  src.connect(analyser);
+  analyser.connect(context.destination);
+  analyser.fftSize = 256;
+  let bufferLength = analyser.frequencyBinCount;
+  let dataArray = new Uint8Array(bufferLength);
 
-    src.connect(analyser);
-    analyser.connect(context.destination);
+  let cvW = canvas.width;
+  let cvH = canvas.height;
+  let barWidth = (cvW / bufferLength) * 2.5;
+  let barHeight;
+  let x = 0;
 
-    analyser.fftSize = 256;
+  let renderFrame = () => {
+    // console.log('renderFrame');
+    x = 0;
 
-    var bufferLength = analyser.frequencyBinCount; // 128
+    analyser.getByteFrequencyData(dataArray);
 
-    var dataArray = new Uint8Array(bufferLength);
-    // console.log(bufferLength, dataArray)
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, cvW, cvH);
 
-    var cvW = canvas.width;
-    var cvH = canvas.height;
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+      
+      let r = barHeight + (25 * (i/bufferLength));
+      let g = 250 * (i/bufferLength);
+      let b = 50;
 
-    var barWidth = (cvW / bufferLength) * 2.5;
-    var barHeight;
-    var x = 0;
+      ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+      ctx.fillRect(x, cvH - barHeight, barWidth, barHeight);
 
-    renderFrame = () => {
-      // console.log('renderFrame');
-      x = 0;
-
-      analyser.getByteFrequencyData(dataArray);
-
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, cvW, cvH);
-
-      for (var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-        
-        var r = barHeight + (25 * (i/bufferLength));
-        var g = 250 * (i/bufferLength);
-        var b = 50;
-
-        ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        ctx.fillRect(x, cvH - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
-
-      myReq = requestAnimationFrame(renderFrame);
+      x += barWidth + 1;
     }
-  };
+
+    myReq = requestAnimationFrame(renderFrame);
+  }
 
   playPauseBtn.addEventListener('click', () => {
     if(audio.paused) {
@@ -73,7 +59,16 @@ window.onload = function() {
       myReq = requestAnimationFrame(renderFrame);
     } else {
       audio.pause();
-      cancelAnimationFrame(myReq);
+      setTimeout(() => {
+        cancelAnimationFrame(myReq);
+      }, 1000);
     }
   })
+
+  file.addEventListener('change', function() {
+    let files = this.files;
+    audio.src = URL.createObjectURL(files[0]);
+    audio.load();
+  });  
+
 };

@@ -1,3 +1,7 @@
+body {
+  /* background: black; */
+}
+
 input, button {
   position: fixed;
   left: 10px;
