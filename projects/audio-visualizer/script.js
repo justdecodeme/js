@@ -122,34 +122,42 @@ window.onload = function() {
   // 
   let dragArea = (e) => {
     const seekBar = canvas;
+    let duration = audio.duration;
     let x = 0;
-    let isMouseDown = isMouseMove = isMouseDownAndMove = false;
+    let isMouseDown = isMouseMove = isMouseDownAndMove = isMouseMoveAndUp = false;
   
+    const updateSeekbar = pos => {
+      x = parseFloat(pos / cvW).toFixed(2);
+      audio.currentTime = x * duration;   
+      console.log(x)       
+    }
+
     seekBar.addEventListener('mousedown', (e) => {
       // console.log('mousedown');
-      isMouseDown = true; isMouseMove = false;
-  
-      x = Math.round(e.offsetX * 100 / cvW);
-      // console.log(x)
+      isMouseDown = true; isMouseMove = isMouseMoveAndUp = false;
     }, false);
     seekBar.addEventListener('mousemove', (e) => {
       if(isMouseDown && isMouseMove) {
-        console.log('mousemove');
+        // console.log('mousemove');
         isMouseDownAndMove = true;
-
-        x = Math.round(e.offsetX * 100 / cvW);
-        // console.log(x)
-        }
+        isMouseMoveAndUp = true;
+      }
       isMouseMove = true;
     }, false);
-    seekBar.addEventListener('mouseup', () => {
-      // console.log('mouseup');
+    seekBar.addEventListener('mouseup', (e) => {
       isMouseDown = isMouseMove = false;
+      if(isMouseMoveAndUp) {
+        // console.log('mouseup');
+
+        updateSeekbar(e.offsetX)    
+      }
     }, false);
-    seekBar.addEventListener('click', () => {
+    seekBar.addEventListener('click', (e) => {
       // run iff mouse didn't moved
       if(!isMouseDownAndMove) {
-        console.log('click');
+        // console.log('click');
+
+        updateSeekbar(e.offsetX)
       }
       isMouseDownAndMove = false;
     }, false);
