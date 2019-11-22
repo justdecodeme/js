@@ -26,12 +26,11 @@ window.onload = function() {
   let cvH = canvas.height;
   let barWidth = (cvW / bufferLength) * 2.5;
   let barHeight;
-  let x = 0;
 
   // functions
   const renderFrame = () => {
     // console.log('renderFrame');
-    x = 0;
+    let x = 0;
 
     analyser.getByteFrequencyData(dataArray);
 
@@ -114,22 +113,40 @@ window.onload = function() {
   }, false);
 
   // 
-  const dragArea = canvas;
-  let isDown = isMove = false;
 
-  dragArea.addEventListener('mousedown', () => {
-    console.log('mousedown');
-    isDown = true;
-    isMove = false;
-  }, false);
-  dragArea.addEventListener('mousemove', () => {
-    if(isDown && isMove) {
-      console.log('mousemove');
-    }
-    isMove = true;
-  }, false);
-  dragArea.addEventListener('mouseup', () => {
-    console.log('mouseup');
-    isDown = isMove = false;
-  }, false);
+  let dragArea = (e) => {
+    const dragAreaEl = canvas;
+    let x = 0;
+    let isDown = isMove = isDownMove = false;
+  
+    dragAreaEl.addEventListener('mousedown', (e) => {
+      // console.log('mousedown');
+      isDown = true; isMove = false;
+  
+      x = Math.round(e.offsetX * 100 / cvW);
+      // console.log(x)
+    }, false);
+    dragAreaEl.addEventListener('mousemove', (e) => {
+      if(isDown && isMove) {
+        console.log('mousemove');
+        isDownMove = true;
+
+        x = Math.round(e.offsetX * 100 / cvW);
+        // console.log(x)
+        }
+      isMove = true;
+    }, false);
+    dragAreaEl.addEventListener('mouseup', () => {
+      // console.log('mouseup');
+      isDown = isMove = false;
+    }, false);
+    dragAreaEl.addEventListener('click', () => {
+      // run iff mouse didn't moved
+      if(!isDownMove) {
+        console.log('click');
+      }
+      isDownMove = false;
+    }, false);
+  };
+  dragArea();
 };
