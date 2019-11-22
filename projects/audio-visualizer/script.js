@@ -54,7 +54,12 @@ window.onload = function() {
   }
 
   const handleDrop = files => {
-    console.log(files);
+    if(files.target) {
+      console.log('files selected');
+      files = files.target.files
+    } else {
+      console.log('files droppped');
+    }
     audio.src = URL.createObjectURL(files[1]);
     audio.load();    
   }
@@ -101,7 +106,7 @@ window.onload = function() {
   dropArea.addEventListener('drop', (e) => {
     // console.log('drop')
     dropArea.classList.remove('active');
-    
+
     let dt = e.dataTransfer;
     let files = dt.files;
 
