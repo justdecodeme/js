@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drag and Drop API</title>
+
+    <style>
+      .active {
+        background: black!important;
+      }
+    </style>
+</head>
+
+<body onload="doDragDrop()">
+    <h1>Drag-and-drop API Testing</h1>
+    <h2>Original Photo</h2>
+    <p><img src="_assets/ia.png" draggable="true" id="logo"></p>
+    <h2>Duplicated Photo</h2>
+    <div id="copy" style="height:150px;background:#ccc"></div>
+
+    <script>
+        function doDragDrop() {
+            var image = document.getElementById("logo");
+            image.addEventListener("dragstart", startDrag, false);
+
+            function startDrag(event) {
+                event.dataTransfer.setData("text", event.target.src);
+            }
+
+            var copy = document.getElementById("copy");
+            copy.addEventListener("dragenter", enterDrag, false);
+
+            function enterDrag(event) {
+                event.preventDefault();
+                copy.classList.add('active');
+            }
+            copy.addEventListener("dragleave", leaveDrag, false);
+
+            function leaveDrag(event) {
+                event.preventDefault();
+                copy.classList.remove('active');
+            }
+            copy.addEventListener("dragover", overDrag, false);
+
+            function overDrag(event) {
+                event.preventDefault();
+            }
+            copy.addEventListener("drop", endDrop, false);
+
+            function endDrop(event) {
+                event.preventDefault();
+                var newImage = document.createElement("img");
+                newImage.src = event.dataTransfer.getData("text");
+                copy.appendChild(newImage);
+                copy.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
