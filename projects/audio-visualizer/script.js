@@ -52,7 +52,6 @@ window.onload = function() {
 
     myReq = requestAnimationFrame(renderFrame);
   }
-
   const handleDrop = files => {
     if(files.target) {
       console.log('files selected');
@@ -63,9 +62,14 @@ window.onload = function() {
     audio.src = URL.createObjectURL(files[1]);
     audio.load();    
   }
+  const handleKeyPress = keyPressed => {
+    if(keyPressed.code == 'Space') {
+      keyPressed.preventDefault();
+      togglePlay();
+    }
+  }
 
-  // event handlers
-  playPauseBtn.addEventListener('click', () => {
+  const togglePlay = state => {
     if(audio.paused) {
       audio.play();
       myReq = requestAnimationFrame(renderFrame);
@@ -75,9 +79,12 @@ window.onload = function() {
         cancelAnimationFrame(myReq);
       }, 1000);
     }
-  })
+  }
 
-  fileElem.addEventListener('change', handleDrop, false);  
+  // event handlers
+  fileElem.addEventListener('change', handleDrop, false); 
+  document.body.addEventListener('keydown', handleKeyPress, false);  
+  playPauseBtn.addEventListener('click', togglePlay, false);  
 
   // Drag and Drop logic
   const dropArea = canvas;
@@ -113,39 +120,38 @@ window.onload = function() {
   }, false);
 
   // 
-
   let dragArea = (e) => {
-    const dragAreaEl = canvas;
+    const seekBar = canvas;
     let x = 0;
-    let isDown = isMove = isDownMove = false;
+    let isMouseDown = isMouseMove = isMouseDownAndMove = false;
   
-    dragAreaEl.addEventListener('mousedown', (e) => {
+    seekBar.addEventListener('mousedown', (e) => {
       // console.log('mousedown');
-      isDown = true; isMove = false;
+      isMouseDown = true; isMouseMove = false;
   
       x = Math.round(e.offsetX * 100 / cvW);
       // console.log(x)
     }, false);
-    dragAreaEl.addEventListener('mousemove', (e) => {
-      if(isDown && isMove) {
+    seekBar.addEventListener('mousemove', (e) => {
+      if(isMouseDown && isMouseMove) {
         console.log('mousemove');
-        isDownMove = true;
+        isMouseDownAndMove = true;
 
         x = Math.round(e.offsetX * 100 / cvW);
         // console.log(x)
         }
-      isMove = true;
+      isMouseMove = true;
     }, false);
-    dragAreaEl.addEventListener('mouseup', () => {
+    seekBar.addEventListener('mouseup', () => {
       // console.log('mouseup');
-      isDown = isMove = false;
+      isMouseDown = isMouseMove = false;
     }, false);
-    dragAreaEl.addEventListener('click', () => {
+    seekBar.addEventListener('click', () => {
       // run iff mouse didn't moved
-      if(!isDownMove) {
+      if(!isMouseDownAndMove) {
         console.log('click');
       }
-      isDownMove = false;
+      isMouseDownAndMove = false;
     }, false);
   };
   dragArea();
