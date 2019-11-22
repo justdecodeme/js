@@ -1,5 +1,5 @@
 window.onload = function() {
-  let file = document.getElementById("thefile");
+  let fileElem = document.getElementById("fileElem");
   let audio = document.getElementById("audio");
   let playPauseBtn = document.getElementById("playPause");
 
@@ -28,7 +28,7 @@ window.onload = function() {
   let barHeight;
   let x = 0;
 
-  let renderFrame = () => {
+  const renderFrame = () => {
     // console.log('renderFrame');
     x = 0;
 
@@ -53,6 +53,12 @@ window.onload = function() {
     myReq = requestAnimationFrame(renderFrame);
   }
 
+  const handleDrop = files => {
+    console.log(files);
+    audio.src = URL.createObjectURL(files[1]);
+    audio.load();    
+  }
+
   playPauseBtn.addEventListener('click', () => {
     if(audio.paused) {
       audio.play();
@@ -65,10 +71,40 @@ window.onload = function() {
     }
   })
 
-  file.addEventListener('change', function() {
-    let files = this.files;
-    audio.src = URL.createObjectURL(files[0]);
-    audio.load();
-  });  
+  fileElem.addEventListener('change', handleDrop, false);  
 
+
+  // Drag and Drop logic
+
+  const dropArea = canvas;
+
+  ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+  })
+  
+  function preventDefaults (e) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+  
+  dropArea.addEventListener('dragenter', () => {
+    // console.log('dragenter')
+    dropArea.classList.add('active');
+  }, false)
+  dropArea.addEventListener('dragleave', () => {
+    // console.log('dragleave')
+    dropArea.classList.remove('active');
+  }, false)
+  dropArea.addEventListener('dragover', () => {
+    // console.log('dragover')
+  }, false)
+  dropArea.addEventListener('drop', (e) => {
+    // console.log('drop')
+    dropArea.classList.remove('active');
+    
+    let dt = e.dataTransfer;
+    let files = dt.files;
+
+    handleDrop(files);
+  }, false)  
 };

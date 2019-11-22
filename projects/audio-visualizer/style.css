@@ -1,6 +1,9 @@
 body {
   /* background: black; */
 }
+.active {
+  background: grey;
+}
 
 input, button {
   position: fixed;
