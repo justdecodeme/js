@@ -119,7 +119,7 @@ window.onload = function() {
     handleDrop(files);
   }, false);
 
-  // 
+  // Drag logic for seekbar
   let initDrag = (e) => {
     const seekBar = document.getElementById('seekBar');
     const progressBar = document.getElementById('progressBar')
@@ -135,7 +135,7 @@ window.onload = function() {
       }
     }
     const onMouseDown = e => {
-      console.log('mousedown');
+      // console.log('mousedown');
       isMouseDown = true; isMouseMove = isMouseMoveAndUp = false;
 
       seekBar.addEventListener('mousemove', onMouseMove, false);
@@ -145,7 +145,7 @@ window.onload = function() {
     const onMouseMove = e => {
       // if mouse down and then move
       if(isMouseDown && isMouseMove) {
-        console.log('mousemove');
+        // console.log('mousemove');
         isMouseDownAndMove = true;
         isMouseMoveAndUp = true;
 
@@ -157,14 +157,14 @@ window.onload = function() {
       isMouseDown = isMouseMove = false;
       // iff mouse is moved and then up
       if(isMouseMoveAndUp) {
-        console.log('mouseup');
+        // console.log('mouseup');
         updateProgressBar(e.offsetX)    
       }
     }
     const onClick = e => {
       // iff mouse didn't moved at all
       if(!isMouseDownAndMove) {
-        console.log('click');
+        // console.log('click');
         updateProgressBar(e.offsetX)
       }
       isMouseDownAndMove = false;
