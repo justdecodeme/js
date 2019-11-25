@@ -28,10 +28,10 @@ input, button {
   height: 100%;
 }
 #seekBar {
-  background: rgba(0, 255, 0, 0.1);
+  /* background: rgba(0, 255, 0, 0.3); */
 }
 #progressBar {
-  background: rgba(0, 255, 0, 0.05);
+  background: rgba(251, 255, 0, 0.432);
 }
 
 audio {
