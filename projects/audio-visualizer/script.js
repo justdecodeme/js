@@ -2,6 +2,7 @@ window.onload = function() {
   let fileElem = document.getElementById("fileElem");
   let audio = document.getElementById("audio");
   let playPauseBtn = document.getElementById("playPause");
+  const seekBar = document.getElementById('seekBar');
 
   let canvas = document.getElementById("canvas");
   let ctx = canvas.getContext("2d");
@@ -52,16 +53,6 @@ window.onload = function() {
 
     myReq = requestAnimationFrame(renderFrame);
   }
-  const handleDrop = files => {
-    if(files.target) {
-      console.log('files selected');
-      files = files.target.files
-    } else {
-      console.log('files droppped');
-    }
-    audio.src = URL.createObjectURL(files[1]);
-    audio.load();    
-  }
   const handleKeyPress = keyPressed => {
     if(keyPressed.code == 'Space') {
       keyPressed.preventDefault();
@@ -82,51 +73,82 @@ window.onload = function() {
   }
 
   // event handlers
-  fileElem.addEventListener('change', handleDrop, false); 
+  // fileElem.addEventListener('change', handleDrop, false); 
   document.body.addEventListener('keydown', handleKeyPress, false);  
   playPauseBtn.addEventListener('click', togglePlay, false);  
 
   // Drag and Drop logic
-  const dropArea = canvas;
-
-  ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    dropArea.addEventListener(eventName, preventDefaults, false)
-  })
+  const initDragDropAPI = e => {
+    // Variables
+    const dropArea = seekBar;
+    
+    // Functions
+    const handleDrop = files => {
+      // Files selected using button
+      if(files.target) {
+        console.log('files selected');
+        files = files.target.files
+      } else { // Files drag and dropped
+        console.log('files droppped');
+      }
+      audio.src = URL.createObjectURL(files[0]);
+      audio.load();    
+    }   
+    const preventDefaults = e => {
+      e.preventDefault()
+      e.stopPropagation()
+    }
   
-  function preventDefaults (e) {
-    e.preventDefault()
-    e.stopPropagation()
+    const onDragEnter = e => {
+      e.preventDefault()
+      // console.log('dragenter')
+      dropArea.classList.add('active');    
+
+      dropArea.addEventListener('dragover', onDragOver, false);
+      dropArea.addEventListener('dragleave', onDragLeave, false);
+      dropArea.addEventListener('drop', onDrop, false);      
+    }
+    const onDragOver = e => {
+      e.preventDefault()
+      // console.log('dragover')
+    }
+    const onDragLeave = e => {
+      e.preventDefault()
+      // console.log('dragleave')
+      dropArea.classList.remove('active');
+    }
+    const onDrop = e => {
+      e.preventDefault()
+      // console.log('drop')
+      dropArea.classList.remove('active');
+  
+      let dt = e.dataTransfer;
+      let files = dt.files;
+  
+      handleDrop(files);
+
+      dropArea.removeEventListener('dragover', onDragOver, false);
+      dropArea.removeEventListener('dragleave', onDragLeave, false);
+      dropArea.removeEventListener('drop', onDrop, false);       
+    }
+  
+    // Events
+    // ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    //   dropArea.addEventListener(eventName, preventDefaults, false)
+    // })
+  
+    dropArea.addEventListener('dragenter', onDragEnter, false);
   }
-  
-  dropArea.addEventListener('dragenter', () => {
-    // console.log('dragenter')
-    dropArea.classList.add('active');
-  }, false);
-  dropArea.addEventListener('dragleave', () => {
-    // console.log('dragleave')
-    dropArea.classList.remove('active');
-  }, false);
-  dropArea.addEventListener('dragover', () => {
-    // console.log('dragover')
-  }, false);
-  dropArea.addEventListener('drop', (e) => {
-    // console.log('drop')
-    dropArea.classList.remove('active');
 
-    let dt = e.dataTransfer;
-    let files = dt.files;
-
-    handleDrop(files);
-  }, false);
-
-  // Drag logic for seekbar
-  let initDrag = (e) => {
-    const seekBar = document.getElementById('seekBar');
+  // Seekbar logic
+  let initSeekbar = e => {
+    // Variables
     const progressBar = document.getElementById('progressBar')
     let duration = audio.duration;
     let x = 0;
     let isMouseDown = isMouseMove = isMouseDownAndMove = isMouseMoveAndUp = false;
   
+    // Functions
     const updateProgressBar = pos => {
       x = pos / cvW;
       progressBar.style.width = x * 100 + '%';
@@ -175,7 +197,10 @@ window.onload = function() {
       seekBar.removeEventListener('mouseup', onMouseUp, false);
     }
 
+    // Events
     seekBar.addEventListener('mousedown', onMouseDown, false);
   };
-  initDrag();
+
+  initDragDropAPI();
+  initSeekbar();
 };
