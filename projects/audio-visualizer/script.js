@@ -132,39 +132,50 @@ window.onload = function() {
       progressBar.style.width = x * 100 + '%';
       if(!isMouseMove) {
         audio.currentTime = x * duration;   
-        console.log(x)       
       }
     }
-
-    seekBar.addEventListener('mousedown', (e) => {
-      // console.log('mousedown');
+    const onMouseDown = e => {
+      console.log('mousedown');
       isMouseDown = true; isMouseMove = isMouseMoveAndUp = false;
-    }, false);
-    seekBar.addEventListener('mousemove', (e) => {
+
+      seekBar.addEventListener('mousemove', onMouseMove, false);
+      seekBar.addEventListener('mouseup', onMouseUp, false);
+      seekBar.addEventListener('click', onClick, false);      
+    }
+    const onMouseMove = e => {
+      // if mouse down and then move
       if(isMouseDown && isMouseMove) {
-        // console.log('mousemove');
+        console.log('mousemove');
         isMouseDownAndMove = true;
         isMouseMoveAndUp = true;
 
         updateProgressBar(e.offsetX);
       }
       isMouseMove = true;
-    }, false);
-    seekBar.addEventListener('mouseup', (e) => {
+    }
+    const onMouseUp = e => {
       isMouseDown = isMouseMove = false;
+      // iff mouse is moved and then up
       if(isMouseMoveAndUp) {
-        // console.log('mouseup');
+        console.log('mouseup');
         updateProgressBar(e.offsetX)    
       }
-    }, false);
-    seekBar.addEventListener('click', (e) => {
-      // run iff mouse didn't moved
+    }
+    const onClick = e => {
+      // iff mouse didn't moved at all
       if(!isMouseDownAndMove) {
-        // console.log('click');
+        console.log('click');
         updateProgressBar(e.offsetX)
       }
       isMouseDownAndMove = false;
-    }, false);
+
+      // remove listners
+      seekBar.removeEventListener('mousemove', onMouseMove, false);
+      seekBar.removeEventListener('click', onClick, false);      
+      seekBar.removeEventListener('mouseup', onMouseUp, false);
+    }
+
+    seekBar.addEventListener('mousedown', onMouseDown, false);
   };
   initDrag();
 };
