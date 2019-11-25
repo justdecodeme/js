@@ -87,10 +87,37 @@ window.onload = function() {
       }
     }
 
+    const updateVol = e => {
+      // normalized to extract its sign, effectively converting it to +1/-1
+      const delta = Math.sign(e.deltaY);
+      let vol = audio.volume;
+      
+      // increase
+      if(delta == 1) {
+        if(vol < 1) {
+          vol += .1;
+          if(vol > 1) {
+            vol = 1;
+          }
+        }
+      } else { // decrease
+        if(vol > 0) {
+          vol -= .1;
+          if(vol < 0) {
+            vol = 0;
+          }
+        }
+      }
+
+      audio.volume = parseFloat(vol).toFixed(1);
+      console.log(audio.volume)
+    }
+
 
     // Events
-    document.body.addEventListener('keydown', handleKeyPress, false);  
-    playPauseBtn.addEventListener('click', togglePlay, false);      
+    document.body.addEventListener('keydown', handleKeyPress, false);
+    playPauseBtn.addEventListener('click', togglePlay, false);
+    window.addEventListener("wheel", updateVol, false);
   })();
 
   // Seekbar logic
