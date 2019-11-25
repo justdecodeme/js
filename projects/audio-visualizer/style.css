@@ -35,6 +35,7 @@ input, button {
 #progressBar {
   background: rgba(251, 255, 0, 0.432);
   pointer-events: none;
+  width: 0%;
 }
 
 audio {

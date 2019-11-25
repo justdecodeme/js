@@ -68,9 +68,11 @@ window.onload = function() {
   const initPlayer = (e => {
     // Variables
     const volEl = document.getElementById('volEl');
+    let duration = audio.duration;
     const maxVol = 100;
     const minVol = 0;
     const stepVol = .05;
+    let onPlayInterval;
 
     // Initialization
     volEl.innerHTML = parseInt(audio.volume * maxVol);
@@ -119,32 +121,74 @@ window.onload = function() {
       audio.volume = (vol / maxVol);
       // console.log(vol, vol / maxVol)
     }
+    const onPlay = e => {
+      // console.log('onPlay');
+      
+      onPlayInterval = setInterval(() => {
+        let currentTime = audio.currentTime;
+        let progress = currentTime / duration;
+        let pos = progress * cvW + '%';
+        initSeekbar.updateProgressBar(pos);
+      }, 10);
+
+      audio.addEventListener('pause', onPause, false);
+    }
+    const onPause = e => {
+      // console.log('onPause');
+
+      clearInterval(onPlayInterval)
+
+      audio.removeEventListener('pause', onPause, false);
+    }
 
     // Events
     document.body.addEventListener('keydown', handleKeyPress, false);
     playPauseBtn.addEventListener('click', togglePlay, false);
     window.addEventListener("wheel", updateVol, false);
+    audio.addEventListener('play', onPlay, false);
+
+    return {
+      duration,
+    }
   })();
 
   // Seekbar logic
   const initSeekbar = (e => {
     // Variables
     const progressBar = document.getElementById('progressBar')
-    let duration = audio.duration;
     let x = 0;
     let isMouseDown = isMouseMove = isMouseDownAndMove = isMouseMoveAndUp = false;
+    let isPlaying = false;
   
     // Functions
     const updateProgressBar = pos => {
+      let isMouseActivity = true;
+      
+      if(pos[pos.length-1] == "%") {
+        isMouseActivity = false;
+        pos = pos.substring(0, pos.length - 1);
+      }
+
+      // console.log(pos, isMouseActivity)
+      
       x = pos / cvW;
       progressBar.style.width = x * 100 + '%';
-      if(!isMouseMove) {
-        audio.currentTime = x * duration;   
+      if(!isMouseMove && isMouseActivity) {
+        // console.log("isMouseDown", "isMouseMove", "isMouseDownAndMove", "isMouseMoveAndUp")
+        // console.log(isMouseDown, isMouseMove, isMouseDownAndMove, isMouseMoveAndUp)
+        audio.currentTime = x * initPlayer.duration;   
       }
     }
     const onMouseDown = e => {
       // console.log('mousedown');
       isMouseDown = true; isMouseMove = isMouseMoveAndUp = false;
+      
+      if(!audio.paused) {
+        isPlaying = true;
+        audio.pause();
+      }
+
+      updateProgressBar(e.offsetX);
 
       seekBar.addEventListener('mousemove', onMouseMove, false);
       seekBar.addEventListener('mouseup', onMouseUp, false);
@@ -162,19 +206,25 @@ window.onload = function() {
       isMouseMove = true;
     }
     const onMouseUp = e => {
+      // console.log('mouseup');
+      
       isMouseDown = isMouseMove = false;
       // iff mouse is moved and then up
       if(isMouseMoveAndUp) {
-        // console.log('mouseup');
-        updateProgressBar(e.offsetX)    
+        // updateProgressBar(e.offsetX)    
       }
     }
     const onClick = e => {
+      // console.log('click');
+
       // iff mouse didn't moved at all
-      if(!isMouseDownAndMove) {
-        // console.log('click');
+      // if(!isMouseDownAndMove) {
         updateProgressBar(e.offsetX)
-      }
+        if(isPlaying) {
+          isPlaying = false;
+          audio.play();
+        }
+      // }
       isMouseDownAndMove = false;
 
       // remove listners
@@ -185,6 +235,10 @@ window.onload = function() {
 
     // Events
     seekBar.addEventListener('mousedown', onMouseDown, false);
+
+    return {
+      updateProgressBar
+    }
   })();
 
   // Drag and Drop logic
