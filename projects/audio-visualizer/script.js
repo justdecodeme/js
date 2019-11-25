@@ -31,7 +31,6 @@ window.onload = function() {
     let barHeight;
     let myReq;
 
-
     // Functions
     var renderFrame = e => {
       // console.log('renderFrame');
@@ -67,11 +66,13 @@ window.onload = function() {
 
   // Player logic
   const initPlayer = (e => {
+    // Variables
     const volEl = document.getElementById('volEl');
     const maxVol = 100;
     const minVol = 0;
     const stepVol = .05;
 
+    // Initialization
     volEl.innerHTML = parseInt(audio.volume * maxVol);
 
     // Functions
@@ -81,7 +82,6 @@ window.onload = function() {
         togglePlay();
       }
     }
-  
     const togglePlay = e => {
       if(audio.paused) {
         audio.play();
@@ -93,7 +93,6 @@ window.onload = function() {
         }, 1000);
       }
     }
-
     const updateVol = e => {
       let vol = parseInt(audio.volume * maxVol);
       // normalized to extract its sign, effectively converting it to +1/-1
