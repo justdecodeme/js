@@ -1,87 +1,104 @@
 window.onload = function() {
-  let fileElem = document.getElementById("fileElem");
   let audio = document.getElementById("audio");
   let playPauseBtn = document.getElementById("playPause");
   const seekBar = document.getElementById('seekBar');
 
   let canvas = document.getElementById("canvas");
   let ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  let cvW = canvas.width = window.innerWidth;
+  let cvH = canvas.height = window.innerHeight;
 
   let requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   let cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-  let myReq;
 
-  let context = new AudioContext();
-  let src = context.createMediaElementSource(audio);
-  let analyser = context.createAnalyser();
-  src.connect(analyser);
-  analyser.connect(context.destination);
-  analyser.fftSize = 256;
-  let bufferLength = analyser.frequencyBinCount;
-  let dataArray = new Uint8Array(bufferLength);
 
-  let cvW = canvas.width;
-  let cvH = canvas.height;
-  let barWidth = (cvW / bufferLength) * 2.5;
-  let barHeight;
+  // Visualization logic 
+  var initVisualization = (e => {
+    // Variables
+    let context = new AudioContext();
+    let src = context.createMediaElementSource(audio);
+    let analyser = context.createAnalyser();
 
-  // functions
-  const renderFrame = () => {
-    // console.log('renderFrame');
-    let x = 0;
+    src.connect(analyser);
+    analyser.connect(context.destination);
+    analyser.fftSize = 256;
 
-    analyser.getByteFrequencyData(dataArray);
+    let bufferLength = analyser.frequencyBinCount;
+    let dataArray = new Uint8Array(bufferLength);
 
-    ctx.fillStyle = "#000";
-    ctx.fillRect(0, 0, cvW, cvH);
+    let barWidth = (cvW / bufferLength) * 2.5;
+    let barHeight;
+    let myReq;
 
-    for (let i = 0; i < bufferLength; i++) {
-      barHeight = dataArray[i];
-      
-      let r = barHeight + (25 * (i/bufferLength));
-      let g = 250 * (i/bufferLength);
-      let b = 50;
 
-      ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-      ctx.fillRect(x, cvH - barHeight, barWidth, barHeight);
+    // Functions
+    var renderFrame = e => {
+      // console.log('renderFrame');
 
-      x += barWidth + 1;
+      let x = 0;
+  
+      analyser.getByteFrequencyData(dataArray);
+  
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, cvW, cvH);
+  
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i];
+        
+        let r = barHeight + (25 * (i/bufferLength));
+        let g = 250 * (i/bufferLength);
+        let b = 50;
+  
+        ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+        ctx.fillRect(x, cvH - barHeight, barWidth, barHeight);
+  
+        x += barWidth + 1;
+      }
+  
+      initVisualization.myReq = requestAnimationFrame(renderFrame);
     }
 
-    myReq = requestAnimationFrame(renderFrame);
-  }
-  const handleKeyPress = keyPressed => {
-    if(keyPressed.code == 'Space') {
-      keyPressed.preventDefault();
-      togglePlay();
-    }
-  }
+    return {
+      renderFrame,
+      myReq
+    };    
+  })();
 
-  const togglePlay = state => {
-    if(audio.paused) {
-      audio.play();
-      myReq = requestAnimationFrame(renderFrame);
-    } else {
-      audio.pause();
-      setTimeout(() => {
-        cancelAnimationFrame(myReq);
-      }, 1000);
+  // Player logic
+  const initPlayer = (e => {
+    // Functions
+    const handleKeyPress = keyPressed => {
+      if(keyPressed.code == 'Space') {
+        keyPressed.preventDefault();
+        togglePlay();
+      }
     }
-  }
+  
+    const togglePlay = e => {
+      if(audio.paused) {
+        audio.play();
+        initVisualization.myReq = requestAnimationFrame(initVisualization.renderFrame);
+      } else {
+        audio.pause();
+        setTimeout(() => {
+          cancelAnimationFrame(initVisualization.myReq);
+        }, 1000);
+      }
+    }
 
-  // event handlers
-  // fileElem.addEventListener('change', handleDrop, false); 
-  document.body.addEventListener('keydown', handleKeyPress, false);  
-  playPauseBtn.addEventListener('click', togglePlay, false);  
+
+    // Events
+    document.body.addEventListener('keydown', handleKeyPress, false);  
+    playPauseBtn.addEventListener('click', togglePlay, false);      
+  })();
 
   // Drag and Drop logic
-  const initDragDropAPI = e => {
+  const initDragDropAPI = (e => {
     // Variables
     const dropArea = seekBar;
-    
+    const fileElem = document.getElementById("fileElem");
+
     // Functions
     const handleDrop = files => {
       // Files selected using button
@@ -138,10 +155,11 @@ window.onload = function() {
     // })
   
     dropArea.addEventListener('dragenter', onDragEnter, false);
-  }
+    fileElem.addEventListener('change', handleDrop, false);
+  })();
 
   // Seekbar logic
-  let initSeekbar = e => {
+  const initSeekbar = (e => {
     // Variables
     const progressBar = document.getElementById('progressBar')
     let duration = audio.duration;
@@ -199,8 +217,5 @@ window.onload = function() {
 
     // Events
     seekBar.addEventListener('mousedown', onMouseDown, false);
-  };
-
-  initDragDropAPI();
-  initSeekbar();
+  })();
 };
