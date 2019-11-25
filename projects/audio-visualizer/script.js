@@ -129,7 +129,7 @@ window.onload = function() {
         let progress = currentTime / duration;
         let pos = progress * cvW + '%';
         initSeekbar.updateProgressBar(pos);
-      }, 10);
+      }, 100);
 
       audio.addEventListener('pause', onPause, false);
     }
@@ -146,10 +146,6 @@ window.onload = function() {
     playPauseBtn.addEventListener('click', togglePlay, false);
     window.addEventListener("wheel", updateVol, false);
     audio.addEventListener('play', onPlay, false);
-
-    return {
-      duration,
-    }
   })();
 
   // Seekbar logic
@@ -159,6 +155,18 @@ window.onload = function() {
     let x = 0;
     let isMouseDown = isMouseMove = isMouseDownAndMove = isMouseMoveAndUp = false;
     let isPlaying = false;
+    let currentTimeEl = document.querySelector('#time .current');
+    let totalTimeEl = document.querySelector('#time .total');
+    let duration = audio.duration;
+    let currentTime = audio.currentTime;
+
+    let minutes = Math.floor(duration / 60);
+    let seconds = Math.round(duration - minutes * 60);    
+    totalTimeEl.innerHTML = minutes + ':' + seconds;
+
+    minutes = Math.floor(currentTime / 60);
+    seconds = Math.round(currentTime - minutes * 60);
+    currentTimeEl.innerHTML = minutes + ':' + seconds;    
   
     // Functions
     const updateProgressBar = pos => {
@@ -173,10 +181,14 @@ window.onload = function() {
       
       x = pos / cvW;
       progressBar.style.width = x * 100 + '%';
+      let currentTime = x * duration;
+
+      let minutes = Math.floor(currentTime / 60);
+      let seconds = Math.round(currentTime - minutes * 60);
+      currentTimeEl.innerHTML = minutes + ':' + seconds;
+
       if(!isMouseMove && isMouseActivity) {
-        // console.log("isMouseDown", "isMouseMove", "isMouseDownAndMove", "isMouseMoveAndUp")
-        // console.log(isMouseDown, isMouseMove, isMouseDownAndMove, isMouseMoveAndUp)
-        audio.currentTime = x * initPlayer.duration;   
+        audio.currentTime = currentTime;
       }
     }
     const onMouseDown = e => {
