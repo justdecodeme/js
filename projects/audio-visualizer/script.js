@@ -9,7 +9,7 @@ window.onload = function() {
   const cvH = canvas.height = window.innerHeight;
 
   const requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-      window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
   const cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
 
