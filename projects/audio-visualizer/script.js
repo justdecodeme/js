@@ -27,9 +27,12 @@ window.onload = function() {
     let bufferLength = analyser.frequencyBinCount;
     let dataArray = new Uint8Array(bufferLength);
 
-    let barWidth = (cvW / bufferLength) * 2.5;
+    let barWidth = (cvW / bufferLength) * 1;
+    // let barWidth = (cvW) / 100;
     let barHeight;
     let myReq;
+    let barGap = 2;
+    let barExtraHeight = 200;
 
     // Functions
     var renderFrame = e => {
@@ -38,21 +41,24 @@ window.onload = function() {
       let x = 0;
   
       analyser.getByteFrequencyData(dataArray);
-  
+
+      // to clear the canvas every frame
       ctx.fillStyle = "#000";
       ctx.fillRect(0, 0, cvW, cvH);
   
       for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
+        barHeight = dataArray[i] + barExtraHeight;
         
         let r = barHeight + (25 * (i/bufferLength));
         let g = 250 * (i/bufferLength);
         let b = 50;
+        // let y = cvH - barHeight;
+        let y = (cvH - barHeight) / 2;
   
         ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        ctx.fillRect(x, cvH - barHeight, barWidth, barHeight);
+        ctx.fillRect(x, y, barWidth, barHeight);
   
-        x += barWidth + 1;
+        x += barWidth + barGap;
       }
   
       initVisualization.myReq = requestAnimationFrame(renderFrame);
@@ -90,9 +96,9 @@ window.onload = function() {
         initVisualization.myReq = requestAnimationFrame(initVisualization.renderFrame);
       } else {
         audio.pause();
+        cancelAnimationFrame(initVisualization.myReq);
         setTimeout(() => {
-          cancelAnimationFrame(initVisualization.myReq);
-        }, 1000);
+        }, 100);
       }
     }
     const updateVol = e => {
@@ -181,7 +187,7 @@ window.onload = function() {
       
       x = pos / cvW;
       progressBar.style.width = x * 100 + '%';
-      let currentTime = x * duration;
+      currentTime = x * duration;
 
       let minutes = Math.floor(currentTime / 60);
       let seconds = Math.round(currentTime - minutes * 60);
