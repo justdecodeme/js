@@ -67,6 +67,13 @@ window.onload = function() {
 
   // Player logic
   const initPlayer = (e => {
+    const volEl = document.getElementById('volEl');
+    const maxVol = 100;
+    const minVol = 0;
+    const stepVol = .05;
+
+    volEl.innerHTML = parseInt(audio.volume * maxVol);
+
     // Functions
     const handleKeyPress = keyPressed => {
       if(keyPressed.code == 'Space') {
@@ -88,31 +95,31 @@ window.onload = function() {
     }
 
     const updateVol = e => {
+      let vol = parseInt(audio.volume * maxVol);
       // normalized to extract its sign, effectively converting it to +1/-1
       const delta = Math.sign(e.deltaY);
-      let vol = audio.volume;
-      
+
       // increase
       if(delta == 1) {
-        if(vol < 1) {
-          vol += .1;
-          if(vol > 1) {
-            vol = 1;
+        if(vol < maxVol) {
+          vol += (stepVol * maxVol);
+          if(vol > maxVol) {
+            vol = maxVol;
           }
         }
       } else { // decrease
-        if(vol > 0) {
-          vol -= .1;
-          if(vol < 0) {
-            vol = 0;
+        if(vol > minVol) {
+          vol -= (stepVol * maxVol);
+          if(vol < minVol) {
+            vol = minVol;
           }
         }
       }
 
-      audio.volume = parseFloat(vol).toFixed(1);
-      console.log(audio.volume)
+      volEl.innerHTML = vol;
+      audio.volume = (vol / maxVol);
+      // console.log(vol, vol / maxVol)
     }
-
 
     // Events
     document.body.addEventListener('keydown', handleKeyPress, false);

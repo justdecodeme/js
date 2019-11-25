@@ -27,9 +27,11 @@ input, button {
   width: 100%;
   height: 100%;
 }
+
 #seekBar {
   /* background: rgba(0, 255, 0, 0.3); */
 }
+
 #progressBar {
   background: rgba(251, 255, 0, 0.432);
   pointer-events: none;
@@ -40,4 +42,11 @@ audio {
   left: 10px;
   bottom: 10px;
   width: calc(100% - 20px);
+}
+
+#volEl {
+  position: fixed;
+  color: wheat;
+  z-index: 9;
+  right: 10px;
 }
