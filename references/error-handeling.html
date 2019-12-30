@@ -1,0 +1,170 @@
+<html>
+    <body>
+        <h1>Error Handling</h1>
+        <script>
+            // Error Handling
+        
+            // There are three types of errors in programming:
+            
+            // 1. Syntax Error (Parsing Error)
+            // ----------
+            // In a traditional programming language, this type of error occurs at compile time; because JavaScript is an interpreted language, 
+            // this type of error arises when the code is interpreted. When a syntax error occurs in JavaScript, only the code contained within the 
+            // same thread as the syntax error is affected; independent code running in other threads will still be executed, as nothing in them 
+            // depends on the code containing the error. For example, consider the following code containing a syntax error:
+            // console.log("Hello" 
+            // This produces the following error: SyntaxError: missing ) after argument list. This is because we failed to add a closing parenthesis 
+            // to our call to console.log.    
+        
+            // 2. Runtime Error (Exception)
+            // ----------
+            // Commonly referred to as exceptions, this type of error occurs during execution (i.e., after compilation or interpretation). Once a runtime 
+            // error is encountered, an exception is thrown in the hope that it will be caught by a subsequent section of code containing instructions on how 
+            // to recover from the error. Much like syntax errors, these affect the thread where they occured but allow other, independent threads to continue 
+            // normal execution. For example, consider the following code containing a runtime error:
+            // function sum(a, b) {}
+            // add(2, 3) 
+            // This produces the following error: ReferenceError: add is not defined. This is because we attempted to call the add function without ever 
+            // declaring and defining it.
+        
+            // 3. Logical Error
+            // ----------
+            // These are some of the most difficult errors to isolate because they cause the program to operate without terminating or crashing, but the 
+            // operations the code performs are not correct. Unlike syntax and runtime errors which arise due to some violation of the rules of the language, 
+            // these errors occur when there is a mistake in your the code's logic.    
+        
+        
+            // Try, Catch, and Finally
+            // ----------
+            // The try block is the first step in error handling and is used for any block of code that is likely to raise an exception. It should contain 
+            // one or more statements to be executed and is typically followed by at least one catch clause and/or the optional finally clause. In other words, 
+            // the try statement has three forms:
+        
+            // try-catch
+            // try-finally
+            // try-catch-finally 
+        
+            // example
+            // ----------
+            function reverseString(s) {
+                try {
+                    s = s.split("").reverse().join("");
+                } catch(e) {
+                    console.log(e.message);
+                } finally {
+                    console.log(s);
+                }
+            }
+            reverseString('1234');
+            reverseString(1234);
+            console.log('------------')
+        
+            // output
+            // ----------
+            // 4321
+            // s.split is not a function
+        
+        
+            // Throw
+            // ----------
+            // We use the throw statement, denoted by the throw keyword, to throw an exception. There are two ways to do this, shown below.
+        
+            // 1. throw value
+            // ----------
+            // We can throw an exception by following the keyword throw with some value that we wish to use for the exception being thrown.
+        
+            // example
+            // ----------
+            function throwString() {
+                // Generate an exception with a String value
+                throw "some exception";
+            }
+            function throwFalse() {
+                // Generate an exception with a boolean value of false
+                throw false;
+            }
+            function throwNumber() {
+                // Generate an exception with a Number value of -1
+                throw -1;
+            }
+            try {
+                throwString();
+            }
+            catch (e) {
+                console.log(e);
+            }
+            try {
+                throwFalse();
+            }
+            catch (e) {
+                console.log(e);
+            }
+            try {
+                throwNumber();
+            }
+            catch (e) {
+                console.log(e);
+            }
+            console.log('------------')
+
+            // output
+            // ----------
+            // some exception
+            // false
+            // -1
+        
+            // 2. throw new Error (customError)
+            // ----------
+            // We can throw an exception by following the keyword throw with new Error(customError), where customError is the value we want for the message property of the 
+            // exception being thrown. 
+        
+        
+            // example
+            // ----------
+            function getValue(arr, pos) {
+                if (pos < 0) {
+                    throw new Error("Index Underflow: " + pos);
+                }
+                let len = arr.length;
+                if (pos >= len) {
+                    throw new Error("Index Overflow: " + pos);
+                }
+                return arr[pos];
+            }
+        
+            function main() {
+                var index;  
+                const arr = [1, 2, 3, 4, 5];
+                try {
+                    index = 5;
+                    console.log(getValue(arr, index));
+                } 
+                catch (e) {
+                    console.log(e.message);
+                }
+                try {
+                    index = 2;
+                    console.log(getValue(arr, index));
+                } 
+                catch (e) {
+                    console.log(e.message);
+                }
+                try {
+                    index = -3;
+                    console.log(getValue(arr, index));
+                } 
+                catch (e) {
+                    console.log(e.message);
+                }
+            }    
+            main();
+        
+            // output
+            // ----------
+            // Index Overflow: 5
+            // 3
+            // Index Underflow: -3    
+        
+        </script>        
+    </body>
+</html>
