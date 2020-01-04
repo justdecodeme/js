@@ -2,6 +2,10 @@
 <html lang="en">
 <body>
     <script>
+        
+        // ------------------------
+        // Template Literals
+        // ------------------------
         var book = {
             name: 'Learning JavaScript DataStructures and Algorithms'
         };
@@ -14,6 +18,46 @@
         console.log(`You are reading ${book.name}
             and this is a new line
         and so is this`);
+
+        // ------------------------
+        // Tagged Template Literals
+        // ------------------------
+        // Tagged template literals allow us to use a function to modify the output of a template literal. In this construct:
+
+        // The first argument contains an array of string literals.
+        // The subsequently processed arguments are the values of the substitution expressions.
+        // After processing all the arguments, the function returns the manipulated string.
+
+        // input
+        // -------
+        var a = 5;
+        var b = 10;
+
+        function foo(strings, ...values) {
+            console.log("." + strings[0] + ".");
+            console.log("." + strings[1] + ".");
+            console.log("." + strings[2] + ".");
+            console.log("." + strings[3] + ".");
+            console.log(values[0]);
+            console.log(values[1]);
+            console.log(values[2]);
+        }
+
+        foo`Sum ${a + b}
+        Product ${a * b}
+        Division ${b / a}`;        
+
+        // output
+        // -------
+        // .Sum .
+        // .
+        // Product .
+        // .
+        // Division .
+        // ..
+        // 15
+        // 50
+        // 2
     </script>
 </body>
 </html>
