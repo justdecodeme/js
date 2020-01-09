@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <script>
+            var ar = [1,2,1,2,1,3,2];
+            var ar = [10, 20, 20, 10, 10, 30, 50, 10, 20];
+
+            function socksPair(ar) {
+                let pairs = 0;
+                let size = ar.length;
+
+                for (let i = 0; i < size && ar.length > 1; i++) {
+                    let el = ar[0];
+                    ar.shift();
+                    
+                    let index = ar.indexOf(el);
+                    if(index >= 0) {
+                        ar.splice(index, 1);
+                        pairs++;
+                    }
+                }
+
+                return pairs;
+            }
+            console.log(socksPair(ar, 7));
+        </script>
+    </body>
+</html>
