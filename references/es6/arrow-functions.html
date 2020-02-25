@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* 
+            Arrow functions are always anonymous.
+            These expressions lexically bind the this value while using less syntax than a typical function expression.
+            Here are some basic examples of arrow function syntax:
+         */
+        // (parameter) => {statements}
+        // parameter => {statements}
+        // parameter => expression
+        // parameter => {return expression}
+
+        // (param1, param2, ..., paramN) => {statements}
+        // (param1, param2, ..., paramN) => expression
+        // (param1, param2, ..., paramN) => {return expression}        
+        
+        
+        /* Arrow functions bring lot of clarity and code reduction. */
+
+        /* Method 1 */
+        const greetings1 = (name) => {
+            return `Welcome ${name}!`;
+        }
+
+        /* Method 2 */
+        const greetings2 = name => `Welcome ${name}!`;
+
+        console.log(greetings1('Rakko'));
+        console.log(greetings2('Rakko'));
+    </script>    
+</body>
+</html>

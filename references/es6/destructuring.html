@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* 
+            It allows us to 'unpack' arrays or objects into a bunch of
+            variables which makes working with arrays and objects a bit
+            more convenient.
+
+            syntax: 
+            let [a, b] = [1, 2, 3, 4, 5];
+            let {name, age} = {fName: 'Jogn', lName: 'Wich', age: 30};
+         */
+
+        let fullName = "Rakesh Kumar Jat";
+        let fullNameArr = fullName.split(" ");
+
+        let [fName, , lName] = fullNameArr; /* order matters */
+
+        console.log(fName, lName);
+
+
+        let person = {
+            first: "Rakesh",
+            middle: "Kumar",
+            last: "Jat"
+        };
+
+        let {last, middle} = person; /* order doesn't matter */
+
+        console.log(middle, last);
+    </script>    
+</body>
+</html>
