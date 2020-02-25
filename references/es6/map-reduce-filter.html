@@ -2,33 +2,17 @@
 <html lang="en">
 <body>
     <script>
-        /* 
-            It allows us to 'unpack' arrays or objects into a bunch of
-            variables which makes working with arrays and objects a bit
-            more convenient.
+        /* MAP */
+        /* It iterates the array for us and we can passa callback function to perform
+            some operation on the each array item. The updated  values can be returned
+            by the callback function to create a new array.
 
-            syntax: 
-            let [a, b] = [1, 2, 3, 4, 5];
-            let {name, age} = {fName: 'Jogn', lName: 'Wich', age: 30};
+            syntax:
+            arr.map((item)) => {
+                // callback function body
+            }
          */
 
-        let fullName = "Rakesh Kumar Jat";
-        let fullNameArr = fullName.split(" ");
-
-        let [fName, , lName] = fullNameArr; /* order matters */
-
-        console.log(fName, lName);
-
-
-        let person = {
-            first: "Rakesh",
-            middle: "Kumar",
-            last: "Jat"
-        };
-
-        let {last, middle} = person; /* order doesn't matter */
-
-        console.log(middle, last);
     </script>    
 </body>
 </html>
