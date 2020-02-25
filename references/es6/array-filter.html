@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* MAP */
+        /* It iterates through the array to create a new array. You can 
+            decide which elements should be added in the new array based
+            on some conditions.
+
+            syntax:
+            arr.filter(value => {
+                // return true/false to add/skip the current item
+            });
+         */
+
+        /* EXAMPLE 01 */
+
+        const ar = [1, 2, 3, 4, 5];
+
+        const evenNos = ar.filter(value => {
+            return value % 2 == 0;
+        });
+
+        console.log(evenNos);
+    </script>    
+</body>
+</html>
