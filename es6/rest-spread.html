@@ -2,6 +2,51 @@
 <html lang="en">
 <body>
     <script>
+        /* REST Operator */
+
+        /* SyntaxError: Rest parameter must be last formal parameter */
+        // const sum = (...args, m, n) => {
+        //     console.log(m, n, args);
+        // }
+
+        const sum = (m, n, ...args) => {
+            console.log(m, n, args);
+        }
+
+        sum(1, 2, 3, 4, 5); /* 1 2 (3) [3, 4, 5] */
+
+
+        /* SPREAD Operator */
+
+        /* Spread syntax allows arrays and objects to be expanded into:
+            - elements in case of array
+            - key-value pairs in case of object
+         */
+
+        let ar1 = [1, 2, 3, 4];
+        let ar2 = [...ar1]; /* copy ar1 values to ar2 */
+        ar1.push(5);
+
+        console.log(ar1, ar2); // (5) [1, 2, 3, 4, 5] (4) [1, 2, 3, 4]
+
+
+        /* OLD METHOD */
+        let ar3 = ar1.concat(ar2);
+        console.log(ar3);
+        /* ES6 METHOD */
+        let ar4 = [0, ...ar1, ...ar2, 10]; /* concatenate ar2 to ar2 */
+        console.log(ar4);
+
+
+        let obj1 = {
+            name: 'John'
+        }
+        let obj2 = {
+            age: 28
+        }
+        let obj3 = {...obj1, ...obj2};
+
+        console.log(obj3);
     </script>    
 </body>
 </html>
