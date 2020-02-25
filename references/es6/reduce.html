@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* MAP */
+        /* Just like map(), reduce() also iterates through the entire array and it
+            accepts a callback function to perform some action on the array element.
+            The difference there is that reduce() passes the result of the callback
+            from one interation to the next one. This callback result is called
+            accumulator. The accumulator can be pretty much anything (integer,
+            string, object or even an array) and must be instantiated and passed
+            when calling reduce().
+
+            syntax:
+            arr.reduce((acc, value) => {
+                // callback function
+            }, acc_default_value);
+         */
+
+        /* EXAMPLE 01 */
+
+        const ar = [1, 2, 3, 4, 5];
+
+        const sum = ar.reduce((acc, value) => {
+            return acc + value;
+        });
+
+        console.log(sum);
+    </script>    
+</body>
+</html>
