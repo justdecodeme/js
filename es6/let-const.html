@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        a = 10;
+        console.log(a);
+        var a;
+
+        /* let, const doesn't allowed hoisting */
+
+        b = 20; /* ReferenceError: Cannot access 'b' before initialization */
+        console.log(b); 
+        let b;
+
+        const c; /* SyntaxError: Missing initializer in const declaration */
+        c = 30;
+        console.log(c);
+    </script>    
+</body>
+</html>
