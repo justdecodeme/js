@@ -5,9 +5,9 @@
 	<a href="https://www.youtube.com/watch?v=2rkEbcptR64&feature=emb_logo">Class Ref: Video</a>
 	
     <script>
-    	//-------------------
-    	// ES6 classes
-    	//-------------------
+		/* ************** */
+    	/* ES6 CLASSES */
+		/* ************** */
     	class Book {
     	    constructor (title, pages, isbn) {
     	        this.title = title;
@@ -23,12 +23,12 @@
         book.title = 'JS - Beginer to Advance'; //update the value of the book title
     	console.log(book.title); //outputs the book title
 
-    	//-------------------
-    	// inheritance
-    	//-------------------
+		/* ************** */
+    	/* INHERITENCE */
+		/* ************** */
     	class ITBook extends Book {
     	    constructor (title, pages, isbn, technology) {
-    	    	// refering to the constructor superclass using the keyword super
+    	    	/* refering to the constructor superclass using the keyword super */
     	        super(title, pages, isbn);
     	        this.technology = technology;
     	    }
@@ -40,12 +40,12 @@
     	console.log(jsBook.isbn);
     	jsBook.printTechnology();
 
-    	//-------------------
-    	// getter and setters
-    	//-------------------
+		/* ************** */
+    	/* GETTER and SETTER */
+		/* ************** */
     	class Person {
     	    constructor (name) {
-    	    	// using underscore to make it seem as though the attribute is private (its not really a private)
+    	    	/* using underscore to make it seem as though the attribute is private (its not really a private) */
     	        this._name = name; 
     	    }
     	    get name() {
@@ -60,9 +60,9 @@
     	person.name = 'Gandalf';
     	console.log(person.name);
 
-    	//-------------------
-    	// using symbols for private atributes
-    	//-------------------
+		/* ************** */
+    	/* USING SYMBOLS FOR PRIVATE ATTRIBUTES */
+		/* ************** */
     	var _name = Symbol();
     	class Person2 {
     	    constructor (name) {

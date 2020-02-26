@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* 
+            It is used to search for an element in the array that matches some condition. 
+            It returns the first element that matches the condition.
+         */
+
+        const ar = [1, 2, 3, 4, 5];
+
+        const firstEvenNo = ar.find(value => {
+            return value % 2 == 0;
+        });
+
+        console.log(firstEvenNo); /* 2 */
+    </script>    
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* MAP */
+        /* 
+            A promise is used to handle the asynchronous result of an operation. 
+            It defers the execution of a code block until an asynchronous request
+            is completed. This way, other operations can keep running without
+            interruption. 
+
+            A promise has 3 states:
+            - Pending: It means the operation is going on.
+            - Fulfilled: It means the operation was complted.
+            - Rejected: It means the operation did not complete and an error
+                        can be thrown.
+
+            syntax:
+            const mPromise = new Promise((resolve, reject) => {
+                // Promise body
+                // Call resolve() 
+                // Call reject()
+            })
+         */
+
+        /* EXAMPLE 01 */
+
+        const ar = [1, 2, 3, 4, 5];
+
+        const evenNos = ar.filter(value => {
+            return value % 2 == 0;
+        });
+
+        console.log(evenNos);
+    </script>    
+</body>
+</html>

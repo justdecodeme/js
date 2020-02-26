@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <script>
+        /* 
+           It is quite similar to the find() method. 
+           The difference is that findIndex() method returns the index of the element instead of the element itself. 
+         */
+
+        const ar = [-1, -2, -3, 1, 2, 3];
+
+        const firstPositiveEvenNoIndex = ar.findIndex(value => {
+            return (value % 2 == 0 && value > 0);
+        });
+
+        console.log(firstPositiveEvenNoIndex); /* 4 */
+    </script>    
+</body>
+</html>
