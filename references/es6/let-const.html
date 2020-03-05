@@ -8,13 +8,41 @@
 
         /* let, const doesn't allowed hoisting */
 
-        b = 20; /* ReferenceError: Cannot access 'b' before initialization */
-        console.log(b); 
-        let b;
+        // b = 20; /* ReferenceError: Cannot access 'b' before initialization */
+        // console.log(b); 
+        // let b;
 
-        const c; /* SyntaxError: Missing initializer in const declaration */
-        c = 30;
-        console.log(c);
+        // const c; /* SyntaxError: Missing initializer in const declaration */
+        // c = 30;
+        // console.log(c);
+
+
+        // const PI = Math.PI;
+        // PI = 3.0; /* let-const.html:20 Uncaught TypeError: Assignment to constant variable. */
+        // console.log(PI);    
+
+        let language = 'JavaScript!';
+        // let language = 'Ruby!'; /* SyntaxError: Identifier 'language' has already been declared */
+        // var language = 'Ruby!'; /* SyntaxError: Identifier 'language' has already been declared */
+        console.log(language);
+
+
+        /* ES6 Scope */
+
+        let d = 5;
+
+        function func(){
+            // console.log('Begin: ' + d); /* ReferenceError: Cannot access 'd' before initialization */
+            let d = 6;
+            // console.log('Before if: ' + d); /* 6 */
+            if (true){
+                let d = 7;
+                console.log('Inside if: ' + d); /* 7 */
+            }
+            console.log('After if: ' + d); /* 6 */
+        }
+        func();
+        console.log('After function: ' + d); /* 5 */
     </script>    
 </body>
 </html>
