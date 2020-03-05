@@ -2,22 +2,34 @@
 <html lang="en">
 <body>
     <script>
-        
         // ------------------------
         // Template Literals
         // ------------------------
+
+        let r = 200;
+        let g = 155;
+        let b = 100;
+        let a = 0.8;
+
+        const rgba = `rgba(${r}, ${g}, ${b}, ${a})`;
+
+        console.log(rgba);
+        console.log('--------------');
+        
+                
         var book = {
             name: 'Learning JavaScript DataStructures and Algorithms'
         };
 
         console.log('You are reading ' + book.name + '\nand this is a new line' + '\nand so is this');
-        console.log('--------------')
+        console.log('--------------');
 
         // Template literals (enclosed by backticks) are really nice because we can create strings 
         // withoud the need to concatenate the values
         console.log(`You are reading ${book.name}
             and this is a new line
         and so is this`);
+        console.log('--------------')
 
         // ------------------------
         // Tagged Template Literals
@@ -30,10 +42,11 @@
 
         // input
         // -------
-        var a = 5;
-        var b = 10;
+        var c = 5;
+        var d = 10;
 
         function foo(strings, ...values) {
+            console.log(strings, values)
             console.log("." + strings[0] + ".");
             console.log("." + strings[1] + ".");
             console.log("." + strings[2] + ".");
@@ -43,9 +56,11 @@
             console.log(values[2]);
         }
 
-        foo`Sum ${a + b}
-        Product ${a * b}
-        Division ${b / a}`;        
+        // foo`Sum ${c + d} Product ${c * d} Division ${d / c}`;
+
+        foo`Sum ${c + d}
+        Product ${c * d}
+        Division ${d / c}`;        
 
         // output
         // -------
