@@ -16,8 +16,9 @@
     	testTruthy(new String('')); //true (object is always true)
 
     	testTruthy(1); //true
-    	testTruthy(0); //true
-    	testTruthy(-1); //true
+    	testTruthy(0); //false
+		testTruthy(-1); //true
+		
     	testTruthy(null); //false
     	testTruthy(undefined); //false
     	testTruthy(NaN); //false
@@ -36,10 +37,14 @@
     	testTruthy(a); //false
     	testTruthy(b); //false
     	testTruthy(c); //false
-    	testTruthy(d); //false
+		testTruthy(d); //false
+		
+		testTruthy(4 == '4'); //true - The == operator does type coercion
+		testTruthy(4 === '4'); //false
 
     	var person1 = {name:'John'};
     	var person2 = {name:'John'};
+    	console.log(person1 == person2); //false, different objects
     	console.log(person1 === person2); //false, different objects
 
     	console.log('packt' ? true : false);
@@ -68,7 +73,8 @@
     	// 2.1 - [0].valueOf() is not primitive
     	// 2.2 - [0].toString is 0
     	// 0 == 1
-    	// outputs false    	
+		// outputs false
+		
     </script>
 </body>
 </html>
