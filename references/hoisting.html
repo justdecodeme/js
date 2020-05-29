@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <script>
+			// JavaScript only hoists declarations, not initializations.
+			
+			console.log(a); // undefined
+			var a = 1;
+			console.log(a); // 1
+
+			f(); // Work due to hoisting
+
+			// Function declaration
+			function f() {
+				console.log(a); // undefined due to hoisting
+				var a = 2;
+				console.log(a); // 2
+				console.log('f');
+			}
+
+			g(); // Uncaught TypeError: g is not a function
+
+			// Function expression - Hoisting doesn't work
+			var g = function() {
+				console.log('g');
+			}
+
+			g(); // g
+    </script>
+  </body>
+</html>
