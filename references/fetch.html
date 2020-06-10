@@ -2,7 +2,44 @@
 <html lang="en">
 <body>
     <script>
-    
+        // Making AJAX Calls with Fetch and Promises
+        function getWeather(place) {
+            fetch(`https://crossorigin.me/https://www.metaweather.com/api/location/${place}/`)
+                .then(response => {
+                    console.log(response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    const today = data.consolidated_weather[0];
+                    console.log(`Min Temp: ${today.min_temp} & Max Temp: ${today.max_temp}`);
+                })
+                .catch(error => console.log(error));
+        }
+
+        getWeather(2487956);
+
+        // Making AJAX Calls with Fetch with Async/Await
+        async function getWeatherAW(place) {
+            try {
+                const result = await fetch(`https://crossorigin.me/https://www.metaweather.com/api/location/${place}/`);
+                const data = await result.json();
+                const today = data.consolidated_weather[0];
+                console.log(`Min Temp: ${today.min_temp} & Max Temp: ${today.max_temp}`);
+
+                return data;
+            } catch(error) {
+                console.log(error);
+            }
+        }
+
+        getWeatherAW(2487956);
+
+        let dataLondon;
+        getWeatherAW(44418).then(data => {
+            dataLondon = data;
+            console.log(dataLondon);
+        })
     </script>
 </body>
 </html>
