@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-    <script>
-        /* 
+	<body>
+		<script>
+			/* 
             It allows us to 'unpack' arrays or objects into a bunch of
             variables which makes working with arrays and objects a bit
             more convenient.
@@ -12,23 +12,34 @@
             let {name, age} = {fName: 'Jogn', lName: 'Wich', age: 30};
          */
 
-        let fullName = "Rakesh Kumar Jat";
-        let fullNameArr = fullName.split(" ");
+			let fullName = "Rakesh Kumar Jat";
+			let fullNameArr = fullName.split(" ");
+			let [fName, , lName] = fullNameArr; /* order matters */
+			console.log(fName, lName); // Rakesh Jat
 
-        let [fName, , lName] = fullNameArr; /* order matters */
+			let person = {
+				first: "Rakesh",
+				middle: "Kumar",
+				last: "Jat",
+			};
+			let { last, middle } = person; /* order doesn't matter */
+			console.log(middle, last); // Kumar Jat
 
-        console.log(fName, lName);
-
-
-        let person = {
-            first: "Rakesh",
-            middle: "Kumar",
-            last: "Jat"
-        };
-
-        let {last, middle} = person; /* order doesn't matter */
-
-        console.log(middle, last);
-    </script>    
-</body>
+			person = {
+				first: "Rakesh",
+				middle: "Kumar",
+				last: "Jat",
+				add: {
+					village: "Dantlothi",
+					Teh: "Deeg",
+					dist: "Bharatpur",
+				},
+			};
+			let {
+				add: { dist },
+			} = person;
+			// Using the colon and nested curly braces, we can destructure the dist from the add object.
+			console.log(dist); // Bharatpur
+		</script>
+	</body>
 </html>
