@@ -1,102 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<body>
-    <script>
-        // Objects - Math, Object, String, Boolean, Array, Date, Number
+	<body>
+		<script>
+			// Objects - Math, Object, String, Boolean, Array, Date, Number
 
-        /* Object example 1 */
+			/* Object example 1 */
 
-        var person = new Object();
+			var person = new Object();
 
-        /* Object example 2 */
+			/* Object example 2 */
 
-        var person = {};
+			var person = {};
 
-        person = {
-            name: {
-                first: 'Gandalf',
-                last: 'the Grey'
-            },
-            address: 'Middle Earth',
-            fullName: function() {
-                return this.name.first + " " + this.name.last;
-            }
-        };
-        console.log(person.fullName()); // Gandalf the Grey
-        console.log(person.address); // Middle Earth
+			person = {
+				name: {
+					first: "Gandalf",
+					last: "the Grey",
+				},
+				address: "Middle Earth",
+				fullName: function () {
+					return this.name.first + " " + this.name.last;
+				},
+			};
+			console.log(person.fullName()); // Gandalf the Grey
+			console.log(person.address); // Middle Earth
 
-        /* Object example 3 */
-        // this is also, how we declare a class that represents a book
-        function Book(title, pages, isbn){
-            this.title = title;
-            this.pages = pages;
-            this.isbn = isbn;
-            this.printIsbn = function(){
-                console.log(this.isbn);
-            }
-        }
-        Book.prototype.printDetails = function(){
-            console.log(this.title + ' | ' + this.pages + ' | ' + this.isbn);
-        };
+			/* Object example 3 */
+			// this is also, how we declare a class that represents a book
+			function Book(title, pages, isbn) {
+				this.title = title;
+				this.pages = pages;
+				this.isbn = isbn;
+				this.printIsbn = function () {
+					console.log(this.isbn);
+				};
+			}
+			Book.prototype.printDetails = function () {
+				console.log(this.title + " | " + this.pages + " | " + this.isbn);
+			};
 
-        var book1 = new Book('JS Mastery', 400, 1234567890);
-        var book2 = new Book('JavaScript Projects', 999, 4567890);
+			var book1 = new Book("JS Mastery", 400, 1234567890);
+			var book2 = new Book("JavaScript Projects", 999, 4567890);
 
-        console.log(book1.title); //outputs the book title
-        book1.title = 'JS - Beginer to Advance'; //update the value of the book title
-        console.log(book1.title); //outputs the updated value
-        book1.printIsbn();
+			console.log(book1.title); //outputs the book title
+			book1.title = "JS - Beginer to Advance"; //update the value of the book title
+			console.log(book1.title); //outputs the updated value
+			book1.printIsbn();
 
-        book1.printDetails();
-        book2.printDetails();
+			book1.printDetails();
+			book2.printDetails();
 
+			console.log("-----------------------");
 
-        console.log('-----------------------')
+			// *******************************
+			// ENHANCED OBJECT PROPERTIES
+			// *******************************
 
-        // *******************************
-        // ENHANCED OBJECT PROPERTIES
-        // *******************************
+			// ES6: Destructuring Assignment + Property Shorthand
+			var [x, y] = ["a", "b"]; // Destructuring Assignment
+			var obj = { x, y }; // Property Shorthand
+			console.log(obj); // { x: "a", y: "b" }
 
-        // ES6: Destructuring Assignment + Property Shorthand
-        var [x, y] = ['a', 'b']; // Destructuring Assignment
-        var obj = { x, y }; // Property Shorthand
-        console.log(obj); // { x: "a", y: "b" }
+			// swaping (Array destructuring can also be performed to swap values at once without the need to create temp varibale)
+			[x, y] = [y, x];
+			obj = { x, y };
+			console.log(obj); // { x: "b", y: "a" }
 
-        // swaping (Array destructuring can also be performed to swap values at once without the need to create temp varibale)
-        [x, y] = [y, x];
-        obj = { x, y };
-        console.log(obj); // { x: "b", y: "a" }
+			// ES5: code above is the same as
+			var x = "a";
+			var y = "b";
+			var obj2 = { x: x, y: y };
+			console.log(obj2); // { x: "a", y: "b" }
 
-        // ES5: code above is the same as
-        var x = 'a';
-        var y = 'b';
-        var obj2 = { x: x, y: y };
-        console.log(obj2); // { x: "a", y: "b" }
+			// swaping
+			var temp = x;
+			x = y;
+			y = temp;
+			obj2 = { x: x, y: y };
+			console.log(obj2); // { x: "a", y: "b" }
 
-        // swaping
-        var temp = x;
-        x = y;
-        y = temp;
-        obj2 = { x: x, y: y };
-        console.log(obj2); // { x: "a", y: "b" }
+			// ES6: Method Properties (to declare functions inside objects as if they were properties)
+			var hello = {
+				name: "abcdef",
+				printHello() {
+					console.log("Hello");
+				},
+			};
+			hello.printHello();
 
-        // ES6: Method Properties (to declare functions inside objects as if they were properties)
-        var hello = {
-            name : 'abcdef',
-            printHello(){
-                console.log('Hello');
-            }
-        }
-        hello.printHello();
+			// ES5: code above is the same as:
+			var hello2 = {
+				name: "abcdef",
+				printHello: function printHello() {
+					console.log("Hello2");
+				},
+			};
+			hello2.printHello();
 
-        // ES5: code above is the same as:
-        var hello2 = {
-            name: 'abcdef',
-            printHello: function printHello() {
-                console.log('Hello2');
-            }
-        };
-        hello2.printHello();
-    </script>
-</body>
+			/* Object to Arrays */
+			const schools = {
+				Yorktown: 10,
+				"Washington & Liberty": 2,
+				Wakefield: 5,
+			};
+			const schoolArray = Object.keys(schools).map((key) => ({
+				name: key,
+				wins: schools[key],
+			}));
+			console.log(schoolArray);
+		</script>
+	</body>
 </html>

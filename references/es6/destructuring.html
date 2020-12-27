@@ -2,6 +2,9 @@
 <html lang="en">
 	<body>
 		<script>
+			/* ******************** */
+			/* Destructuring Arrays */
+			/* ******************** */
 			/* 
             It allows us to 'unpack' arrays or objects into a bunch of
             variables which makes working with arrays and objects a bit
@@ -10,13 +13,16 @@
             syntax: 
             let [a, b] = [1, 2, 3, 4, 5];
             let {name, age} = {fName: 'Jogn', lName: 'Wich', age: 30};
-         */
+             */
 
 			let fullName = "Rakesh Kumar Jat";
 			let fullNameArr = fullName.split(" ");
 			let [fName, , lName] = fullNameArr; /* order matters */
 			console.log(fName, lName); // Rakesh Jat
 
+			/* ******************** */
+			/* Destructuring Objects */
+			/* ******************** */
 			let person = {
 				first: "Rakesh",
 				middle: "Kumar",

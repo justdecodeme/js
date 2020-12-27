@@ -8,3 +8,23 @@ mousemove
 mousedown
 mouseup
 click
+
+What It Means to Be Functional:
+-------------------------------
+JavaScript supports functional programming because JavaScript functions are first-class citizens. This means that 
+functions can do the same things that variables can do. The latest JavaScript syntax adds language improvements 
+that can beef up your functional programming techniques, including arrow functions, promises, and the spread operator.
+
+In a functional program, data is immutable. It never changes.
+
+Pure Functions
+--------------
+A pure function is a function that returns a value that’s computed based on its arguments. Pure functions take at 
+least one argument and always return a value or another function. They do not cause side effects, set global variables, 
+or change anything about application state. They treat their arguments as immutable data.
+
+Pure functions are another core concept of functional programming. They will make your life much easier because they 
+will not affect your application’s state. When writing functions, try to follow these three rules:
+- The function should take in at least one argument.
+- The function should return a value or another function.
+- The function should not change or mutate any of its arguments.
